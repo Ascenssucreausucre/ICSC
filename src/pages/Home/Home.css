@@ -1,0 +1,30 @@
+h1 {
+  font-weight: 700;
+  text-align: center;
+  margin-block-start: 10px;
+}
+h2 {
+  font-weight: 600;
+  margin-block: 5px;
+}
+.important-info {
+  color: rgb(235, 76, 76);
+  font-weight: 600;
+}
+ul {
+  list-style-type: none;
+}
+li {
+  margin-inline-start: 10px;
+}
+section {
+  margin-block: 20px;
+}
+section:has(.section-content) {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+.section-icon {
+  height: 100%;
+}

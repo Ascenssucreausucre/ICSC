@@ -1,0 +1,27 @@
+.nav-link {
+  text-decoration: none;
+  margin-inline-end: 10px;
+  color: black;
+  transition: color 0.2s ease-out;
+}
+.nav-link:hover {
+  color: blue;
+}
+.nav-link.active {
+  color: blue;
+}
+nav {
+  height: clamp(40px, 6dvh, 100px);
+  width: 100vw;
+  padding-inline: 20px;
+  background-color: white;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+  position: fixed;
+}
+
+main {
+  padding-block-start: clamp(40px, 6dvh, 100px);
+}
