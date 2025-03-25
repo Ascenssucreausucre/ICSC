@@ -8,7 +8,7 @@ h2 {
   margin-block: 5px;
 }
 .important-info {
-  color: rgb(235, 76, 76);
+  color: var(--primary-color);
   font-weight: 600;
 }
 ul {
@@ -20,10 +20,13 @@ li {
 section {
   margin-block: 20px;
 }
+.section-content {
+  margin-inline-start: 10px;
+}
 section:has(.section-content) {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
 }
 .section-icon {
   height: 100%;

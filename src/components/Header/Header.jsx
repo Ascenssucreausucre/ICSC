@@ -1,41 +1,32 @@
-import { NavLink } from "react-router-dom";
 import "./Header.css";
+import morocco from "../../assets/images/morocco.jpg";
+import NavBar from "../NavBar/NavBar";
+
+import { globalInfos, importantDates } from "./../../fakeDatas";
 
 export default function Header() {
   return (
     <header>
-      <nav>
-        <NavLink to={"/"} className={"nav-link"}>
-          Home
-        </NavLink>
-        <NavLink to={"/Call-for-Papers"} className={"nav-link"}>
-          Call for Papers
-        </NavLink>
-        <NavLink to={"/Comitees"} className={"nav-link"}>
-          Comitees
-        </NavLink>
-        <NavLink to={"/Submission"} className={"nav-link"}>
-          Submission
-        </NavLink>
-        <NavLink to={"/Program"} className={"nav-link"}>
-          Program
-        </NavLink>
-        <NavLink to={"/Special-Sessions"} className={"nav-link"}>
-          Special Sessions
-        </NavLink>
-        <NavLink to={"/Registration"} className={"nav-link"}>
-          Registration
-        </NavLink>
-        <NavLink to={"/Workshops"} className={"nav-link"}>
-          Workshops
-        </NavLink>
-        <NavLink to={"/Local-Info"} className={"nav-link"}>
-          Local Info
-        </NavLink>
-        <NavLink to={"/Archives"} className={"nav-link"}>
-          Archives
-        </NavLink>
-      </nav>
+      <NavBar />
+      <div
+        className="page-title"
+        style={{ backgroundImage: `url(${morocco})` }}
+      >
+        <h1>ICSC 2025</h1>
+        <p>
+          {importantDates.congress.opening.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+          })}{" "}
+          to{" "}
+          {importantDates.congress.closing.toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+          , 2025 in {globalInfos.city}, {globalInfos.country}.
+        </p>
+      </div>
     </header>
   );
 }

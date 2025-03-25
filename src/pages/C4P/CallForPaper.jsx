@@ -1,7 +1,7 @@
 export default function CallForPaper() {
   return (
     <>
-      <p>test</p>
+      <h1>Call for Paper</h1>
     </>
   );
 }

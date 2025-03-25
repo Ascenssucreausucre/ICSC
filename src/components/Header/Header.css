@@ -1,27 +1,22 @@
-.nav-link {
-  text-decoration: none;
-  margin-inline-end: 10px;
-  color: black;
-  transition: color 0.2s ease-out;
-}
-.nav-link:hover {
-  color: blue;
-}
-.nav-link.active {
-  color: blue;
-}
-nav {
-  height: clamp(40px, 6dvh, 100px);
-  width: 100vw;
-  padding-inline: 20px;
-  background-color: white;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
-  position: fixed;
-}
-
-main {
+.page-title {
   padding-block-start: clamp(40px, 6dvh, 100px);
+  background-position: center;
+  background-repeat: none;
+  background-size: cover;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.page-title * {
+  filter: drop-shadow(0 0 2px rgb(0, 0, 0));
+  padding-inline: 20px;
+}
+.page-title h1 {
+  font-size: 3rem;
+}
+.page-title p {
+  font-weight: 600;
 }

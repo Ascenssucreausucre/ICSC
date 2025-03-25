@@ -1,0 +1,15 @@
+.sponsors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 1rem;
+  justify-content: center;
+}
+footer .title {
+  color: white;
+}
+footer {
+  padding-block: 10px;
+  background-color: var(--primary-color);
+  color: white;
+}
