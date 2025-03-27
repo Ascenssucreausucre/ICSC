@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <section>
-        <h2 className="title">Invitation</h2>
+        <h2 className="title primary">Invitation</h2>
         <p>
           It is our great pleasure to invite you to participate in the IEEE 2025
           13th International Conference on Systems and Control (ICSC'
@@ -30,8 +30,8 @@ export default function Home() {
         </p>
       </section>
       <ImportantDates />
-      <section>
-        <h2 className="title">Topics of interest</h2>
+      <section className="topics">
+        <h2 className="title primary">Topics of interest</h2>
         <p>
           This edition's main topics are written down below. Have in mind that
           the conference will treat more topics than just the main ones.
@@ -45,6 +45,13 @@ export default function Home() {
             />
           ))}
         </div>
+      </section>
+      <section className="submit-your-articles">
+        <h2 className="title">Send your articles !</h2>
+        <p>
+          You can submit your articles to contribute to the conference. In order
+          to
+        </p>
       </section>
     </>
   );

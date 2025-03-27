@@ -1,11 +1,14 @@
 import "./App.css";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Header from "./components/Header/Header";
-import CallForPaper from "./pages/C4P/CallForPaper";
 import Footer from "./components/Footer/Footer";
 import Comittees from "./pages/Comittees/Comittees";
-import Submission from "./pages/Submission/Submission";
 import Program from "./pages/Program/Program";
 import SpecialSessions from "./pages/SpecialSessions/SpecialSessions";
 import Registration from "./pages/Registration/Registration";
@@ -55,9 +58,11 @@ const router = createBrowserRouter([
 ]);
 
 function Root() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   return (
     <>
-      <Header />
+      <Header banner={isHome} />
       <main>
         <Outlet />
       </main>

@@ -10,7 +10,7 @@ export default function Registration() {
 
   return (
     <>
-      <h1 className="title">Registration</h1>
+      <h1 className="title primary">Registration</h1>
       <section>
         <div className="text-container">
           <p>

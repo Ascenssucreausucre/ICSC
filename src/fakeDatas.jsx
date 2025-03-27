@@ -2,6 +2,9 @@ export const globalInfos = {
   city: "Marrakesh",
   country: "Morocco",
   year: "2025",
+  title: "International Conference on Systems and Control",
+  acronym: "ICSC",
+  index: "13",
 };
 
 export const importantDates = {

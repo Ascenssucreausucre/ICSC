@@ -24,6 +24,9 @@
 main {
   padding-inline: clamp(10px, 10vw, 10vw);
   flex: 1;
+  max-width: 1400px;
+  align-self: center;
+  padding-top: 60px;
 }
 .flex {
   display: flex;
@@ -33,7 +36,6 @@ main {
   gap: 10px;
 }
 .title {
-  color: var(--primary-color);
   font-size: 2rem;
   text-align: center;
   font-weight: 800;
@@ -48,6 +50,6 @@ main {
   font-weight: 600;
 }
 .text-container {
-  padding-inline: clamp(10px, 15vw, 15vw);
+  /* padding-inline: clamp(10px, 15vw, 15vw); */
   margin-block: 15px;
 }
