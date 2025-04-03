@@ -49,7 +49,7 @@ const CustomDetails = ({ title, content }) => {
         <div ref={contentRef} className="content">
           <ul>
             {content.map((item, index) => (
-              <li key={index}>{item}</li>
+              <li key={index}>{item.text}</li>
             ))}
           </ul>
         </div>

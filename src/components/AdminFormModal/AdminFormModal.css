@@ -1,0 +1,6 @@
+.edit-form .form-control {
+  outline: 1px solid rgba(128, 128, 128, 0.507);
+}
+.edit-form .form-control:focus {
+  outline: 1px solid var(--primary-color);
+}

@@ -1,13 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { globalInfos } from "../../fakeDatas";
 import "./NavBar.css";
 
-export default function NavBar() {
+export default function NavBar({ data }) {
   const navigate = useNavigate();
   return (
     <nav>
       <h2 className="nav-title" onClick={() => navigate("/")}>
-        ICSC {globalInfos.year}
+        {data.acronym + " " + data.year}
       </h2>
       <NavLink to={"/"} className={"nav-link"}>
         Home

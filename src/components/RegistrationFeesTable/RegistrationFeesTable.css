@@ -1,7 +1,7 @@
 .fees-table {
   width: 100%;
   max-width: 800px;
-  margin: 20px auto;
+  margin-inline: auto;
 }
 
 .region {

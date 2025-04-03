@@ -1,0 +1,87 @@
+import useFetch from "../../../hooks/useFetch";
+import ConferenceCard from "../../../components/ConferenceCard/ConferenceCard";
+import { Outlet } from "react-router-dom";
+import "./Conference.css";
+import { AnimatePresence, motion } from "framer-motion";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import SkeletonConferenceCard from "../../../components/ConferenceCard/SkeletonConferenceCard";
+import { useAdminModal } from "../../../context/AdminModalContext";
+import { useState } from "react";
+import { useEffect } from "react";
+
+export default function Conferences() {
+  const { openModal } = useAdminModal();
+  const [conferenceData, setConferenceData] = useState();
+
+  // Utilisation de useFetch pour récupérer les conférences
+  const {
+    data: conferences,
+    loading,
+    error,
+    refetch,
+  } = useFetch(`/Conferences`);
+
+  useEffect(() => {
+    if (!loading && !error) {
+      setConferenceData(conferences);
+    }
+  }, [conferences]);
+
+  const handleCreateConference = () => {
+    openModal({
+      url: "/Conferences",
+      method: "POST",
+      initialData: {
+        acronym: "",
+        city: "",
+        country: "",
+        year: "",
+        title: "",
+        conference_index: "",
+      },
+      title: "Create Conference",
+      refreshFunction: refetch,
+    });
+  };
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  return (
+    <div>
+      <h1 className="secondary">All conferences</h1>
+      <AnimatePresence>
+        {!loading ? (
+          conferenceData && conferenceData.length > 0 ? (
+            conferenceData.map((conference) => (
+              <motion.div
+                key={conference.id}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.4, ease: "anticipate" }}
+              >
+                <ConferenceCard
+                  key={conference.id}
+                  data={conference}
+                  refreshConferences={refetch}
+                  deleteSelf={setConferenceData}
+                />
+              </motion.div>
+            ))
+          ) : (
+            <p>No conferences found.</p>
+          )
+        ) : (
+          <SkeletonConferenceCard />
+        )}
+      </AnimatePresence>
+      <button className="button" onClick={handleCreateConference}>
+        New Conference
+      </button>
+      <Outlet />
+    </div>
+  );
+}

@@ -1,38 +1,36 @@
 import { registrationFees } from "../../fakeDatas";
 import "./RegistrationFeesTable.css";
 
-export default function RegistrationFeesTable() {
+export default function RegistrationFeesTable({ data }) {
   return (
     <div className="fees-table">
-      {registrationFees.map((region, index) => (
-        <div key={index} className="region">
-          <h2>{region.country}</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>IEEE Member</th>
-                <th>Non-IEEE Member</th>
-                <th>Virtual Attendance</th>
+      <div key={data.id} className="region">
+        <h2>{data.description}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>IEEE Member</th>
+              <th>Non-IEEE Member</th>
+              <th>Virtual Attendance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.feecategories.map((category, catIndex) => (
+              <tr key={catIndex}>
+                <td>{category.type}</td>
+                <td>{category.ieee_member}€</td>
+                <td>{category.non_ieee_member}€</td>
+                <td>
+                  {category.virtual_attendance
+                    ? `${category.virtual_attendance}€`
+                    : "-"}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {region.categories.map((category, catIndex) => (
-                <tr key={catIndex}>
-                  <td>{category.type}</td>
-                  <td>{category.ieeeMember}€</td>
-                  <td>{category.nonIeeeMember}€</td>
-                  <td>
-                    {category.virtualAttendance
-                      ? `${category.virtualAttendance}€`
-                      : "-"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

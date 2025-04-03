@@ -1,0 +1,16 @@
+.conference-data {
+  margin-block: 20px;
+}
+
+.conference-committees {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+}
+.data-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
