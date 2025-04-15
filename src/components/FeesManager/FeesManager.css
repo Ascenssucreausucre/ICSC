@@ -1,0 +1,7 @@
+.fee-manager {
+  margin-block: 2rem;
+  background-color: white;
+  padding-block: 2rem;
+  border-radius: var(--border-radius);
+  filter: var(--card-drop-shadow);
+}

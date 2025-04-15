@@ -10,6 +10,15 @@ footer .title {
 }
 footer {
   padding-block: 10px;
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
   color: white;
+}
+.sponsor {
+  text-align: center;
+}
+.sponsor img {
+  height: 5rem;
+  object-fit: cover;
+  aspect-ratio: 2/1;
+  border-radius: 10px;
 }

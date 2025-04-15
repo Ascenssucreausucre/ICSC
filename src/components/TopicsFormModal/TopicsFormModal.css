@@ -1,0 +1,12 @@
+.form-content {
+  max-height: 400px;
+  overflow-y: scroll;
+  padding-inline: 1.5rem;
+  margin-block: 1rem;
+}
+.subtopic-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}

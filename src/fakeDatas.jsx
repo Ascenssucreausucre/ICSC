@@ -2,6 +2,9 @@ export const globalInfos = {
   city: "Marrakesh",
   country: "Morocco",
   year: "2025",
+  title: "International Conference on Systems and Control",
+  acronym: "ICSC",
+  index: "13",
 };
 
 export const importantDates = {
@@ -235,6 +238,78 @@ export const committees = [
           { name: "A.", surname: "Aitouche", from: "France" },
           { name: "M.", surname: "Chaabane", from: "Tunisia" },
         ],
+      },
+    ],
+  },
+];
+export const registrationFees = [
+  {
+    country: "Morocco",
+    categories: [
+      {
+        type: "Academics",
+        ieeeMember: 280,
+        nonIeeeMember: 280,
+        virtualAttendance: 190,
+      },
+      {
+        type: "Students",
+        ieeeMember: 190,
+        nonIeeeMember: 190,
+        virtualAttendance: 160,
+      },
+      {
+        type: "Free Participation (No contribution)",
+        ieeeMember: 280,
+        nonIeeeMember: 280,
+        virtualAttendance: null, // Pas de tarif
+      },
+      {
+        type: "Industrials",
+        ieeeMember: 550,
+        nonIeeeMember: 550,
+        virtualAttendance: null, // Pas de tarif
+      },
+      {
+        type: "Additional paper charges",
+        ieeeMember: 150,
+        nonIeeeMember: 150,
+        virtualAttendance: null, // Pas de tarif
+      },
+    ],
+  },
+  {
+    country: "Other Countries",
+    categories: [
+      {
+        type: "Academics",
+        ieeeMember: 290,
+        nonIeeeMember: 300,
+        virtualAttendance: 190,
+      },
+      {
+        type: "Students",
+        ieeeMember: 190,
+        nonIeeeMember: 200,
+        virtualAttendance: 160,
+      },
+      {
+        type: "Free Participation (No contribution)",
+        ieeeMember: 290,
+        nonIeeeMember: 300,
+        virtualAttendance: null, // Pas de tarif
+      },
+      {
+        type: "Industrials",
+        ieeeMember: 570,
+        nonIeeeMember: 600,
+        virtualAttendance: null, // Pas de tarif
+      },
+      {
+        type: "Additional paper charges",
+        ieeeMember: 150,
+        nonIeeeMember: 150,
+        virtualAttendance: null, // Pas de tarif
       },
     ],
   },

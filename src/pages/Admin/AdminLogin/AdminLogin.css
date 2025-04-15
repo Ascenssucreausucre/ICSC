@@ -1,0 +1,28 @@
+.admin-login {
+  display: flex;
+  justify-content: center;
+  padding-block: 50px;
+}
+.admin-login form {
+  width: clamp(200px, 40vw, 500px);
+  background-color: var(--primary-color);
+  color: white;
+  padding: 20px 50px;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.2));
+}
+.admin-login .button {
+  background-color: white;
+  color: var(--primary-color);
+}
+.admin-login .button:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+.admin-login .button:disabled {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.single-button {
+  border-radius: 10px;
+  width: 100%;
+}

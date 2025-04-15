@@ -1,0 +1,12 @@
+.fee-category {
+  display: flex;
+  gap: 5px;
+}
+.fee-categories-container {
+  padding-inline: 1rem;
+  max-height: 400px;
+  overflow-y: scroll;
+  margin-block: 10px;
+  background-color: rgba(0, 0, 0, 0.01);
+  border-radius: 10px;
+}

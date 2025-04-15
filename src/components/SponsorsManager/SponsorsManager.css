@@ -1,0 +1,15 @@
+.card-content {
+  display: flex;
+  gap: 1rem;
+}
+.card-content img {
+  height: 4rem;
+  aspect-ratio: 2/1;
+  object-fit: cover;
+}
+.sponsors-wrapper {
+  padding: 1rem 4rem;
+}
+.sponsors-manager {
+  padding-block: 2rem;
+}

@@ -10,9 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "framer-motion": "^12.6.2",
+    "jwt-decode": "^4.0.0",
+    "linkify-react": "^4.2.0",
     "lucide-react": "^0.483.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-helmet": "^6.1.0",
+    "react-loading-skeleton": "^3.5.0",
     "react-router-dom": "^7.4.0"
   },
   "devDependencies": {

@@ -1,0 +1,18 @@
+.confirmation-modal {
+  background-color: var(--primary-color);
+  color: white;
+}
+.confirmation-modal .cancel-button {
+  color: white;
+}
+.confirmation-modal .button {
+  background-color: white;
+  color: var(--primary-color);
+}
+.confirmation-modal .button:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+.confirmation-modal h2 {
+  margin-bottom: 10px;
+}

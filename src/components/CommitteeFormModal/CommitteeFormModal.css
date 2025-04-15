@@ -1,0 +1,128 @@
+.committee-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 800px;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.member-row {
+  display: flex;
+  gap: 5px;
+}
+
+.member-row .form-input {
+  margin-block: 5px;
+  padding-inline: 0.5rem;
+}
+
+.member-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #4a90e2;
+}
+
+.member-details {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.remove-button {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  align-self: center;
+}
+
+.remove-button:hover {
+  background-color: #ff5252;
+}
+
+.add-member-form {
+  background-color: #f5f7fa;
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-top: 1.5rem;
+}
+
+.add-member-form h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.new-member-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.add-button {
+  background-color: var(--tertiary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s;
+}
+
+.add-button:hover {
+  background-color: var(--secondary-color);
+}
+
+.no-members {
+  color: #757575;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+.member-container {
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+@media (max-width: 768px) {
+  .member-details,
+  .new-member-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .member-item {
+    flex-direction: column;
+  }
+
+  .remove-button {
+    align-self: flex-end;
+  }
+}

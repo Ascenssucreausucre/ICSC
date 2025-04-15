@@ -2,6 +2,14 @@
 
 :root {
   --primary-color: #eb4c4c;
+  --secondary-color: #502f2f;
+  --tertiary-color: #4736a8;
+
+  --title-font-size: clamp(2rem, 2vw);
+
+  --card-drop-shadow: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+
+  --border-radius: 10px;
 }
 
 * {
@@ -10,7 +18,6 @@
   box-sizing: border-box;
   font-family: "Roboto Flex", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 400;
   font-style: normal;
   font-variation-settings: "slnt" 0, "wdth" 100, "GRAD" 0, "XOPQ" 96, "XTRA" 468,
     "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738, "YTLC" 514, "YTUC" 712;
@@ -23,20 +30,191 @@
 main {
   padding-inline: clamp(10px, 10vw, 10vw);
   flex: 1;
+  max-width: 1400px;
+  align-self: center;
+  padding-top: 60px;
+}
+h1 {
+  font-weight: 700;
+  text-align: center;
+  margin-block-start: 10px;
+}
+h2 {
+  font-weight: 600;
 }
 .flex {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: stretch;
   flex-wrap: wrap;
   gap: 10px;
 }
 .title {
-  color: var(--primary-color);
   font-size: 2rem;
   text-align: center;
   font-weight: 800;
+  margin-block: 5px;
 }
 .primary {
   color: var(--primary-color);
+}
+.secondary {
+  color: var(--secondary-color);
+}
+.bold {
+  font-weight: 600;
+}
+.text-container {
+  /* padding-inline: clamp(10px, 15vw, 15vw); */
+  margin-block: 15px;
+}
+.button {
+  padding: 10px 15px;
+  border-radius: 50px;
+  border: none;
+  background-color: var(--primary-color);
+  font-size: 1rem;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.2s ease-out;
+}
+.button:hover {
+  cursor: pointer;
+  background-color: var(--secondary-color);
+}
+.button:disabled {
+  cursor: not-allowed;
+  background-color: var(--secondary-color);
+}
+.button.small {
+  padding: 8px 12px;
+}
+.button.alt {
+  color: var(--secondary-color);
+  background-color: white;
+}
+.button.alt:hover {
+  color: white;
+  background-color: var(--primary-color);
+}
+.form-error {
+  color: red;
+  margin-bottom: 15px;
+}
+.button-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+.button-container.card-button-container {
+  align-items: start;
+}
+.edit-link,
+.cancel-link {
+  text-decoration: none;
+  color: var(--secondary-color);
+}
+.delete-button {
+  color: red;
+  background-color: unset;
+  border: none;
+  font-size: 1rem;
+}
+.delete-button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+/* Fond sombre du modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fond sombre avec transparence */
+  backdrop-filter: blur(5px);
+  display: flex;
+  padding-block: 100px;
+  justify-content: center; /* Centrer le modal horizontalement */
+  align-items: center; /* Centrer le modal verticalement */
+  z-index: 999; /* S'assurer que le modal est au-dessus des autres éléments */
+}
+/* Contenu du modal (formulaire) */
+.edit-form,
+.confirmation-modal {
+  background-color: white;
+  padding: 20px 40px;
+  margin-inline: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px; /* Limite la largeur du modal */
+  position: relative;
+}
+.cancel-button {
+  background-color: unset;
+  border: none;
+  font-size: 1rem;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: 600;
+}
+.cancel-button:hover {
+  text-decoration: underline;
+}
+
+.card-title {
+  text-decoration: none;
+  color: var(--secondary-color);
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+.data-detail {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: gray;
+}
+.card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-block: 10px;
+  filter: var(--card-drop-shadow);
+}
+.card * {
+  margin-block: 2px;
+}
+strong {
+  color: var(--secondary-color);
+}
+.card-content-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.card-title.link {
+  color: var(--tertiary-color);
+  transition: color 0.2s ease-out;
+}
+.card-title.link:hover {
+  color: var(--primary-color);
+}
+.flex-1 {
+  flex: 1;
+}
+.white {
+  color: white;
+}
+.center-button {
+  padding-block: 10px;
+  display: flex;
+  justify-content: center;
+}
+section:not([class]) {
+  margin-bottom: 2rem;
+  padding-inline: clamp(20px, 15%, 15%);
 }

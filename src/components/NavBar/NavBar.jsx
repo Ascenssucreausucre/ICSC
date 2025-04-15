@@ -1,38 +1,37 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { globalInfos } from "../../fakeDatas";
 import "./NavBar.css";
 
-export default function NavBar() {
+export default function NavBar({ data }) {
   const navigate = useNavigate();
+
+  const pages = [
+    {
+      link: "/",
+      name: "Home",
+    },
+    {
+      link: "/registration",
+      name: "Registration",
+    },
+    {
+      link: "/committees",
+      name: "Committees",
+    },
+    {
+      link: "/submission",
+      name: "Submission",
+    },
+  ];
   return (
     <nav>
       <h2 className="nav-title" onClick={() => navigate("/")}>
-        ICSC {globalInfos.year}
+        {data.acronym + " " + data.year}
       </h2>
-      <NavLink to={"/"} className={"nav-link"}>
-        Home
-      </NavLink>
-      <NavLink to={"/submission"} className={"nav-link"}>
-        Submission
-      </NavLink>
-      <NavLink to={"/program"} className={"nav-link"}>
-        Program
-      </NavLink>
-      <NavLink to={"/comittees"} className={"nav-link"}>
-        Comittees
-      </NavLink>
-      <NavLink to={"/special-Sessions"} className={"nav-link"}>
-        Special Sessions
-      </NavLink>
-      <NavLink to={"/workshops"} className={"nav-link"}>
-        Workshops
-      </NavLink>
-      <NavLink to={"/local-Info"} className={"nav-link"}>
-        Local Info
-      </NavLink>
-      <NavLink to={"/archives"} className={"nav-link"}>
-        Archives
-      </NavLink>
+      {pages.map((page) => (
+        <NavLink to={page.link} className={"nav-link"} key={page.name}>
+          {page.name}
+        </NavLink>
+      ))}
     </nav>
   );
 }

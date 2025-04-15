@@ -1,0 +1,4 @@
+.committee-back-container {
+  display: flex;
+  flex-direction: column;
+}

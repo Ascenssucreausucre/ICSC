@@ -1,0 +1,63 @@
+.fees-table {
+  width: 100%;
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.region {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.region h2 {
+  font-size: 1.8rem;
+  color: var(--secondary-color);
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--primary-color);
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: bold;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+tr:nth-child(even) td {
+  background-color: #f1f1f1;
+}
+
+td:last-child {
+  font-style: italic;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  th,
+  td {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .region h2 {
+    font-size: 1.5rem;
+  }
+}

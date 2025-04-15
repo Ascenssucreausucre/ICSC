@@ -1,9 +1,8 @@
-import { importantDates } from "../../fakeDatas";
 import { Calendar } from "lucide-react";
 
-export default function ImportantDates() {
+export default function ImportantDates({ data }) {
   return (
-    <section>
+    <section className="important-dates">
       <Calendar
         className="section-icon"
         color="#eb4c4c"
@@ -17,30 +16,30 @@ export default function ImportantDates() {
           <li>
             Initial submission due :{" "}
             <span className="important-info">
-              {importantDates.initialSubmissionDue.toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}{" "}
-            </span>
-          </li>
-          <li>
-            Paper decision notification :{" "}
-            <span className="important-info">
-              {importantDates.paperDecisionNotification.toLocaleDateString(
+              {new Date(data.initial_submission_due).toLocaleDateString(
                 "en-US",
                 {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
                 }
-              )}
+              )}{" "}
+            </span>
+          </li>
+          <li>
+            Paper decision notification :{" "}
+            <span className="important-info">
+              {data.paper_decision_notification.toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
             </span>
           </li>
           <li>
             Final submission due :{" "}
             <span className="important-info">
-              {importantDates.finalSubmissionDue.toLocaleDateString("en-US", {
+              {data.final_submission_due.toLocaleDateString("en-US", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
@@ -50,7 +49,7 @@ export default function ImportantDates() {
           <li>
             Registration :{" "}
             <span className="important-info">
-              {importantDates.registration.toLocaleDateString("en-US", {
+              {data.registration.toLocaleDateString("en-US", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",
@@ -61,12 +60,12 @@ export default function ImportantDates() {
             Congress :{" "}
             <span className="important-info">
               from{" "}
-              {importantDates.congress.opening.toLocaleDateString("en-US", {
+              {data.congress_opening.toLocaleDateString("en-US", {
                 day: "numeric",
                 month: "long",
               })}{" "}
               to{" "}
-              {importantDates.congress.closing.toLocaleDateString("en-US", {
+              {data.congress_closing.toLocaleDateString("en-US", {
                 day: "numeric",
                 month: "long",
                 year: "numeric",

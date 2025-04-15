@@ -1,0 +1,17 @@
+.admin-main-wrapper {
+  width: 100%;
+  background-color: var(--secondary-color);
+  min-height: 100dvh;
+}
+.admin-main {
+  max-width: unset;
+  align-self: unset;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.admin-section {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: var(--border-radius);
+  padding: 1rem 2rem;
+  margin-block: 1rem;
+}

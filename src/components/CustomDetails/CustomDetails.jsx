@@ -36,12 +36,12 @@ const CustomDetails = ({ title, content }) => {
   }, [isOpen]); // On ne met à jour l'effet que si isOpen change
 
   return (
-    <div className="details-container">
-      <div
-        className="summary"
-        ref={summaryRef} // Associe la référence à .summary
-        onClick={() => setIsOpen(!isOpen)} // Ouvre/ferme au clic
-      >
+    <div
+      className="details-container"
+      ref={summaryRef} // Associe la référence à .summary
+      onClick={() => setIsOpen(!isOpen)} // Ouvre/ferme au clic
+    >
+      <div className="summary">
         <span className="icon">{isOpen ? "▼" : "▶"}</span>
         {title}
       </div>
@@ -49,7 +49,7 @@ const CustomDetails = ({ title, content }) => {
         <div ref={contentRef} className="content">
           <ul>
             {content.map((item, index) => (
-              <li key={index}>{item}</li>
+              <li key={index}>{item.text}</li>
             ))}
           </ul>
         </div>

@@ -1,0 +1,34 @@
+.form-input,
+.input-group {
+  margin-block: 20px;
+}
+.form-input input,
+.form-input textarea {
+  border: none;
+  margin-block-start: 5px;
+  font-size: var(--small-font-size);
+  padding: 10px 20px;
+  background-color: white;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  outline: solid #d2367a00 2px;
+  transition: outline 0.2s ease-out, box-shadow 0.2s ease-out,
+    color 0.2s ease-out;
+}
+input[type="tel"] {
+  width: 60px;
+  padding-inline: 5px;
+}
+input:disabled {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
+  cursor: text;
+}
+input:focus-visible {
+  outline: solid var(--primary-color) 2px;
+}
+label {
+  margin-bottom: 5px;
+  font-size: var(--small-font-size);
+}

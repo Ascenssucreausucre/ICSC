@@ -1,0 +1,26 @@
+.conference-card .delete-button {
+  position: relative;
+  overflow: hidden;
+  background-color: rgb(255, 0, 0);
+  padding: 5px 8px;
+  border-radius: 50px;
+  color: white;
+  font-weight: 900;
+  transition: transform 0.2s ease;
+}
+.conference-card .delete-button:hover {
+  text-decoration: none;
+  transform: translateY(4px);
+}
+.card-wrapper {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius);
+  padding-left: 4px;
+  transition: padding 0.2s ease-out;
+}
+.card-wrapper:hover {
+  padding-left: 10px;
+}
+.card-wrapper.active {
+  padding-left: 10px;
+}

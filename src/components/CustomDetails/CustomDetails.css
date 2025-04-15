@@ -1,19 +1,20 @@
 .details-container {
   position: relative;
   flex: 1;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  display: flex;
+  cursor: pointer;
 }
 
 .summary {
   position: relative;
   font-weight: bold;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 5px;
-  background-color: var(--primary-color);
   color: white;
-  border-radius: 4px;
   /* border: 3px solid blue; */
 }
 
@@ -30,6 +31,7 @@
   width: 100%;
   min-width: 200px;
   z-index: 1000;
+  top: 100%;
 }
 
 .content ul {
