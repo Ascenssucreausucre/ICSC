@@ -5,15 +5,42 @@ import { useFeedback } from "../../context/FeedbackContext";
 import { useAdminModal } from "../../context/AdminModalContext";
 import useSubmit from "../../hooks/useSubmit";
 import "./AdminFormModal.css";
+import { Trash2 } from "lucide-react";
+import MembersList from "../MembersList/MembersList";
 
 export default function AdminFormModal() {
   const { modalData, closeModal } = useAdminModal();
   const { submit, submitLoading } = useSubmit();
   const [formData, setFormData] = useState(modalData?.initialData || {});
+  const [objectArrayTemplate, setObjectArrayTemplate] = useState({});
+  const [showList, setShowList] = useState(false);
+  const [conferenceId, setConferenceId] = useState();
 
   // Met à jour le formulaire si modalData change
   useEffect(() => {
-    setFormData(modalData?.initialData || {});
+    if (modalData?.initialData) {
+      const { conference_id, id, ...initialData } = modalData.initialData;
+      setFormData(initialData || {});
+      setConferenceId(conference_id);
+    }
+  }, [modalData]);
+
+  useEffect(() => {
+    if (!modalData?.initialData) return;
+
+    const entries = Object.entries(modalData.initialData);
+    for (const [key, value] of entries) {
+      if (
+        Array.isArray(value) &&
+        value.length > 0 &&
+        typeof value[0] === "object"
+      ) {
+        const objectTemplate = { ...value[0] };
+        // Tu peux stocker ce template dans un state, par exemple :
+        setObjectArrayTemplate(objectTemplate);
+        break; // On s'arrête au premier tableau d'objets trouvé
+      }
+    }
   }, [modalData]);
 
   if (!modalData) return null; // Si le modalData est null, ne rien afficher
@@ -34,6 +61,47 @@ export default function AdminFormModal() {
     }));
   };
 
+  const handleObjectArrayChange = (key, index, field, value) => {
+    const newArray = [...formData[key]];
+    newArray[index] = {
+      ...newArray[index],
+      [field]: value,
+    };
+    setFormData((prev) => ({ ...prev, [key]: newArray }));
+  };
+
+  const addObjectToArray = (key, item) => {
+    const newArray = [...(formData[key] || [])];
+    const newItem = item ? item : objectArrayTemplate;
+
+    // if (firstItem && typeof firstItem === "object") {
+    //   Object.keys(firstItem).forEach((k) => {
+    //     newItem[k] = typeof firstItem[k] === "object" ? {} : "";
+    //   });
+    // }
+    newArray.push(newItem);
+    setFormData((prev) => ({ ...prev, [key]: newArray }));
+  };
+
+  const addExistingObjectToArray = (item) => {
+    const newArray = [...(formData[key] || [])];
+    const newItem = objectArrayTemplate ? objectArrayTemplate : {}; // Crée un objet vide ou avec des valeurs par défaut
+    const firstItem = formData[key]?.[0];
+    if (firstItem && typeof firstItem === "object") {
+      Object.keys(firstItem).forEach((k) => {
+        newItem[k] = typeof firstItem[k] === "object" ? {} : "";
+      });
+    }
+    newArray.push(newItem);
+    setFormData((prev) => ({ ...prev, [key]: newArray }));
+  };
+
+  const removeObjectFromArray = (key, index) => {
+    const newArray = [...formData[key]];
+    newArray.splice(index, 1);
+    setFormData((prev) => ({ ...prev, [key]: newArray }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -51,7 +119,7 @@ export default function AdminFormModal() {
     const response = await submit({
       url: modalData.url,
       method: modalData.method,
-      data: dataToSend,
+      data: { ...dataToSend, conference_id: conferenceId },
       isFormData:
         formData.image instanceof File || formData.banner instanceof File,
     });
@@ -95,6 +163,79 @@ export default function AdminFormModal() {
 
             if (formData[key] instanceof Date) {
               value = formData[key].toISOString().split("T")[0];
+            }
+
+            if (Array.isArray(value)) {
+              return (
+                <div key={key}>
+                  <label className="array-label">{formatLabel(key)}</label>
+                  <div key={key} className="object-array-field">
+                    {value.map((item, index) => (
+                      <div key={index} className="object-array-item">
+                        {Object.entries(item).map(([subKey, subValue]) => {
+                          if (subKey === "id") return null;
+                          const inputName = `${key}-${index}-${subKey}`;
+                          const subValueString =
+                            typeof subValue === "object" && subValue !== null
+                              ? JSON.stringify(subValue)
+                              : subValue || "";
+
+                          return (
+                            <Input
+                              key={inputName}
+                              name={inputName}
+                              value={subValueString}
+                              onChange={(e) =>
+                                handleObjectArrayChange(
+                                  key,
+                                  index,
+                                  subKey,
+                                  e.target.value
+                                )
+                              }
+                              placeholder={formatLabel(subKey)}
+                              label={formatLabel(subKey)}
+                              disabled={!!item.id}
+                            />
+                          );
+                        })}
+                        <button
+                          type="button"
+                          className="remove-button"
+                          onClick={() => removeObjectFromArray(key, index)}
+                        >
+                          <Trash2 color="#ffffff" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="button-container">
+                    {/* <button
+                      type="button"
+                      onClick={() => addObjectToArray(key)}
+                      className="small button"
+                    >
+                      + Add {formatLabel(key)}
+                    </button> */}
+                    <button
+                      type="button"
+                      onClick={() => setShowList(true)}
+                      className="small button"
+                    >
+                      + Add Existing {formatLabel(key)}
+                    </button>
+                    {showList && modalData?.memberUrl && (
+                      <MembersList
+                        url={modalData?.memberUrl}
+                        addMember={(item) => {
+                          addObjectToArray(key, item);
+                        }}
+                        close={() => setShowList(false)}
+                      />
+                    )}
+                  </div>
+                </div>
+              );
             }
 
             let inputType = null;

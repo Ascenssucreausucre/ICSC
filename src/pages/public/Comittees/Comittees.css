@@ -1,9 +1,15 @@
-.committees {
-  padding-block: 3rem;
+.committee {
+  padding-block: 1rem;
 }
 .roles-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
   justify-content: center;
+  max-width: 800px;
+  margin-inline: auto;
+}
+.committee-role {
+  padding: 0.5rem;
+  margin-inline: auto;
 }

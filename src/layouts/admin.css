@@ -6,12 +6,18 @@
 .admin-main {
   max-width: unset;
   align-self: unset;
-  max-width: 1200px;
+  max-width: 1000px;
   margin-inline: auto;
+  padding-inline: 10px;
+  padding-block-end: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(105, 81, 81);
+  border-radius: var(--border-radius);
 }
 .admin-section {
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: var(--border-radius);
   padding: 1rem 2rem;
   margin-block: 1rem;
+  /* filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3)); */
 }

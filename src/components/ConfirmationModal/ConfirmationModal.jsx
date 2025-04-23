@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function ConfirmationModal({
   handleAction,
   text,
-  textAction,
+  textAction = "Delete",
   unShow,
 }) {
   const handleUnShow = () => {

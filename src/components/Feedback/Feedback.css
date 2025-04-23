@@ -1,16 +1,38 @@
 .status-feedback {
   position: fixed;
+  display: flex;
+  align-items: center;
   bottom: 20px;
   left: 50%;
-  color: white;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  font-size: 1.2rem;
+  overflow: hidden;
 }
 .status-feedback.success {
-  background-color: var(--primary-color);
+  color: #1ea97c;
+  backdrop-filter: blur(5px);
+  background-color: rgba(228, 248, 240, 0.85);
 }
 .status-feedback.error {
-  background-color: red;
+  color: #df2b3a;
+  backdrop-filter: blur(5px);
+  background-color: rgba(248, 228, 231, 0.85);
+}
+.status-feedback::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7px;
+  height: 100%;
+}
+
+.status-feedback.success::after {
+  background-color: #1ea97c;
+}
+.status-feedback.error::after {
+  background-color: #df2b3a;
 }

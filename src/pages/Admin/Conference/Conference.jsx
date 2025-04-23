@@ -9,6 +9,8 @@ import TopicManager from "../../../components/TopicsManager/TopicsManager";
 import SponsorsManager from "../../../components/SponsorsManager/SponsorsManager";
 import ImportantDatesManager from "../../../components/ImportantDatesManager/ImportantDatesManager";
 import { useState, useEffect } from "react";
+import ConferenceArticles from "../../../components/ConferenceArticles/ConferenceArticles";
+import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function Conference() {
   const { id } = useParams();
@@ -26,7 +28,7 @@ export default function Conference() {
   return (
     <div className="conference-container">
       {!conferenceData ? (
-        <p>Loading...</p>
+        <LoadingScreen />
       ) : (
         <div className="conference">
           <ConferenceCard
@@ -49,12 +51,19 @@ export default function Conference() {
               conference_id={conferenceData.conference.id}
             />
             <FeesManager
-              data={conferenceData.registrationFees}
+              registrationFeesData={conferenceData.registrationFees}
+              additionnalFeesData={conferenceData.additionnalFees}
               conference_id={conferenceData.conference.id}
+              refetch={refetch}
             />
             <SponsorsManager
               data={conferenceData.sponsors}
               conference_id={conferenceData.conference.id}
+            />
+            <ConferenceArticles
+              data={conferenceData.articles}
+              conference_id={conferenceData.conference.id}
+              refetch={refetch}
             />
           </div>
         </div>

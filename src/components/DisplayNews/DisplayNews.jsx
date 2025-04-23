@@ -3,10 +3,18 @@ import { X as Cross, ChevronRight, ChevronLeft } from "lucide-react";
 import "./DisplayNews.css";
 import Linkify from "linkify-react";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 export default function DisplayNews({ close, news = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [countDown, setCountDown] = useState(true);
   const totalNews = news.length;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCountDown(false);
+    }, 2000);
+  });
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
@@ -45,70 +53,72 @@ export default function DisplayNews({ close, news = [] }) {
   }
 
   return (
-    <motion.div
-      className="display-news-container"
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{
-        opacity: 0,
-        scale: 0.8,
-        transition: { duration: 0.3, ease: "easeOut" },
-      }}
-      transition={{
-        duration: 0.6,
-        ease: "backOut",
-      }}
-    >
-      {/* Barre de navigation supérieure */}
-      <div className="news-navigation">
-        <div className="navigation-arrows">
-          <button onClick={handlePrevious} className="nav-button prev-button">
-            <ChevronLeft size={20} />
-          </button>
-          <button onClick={handleNext} className="nav-button next-button">
-            <ChevronRight size={20} />
-          </button>
-        </div>
-
-        {/* Indicateurs de pagination */}
-        <div className="pagination-dots">
-          {news.map((_, index) => {
-            // Cas 1 : on est dans les 3 premiers éléments
-            if (currentIndex <= 2) {
-              return index < 5 ? renderDot(index) : null;
-            }
-
-            // Cas 2 : on est dans les 3 derniers éléments
-            if (currentIndex >= totalNews - 3) {
-              return index >= totalNews - 5 ? renderDot(index) : null;
-            }
-
-            // Cas 3 : au milieu → afficher 2 avant et 2 après
-            return Math.abs(index - currentIndex) <= 2
-              ? renderDot(index)
-              : null;
-          })}
-        </div>
-
-        {/* Bouton de fermeture */}
-        <button onClick={close} className="close-button nav-button">
-          <Cross size={20} />
-        </button>
-      </div>
-
-      {/* Contenu de l'actualité actuelle */}
-      <div className="news-content">
-        {news[currentIndex] && (
-          <div className="news-item">
-            <h2 className="news-title">{news[currentIndex].title}</h2>
-            <p className="news-text">
-              <Linkify options={{ target: "_blank" }}>
-                {news[currentIndex].content}
-              </Linkify>
-            </p>
+    !countDown && (
+      <motion.div
+        className="display-news-container"
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{
+          opacity: 0,
+          scale: 0.9,
+          transition: { duration: 0.2, ease: "anticipate" },
+        }}
+        transition={{
+          duration: 0.6,
+          ease: "backOut",
+        }}
+      >
+        {/* Barre de navigation supérieure */}
+        <div className="news-navigation">
+          <div className="navigation-arrows">
+            <button onClick={handlePrevious} className="nav-button prev-button">
+              <ChevronLeft size={20} />
+            </button>
+            <button onClick={handleNext} className="nav-button next-button">
+              <ChevronRight size={20} />
+            </button>
           </div>
-        )}
-      </div>
-    </motion.div>
+
+          {/* Indicateurs de pagination */}
+          <div className="pagination-dots">
+            {news.map((_, index) => {
+              // Cas 1 : on est dans les 3 premiers éléments
+              if (currentIndex <= 2) {
+                return index < 5 ? renderDot(index) : null;
+              }
+
+              // Cas 2 : on est dans les 3 derniers éléments
+              if (currentIndex >= totalNews - 3) {
+                return index >= totalNews - 5 ? renderDot(index) : null;
+              }
+
+              // Cas 3 : au milieu → afficher 2 avant et 2 après
+              return Math.abs(index - currentIndex) <= 2
+                ? renderDot(index)
+                : null;
+            })}
+          </div>
+
+          {/* Bouton de fermeture */}
+          <button onClick={close} className="close-button nav-button">
+            <Cross size={20} />
+          </button>
+        </div>
+
+        {/* Contenu de l'actualité actuelle */}
+        <div className="news-content">
+          {news[currentIndex] && (
+            <div className="news-item">
+              <h2 className="news-title">{news[currentIndex].title}</h2>
+              <p className="news-text">
+                <Linkify options={{ target: "_blank" }}>
+                  {news[currentIndex].content}
+                </Linkify>
+              </p>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    )
   );
 }

@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useAdminModal } from "../../context/AdminModalContext";
 import "./NewsManager.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import useSubmit from "../../hooks/useSubmit";
 import { motion, AnimatePresence } from "framer-motion";
 import Linkify from "linkify-react";
+import Pagination from "../Pagination/Pagination"; // Import the new Pagination component
 
 export default function NewsManager({ news }) {
   const { id } = useParams();
@@ -24,6 +25,17 @@ export default function NewsManager({ news }) {
   const [sortOrder, setSortOrder] = useState("desc"); // or 'asc'
   const [filterFrom, setFilterFrom] = useState("");
   const [filterTo, setFilterTo] = useState("");
+  const [pageListHeight, setPageListHeight] = useState(null);
+
+  const newsManagerRef = useRef(null);
+
+  useEffect(() => {
+    if (newsManagerRef.current) {
+      setPageListHeight(
+        newsManagerRef.current.querySelector(".page-list")?.clientHeight
+      );
+    }
+  });
 
   const itemsPerPage = 5;
 
@@ -95,14 +107,13 @@ export default function NewsManager({ news }) {
     });
 
   // Pagination
-  const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
   const paginatedNews = filteredNews.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   return (
-    <div className="new-manager admin-section">
+    <div className="new-manager admin-section" ref={newsManagerRef}>
       <h2 className="title secondary">News</h2>
 
       {/* Filter + Sort */}
@@ -129,7 +140,7 @@ export default function NewsManager({ news }) {
       </div>
 
       {/* News Cards */}
-      <div className="page-list">
+      <div className="page-list" style={{ minHeight: pageListHeight + "px" }}>
         <AnimatePresence>
           {paginatedNews.length === 0 ? (
             <p>This conference has no news.</p>
@@ -194,20 +205,13 @@ export default function NewsManager({ news }) {
         </AnimatePresence>
       </div>
 
-      {/* Pagination Controls */}
-      <div className="pagination-controls">
-        <div className="button-container">
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              className={`page-button ${currentPage === i + 1 ? "active" : ""}`}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Use the new Pagination component */}
+      <Pagination
+        totalItems={filteredNews.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
 
       <button className="button" onClick={handleCreateNews}>
         Add news

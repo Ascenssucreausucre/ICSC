@@ -51,7 +51,6 @@ export default function FeesModal({ data, close, refreshFunction }) {
       ...registrationFee,
       feecategories: feeCategories,
     };
-    console.log("Updated fee data:", updatedFee);
 
     const id = registrationFee.id;
 
@@ -68,7 +67,6 @@ export default function FeesModal({ data, close, refreshFunction }) {
         ? refreshFunction(response.newItem)
         : refreshFunction(updatedFee)
       : null;
-    console.log(response);
     response && close();
   };
 

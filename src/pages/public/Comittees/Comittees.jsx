@@ -36,6 +36,7 @@ export default function Comittees() {
 
   return (
     <div className="committees">
+      <h1 className="title primary">Committees</h1>
       {!loading &&
         committees.map((comittee, comitteeIndex) => (
           <div key={comitteeIndex} className="committee">

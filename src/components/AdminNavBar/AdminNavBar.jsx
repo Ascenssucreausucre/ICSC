@@ -26,11 +26,8 @@ export default function AdminNavBar() {
         <NavLink to={"/admin/conferences"} className={"nav-link"}>
           Conferences
         </NavLink>
-        <NavLink to={"/admin/topics"} className={"nav-link"}>
-          Topics
-        </NavLink>
-        <NavLink to={"/admin/articles"} className={"nav-link"}>
-          Articles
+        <NavLink to={"/admin/authors"} className={"nav-link"}>
+          Authors
         </NavLink>
       </div>
       <button onClick={handleLogout} className="button">

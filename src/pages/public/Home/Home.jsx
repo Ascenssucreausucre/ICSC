@@ -2,6 +2,11 @@ import CustomDetails from "../../../components/CustomDetails/CustomDetails";
 import "./Home.css";
 import ImportantDates from "../../../components/ImportantDates/ImportantDates";
 import { Link, useLoaderData } from "react-router-dom";
+import RotatingText from "../../../components/RotatingText/RotatingText";
+import { LayoutGroup, motion } from "framer-motion";
+import MagnetLines from "../../../components/MagnetLines/MagnetLines";
+import ScrollVelocity from "../../../components/ScrollVelocity/ScrollVelocity";
+
 export default function Home() {
   const homePageData = useLoaderData();
   const convertedDates = {
@@ -23,10 +28,41 @@ export default function Home() {
     ),
   };
 
+  const allTexts = homePageData.topicsData.flatMap((topic) =>
+    topic.contents.map((content) => content.text)
+  );
+
+  const allTextsTwoLines = () => {
+    const half = Math.ceil(allTexts.length / 2);
+
+    const firstHalf = allTexts.slice(0, half).join(", ");
+    const secondHalf = allTexts.slice(half).join(", ");
+
+    return secondHalf.length > 1 ? [firstHalf, secondHalf] : [firstHalf];
+  };
+
+  const filteredTexts = allTexts.filter((text) => text.length < 18);
+
+  const shuffledTexts = filteredTexts.sort(() => 0.5 - Math.random()); // Mélange
+
+  const randomTexts = shuffledTexts.slice(0, 10); // Prend les 10 premiers
+
   return (
     <>
       <section className="section">
         <h2 className="title primary">Invitation</h2>
+        {/* <MagnetLines
+          containerSize="50%"
+          lineColor="var(--primary-color)"
+          lineWidth="0.2rem"
+          lineHeight="2rem"
+          style={{
+            position: "absolute",
+            right: "-25%",
+            zIndex: "-1",
+            opacity: 0.5,
+          }}
+        /> */}
         <p className="sub-title">
           It is our great pleasure to invite you to participate in the IEEE
           {" " + homePageData.conferenceData.year + " "}
@@ -62,7 +98,25 @@ export default function Home() {
         </div>
       </section>
       <section className="topics section">
-        <h2 className="title primary">Topics of interest</h2>
+        <LayoutGroup>
+          <motion.div className="text-flex title primary" layout>
+            <motion.h2 layout>Topics of interest</motion.h2>
+            {randomTexts.length >= 1 && (
+              <RotatingText
+                texts={randomTexts}
+                mainClassName=""
+                staggerFrom={"last"}
+                initial={{ y: "150%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "-150%" }}
+                staggerDuration={0.025}
+                splitLevelClassName=""
+                transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                rotationInterval={3000}
+              />
+            )}
+          </motion.div>
+        </LayoutGroup>
         <p>
           This edition's main topics are written down below. Have in mind that
           the conference will treat more topics than just the main ones.
@@ -76,6 +130,10 @@ export default function Home() {
             />
           ))}
         </div>
+        <ScrollVelocity
+          texts={allTextsTwoLines()}
+          className="scroll-velocity special-gothic-expanded-one-regular"
+        />
       </section>
       <section className="send-your-articles section">
         <section className="alternative-background">

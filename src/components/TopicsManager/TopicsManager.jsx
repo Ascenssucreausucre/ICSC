@@ -3,6 +3,8 @@ import { useAdminModal } from "../../context/AdminModalContext";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
 import TopicsFormModal from "../TopicsFormModal/TopicsFormModal";
+import CountUp from "../CountUp";
+import "./TopicManager.css";
 
 export default function TopicManager({ data, conference_id }) {
   const { submit } = useSubmit();
@@ -58,7 +60,6 @@ export default function TopicManager({ data, conference_id }) {
         <ConfirmationModal
           handleAction={handleDeleteTopic} // Passer la fonction de suppression
           text={`Are you sure you want to delete ${selectedTopic.title} ?`} // Utiliser les informations du topic sélectionné
-          textAction={"Delete"}
           unShow={setConfirmation} // Fermer le modal
         />
       ) : null}
@@ -83,7 +84,12 @@ export default function TopicManager({ data, conference_id }) {
               <div className="card-data flex-1">
                 <h2 className="secondary">{topic.title}</h2>
                 <p>
-                  This topic has {topic.content.length}{" "}
+                  This topic has{" "}
+                  <CountUp
+                    from={0}
+                    to={topic.content.length}
+                    className="count-up"
+                  />{" "}
                   {topic.content.length > 1 ? "subtopics" : "subtopic"}
                 </p>
               </div>

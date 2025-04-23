@@ -39,7 +39,6 @@ export default function ImportantDatesManager({ data, conference_id }) {
 
   const refresh = (newDates) => {
     const formattedNewdates = {
-      conference_id: newDates.conference_id,
       initial_submission_due: new Date(newDates.initial_submission_due),
       paper_decision_notification: new Date(
         newDates.paper_decision_notification
@@ -49,15 +48,14 @@ export default function ImportantDatesManager({ data, conference_id }) {
       congress_opening: new Date(newDates.congress_opening),
       congress_closing: new Date(newDates.congress_closing),
     };
-    setImportantDates(formattedNewdates);
+    setImportantDates({ ...formattedNewdates, conference_id });
   };
 
   const handleEditDates = () => {
-    const { conference_id, ...dataToSend } = importantDates;
     openModal({
-      initialData: dataToSend,
+      initialData: importantDates,
       method: "PUT",
-      url: `/ImportantDates/update/${conference_id}`,
+      url: `/ImportantDates/update/${importantDates.conference_id}`,
       title: `Edit important dates`,
       arg: true,
       refreshFunction: refresh,
@@ -88,7 +86,6 @@ export default function ImportantDatesManager({ data, conference_id }) {
       {confirmation ? (
         <ConfirmationModal
           handleAction={handleDeleteDates}
-          textAction="Delete"
           text="Are you sure to delete important dates for this conference ?"
           unShow={setConfirmation}
         />

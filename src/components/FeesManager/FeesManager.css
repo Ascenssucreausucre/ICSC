@@ -4,4 +4,5 @@
   padding-block: 2rem;
   border-radius: var(--border-radius);
   filter: var(--card-drop-shadow);
+  padding-inline: 5px;
 }

@@ -46,7 +46,6 @@ export default function CommitteesBack({ data, setCommittees }) {
         <ConfirmationModal
           handleAction={handleDeleteCommittee}
           text={`Are you sure to delete ${data.type} ?`}
-          textAction={"Delete"}
           unShow={setConfirmation}
         />
       ) : null}

@@ -5,9 +5,7 @@ import { useLoaderData } from "react-router-dom";
 export default function Registration() {
   const iconSize = 12;
 
-  const { registrationFees, importantDates } = useLoaderData();
-
-  console.log(importantDates);
+  const { registrationFees, importantDates, additionnalFees } = useLoaderData();
 
   return (
     <>
@@ -52,7 +50,11 @@ export default function Registration() {
             <li>
               <ArrowRight size={iconSize} color="#eb4c4c" />
               Six pages are allowed for each paper. Up to two additional pages
-              will be permitted for a charge of 40 EUR per additional page.
+              will be permitted for a charge of{" "}
+              <span className="important-info">
+                {additionnalFees.additionnal_page_fee}€
+              </span>{" "}
+              per additional page.
             </li>
             <li>
               <ArrowRight size={iconSize} color="#eb4c4c" />

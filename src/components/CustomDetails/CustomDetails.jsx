@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./CustomDetails.css";
+import { Triangle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CustomDetails = ({ title, content }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,18 +44,43 @@ const CustomDetails = ({ title, content }) => {
       onClick={() => setIsOpen(!isOpen)} // Ouvre/ferme au clic
     >
       <div className="summary">
-        <span className="icon">{isOpen ? "▼" : "▶"}</span>
+        <span className={`icon${isOpen ? " active" : ""}`}>
+          <Triangle
+            size={"1rem"}
+            color="white"
+            // strokeWidth="5px"
+            fill="white"
+          />
+        </span>
         {title}
       </div>
-      {isOpen && (
-        <div ref={contentRef} className="content">
-          <ul>
-            {content.map((item, index) => (
-              <li key={index}>{item.text}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            ref={contentRef}
+            className="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+          >
+            <motion.ul initial="hidden" animate="visible" exit="hidden">
+              {content.map((item, index) => (
+                <motion.li
+                  key={index}
+                  variants={{
+                    hidden: { opacity: 0, paddingBlock: "0.4rem" },
+                    visible: { opacity: 1, paddingBlock: "0.5rem" },
+                  }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                >
+                  {item.text}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

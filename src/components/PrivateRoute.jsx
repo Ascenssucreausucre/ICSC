@@ -1,17 +1,14 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import LoadingScreen from "./LoadingScreen/LoadingScreen";
 
 // Composant guard privé pour rediriger si l'utilisateur n'est pas authentifié
 const PrivateRoute = () => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   // Si l'utilisateur n'est pas authentifié, on le redirige vers la page de login

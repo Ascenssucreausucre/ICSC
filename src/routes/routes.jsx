@@ -18,6 +18,9 @@ import { AuthProvider } from "../context/AuthContext";
 import { FeedbackProvider } from "../context/FeedbackContext";
 import { AdminModalProvider } from "../context/AdminModalContext";
 import Submission from "../pages/public/Submission/Submission";
+import ConferenceArticles from "../components/ConferenceArticles/ConferenceArticles";
+import Authors from "../pages/Admin/Authors/Authors";
+import Author from "../pages/Admin/Author/Author";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -85,6 +88,18 @@ const router = createBrowserRouter([
           {
             path: "conferences/:id",
             element: <Conference />,
+          },
+          {
+            path: "conferences/:id/articles",
+            element: <ConferenceArticles />,
+          },
+          {
+            path: "authors",
+            element: <Authors />,
+          },
+          {
+            path: "authors/:id",
+            element: <Author />,
           },
         ],
       },

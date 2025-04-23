@@ -4,3 +4,28 @@
 .edit-form .form-control:focus {
   outline: 1px solid var(--primary-color);
 }
+.edit-form {
+  max-height: 80dvh;
+  overflow-y: scroll;
+}
+.object-array-field {
+  height: 40dvh;
+  overflow-y: scroll;
+  padding-inline: 0.5rem;
+}
+.object-array-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: end;
+  margin-top: 5px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  border-radius: var(--border-radius);
+}
+.object-array-item .form-input,
+.object-array-item .remove-button {
+  margin-block: 0;
+  width: 30%;
+  align-self: unset;
+}

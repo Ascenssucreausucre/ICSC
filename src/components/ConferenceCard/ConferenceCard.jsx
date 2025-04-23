@@ -60,7 +60,6 @@ export default function ConferenceCard({
         <ConfirmationModal
           text={`Are you sure you want to delete conference ${data.acronym}'${data.year} ? This action is definitive and will be irreversible.`}
           handleAction={handleDeleteConference}
-          textAction={"Delete"}
           unShow={setConfirmation}
         />
       ) : null}
@@ -69,7 +68,7 @@ export default function ConferenceCard({
           className="card conference-card"
           key={data.id}
           style={{
-            backgroundImage: `linear-gradient(90deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 0.7) 100%), url(${
+            backgroundImage: `linear-gradient(60deg, rgba(255, 255, 255, 1) 40%, rgba(255, 255, 255, 0.7) 100%), url(${
               filesUrl + "/" + data.banner
             })`,
             backgroundSize: "cover",

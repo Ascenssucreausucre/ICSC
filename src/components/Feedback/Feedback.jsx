@@ -1,6 +1,10 @@
 import { useFeedback } from "../../context/FeedbackContext";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Feedback.css";
+import { CrossIcon } from "lucide-react";
+import { CheckCircle2Icon } from "lucide-react";
+import { CheckCircle } from "lucide-react";
+import { XCircle } from "lucide-react";
 export function Feedback() {
   const { feedback } = useFeedback();
 
@@ -18,7 +22,18 @@ export function Feedback() {
           transition={{ duration: 0.2 }}
           style={{ position: "fixed", left: "50%" }}
         >
-          <p>{feedback.message}</p>
+          {feedback.type === "success" ? (
+            <CheckCircle style={{ marginRight: "10px", height: "100%" }} />
+          ) : (
+            <XCircle style={{ marginRight: "10px", height: "100%" }} />
+          )}
+          <p>
+            <strong>
+              {String(feedback.type).charAt(0).toUpperCase() +
+                String(feedback.type).slice(1)}{" "}
+            </strong>
+            {feedback.message}
+          </p>
         </motion.div>
       )}
     </AnimatePresence>

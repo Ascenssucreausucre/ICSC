@@ -1,11 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght,GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC@8..144,-10..0,25..151,100..1000,-200..150,27..175,323..603,25..135,649..854,-305..-98,560..788,416..570,528..760&family=Special+Gothic+Expanded+One&display=swap");
 
 :root {
   --primary-color: #eb4c4c;
   --secondary-color: #502f2f;
   --tertiary-color: #4736a8;
 
-  --title-font-size: clamp(2rem, 2vw);
+  --header-title-font-size: clamp(3rem, 4.8vw, 5rem);
+  --title-font-size: 2rem;
+  --subtitle-font-size: clamp(1.2rem, 1.2vw, 1.5rem);
 
   --card-drop-shadow: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
 
@@ -22,17 +24,26 @@
   font-variation-settings: "slnt" 0, "wdth" 100, "GRAD" 0, "XOPQ" 96, "XTRA" 468,
     "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738, "YTLC" 514, "YTUC" 712;
 }
+
 #root {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
+.font-2 {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 main {
   padding-inline: clamp(10px, 10vw, 10vw);
   flex: 1;
+  width: 95vw;
   max-width: 1400px;
   align-self: center;
   padding-top: 60px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 h1 {
   font-weight: 700;
@@ -49,12 +60,21 @@ h2 {
   flex-wrap: wrap;
   gap: 10px;
 }
+/* TEXT STYLES */
+/* TEXT STYLES */
+
 .title {
-  font-size: 2rem;
+  font-size: var(--title-font-size);
   text-align: center;
-  font-weight: 800;
+  font-weight: 900;
   margin-block: 5px;
 }
+
+.sub-title {
+  font-size: var(--subtitle-font-size);
+  font-weight: 500;
+}
+
 .primary {
   color: var(--primary-color);
 }
@@ -68,6 +88,10 @@ h2 {
   /* padding-inline: clamp(10px, 15vw, 15vw); */
   margin-block: 15px;
 }
+
+/* TEXT STYLES */
+/* TEXT STYLES */
+
 .button {
   padding: 10px 15px;
   border-radius: 50px;
@@ -178,7 +202,12 @@ h2 {
   color: gray;
 }
 .card {
-  background-color: white;
+  background: linear-gradient(
+    40deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  border: solid white 1px;
   border-radius: 10px;
   padding: 10px 20px;
   margin-block: 10px;
@@ -187,8 +216,8 @@ h2 {
 .card * {
   margin-block: 2px;
 }
-strong {
-  color: var(--secondary-color);
+.card strong {
+  margin-block: unset;
 }
 .card-content-container {
   display: flex;
@@ -216,5 +245,11 @@ strong {
 }
 section:not([class]) {
   margin-bottom: 2rem;
-  padding-inline: clamp(20px, 15%, 15%);
+  max-width: 800px;
+  margin-inline: auto;
+}
+a {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }

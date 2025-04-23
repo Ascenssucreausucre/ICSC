@@ -59,11 +59,14 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         setIsAuthenticated(true);
+        showFeedback("success", "Logged in usccessfully");
       } else {
         console.error(data);
+        showFeedback("error", data.error);
       }
     } catch (error) {
       console.error("Login error:", error);
+      showFeedback("error", error.error);
     }
     setLoggingIn(false);
   };

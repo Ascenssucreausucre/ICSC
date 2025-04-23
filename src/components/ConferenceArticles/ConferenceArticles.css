@@ -1,0 +1,102 @@
+.page-button:disabled {
+  border: solid 1px gray;
+  cursor: not-allowed;
+}
+.article-card.card {
+  display: flex;
+  flex-wrap: wrap;
+}
+.p-dropdown.status-dropdown {
+  min-width: 160px;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--border-radius);
+}
+
+.p-dropdown.status-dropdown.status-pending {
+  border: 1px solid #f1e6c2;
+  background: linear-gradient(40deg, #f1e6c2 0%, #fffbe6 100%);
+  transition: border 0.2s ease-out, filter 0.2s ease-out;
+}
+.p-dropdown.status-dropdown.status-pending:hover {
+  border: 1px solid #d3b963;
+  /* filter: drop-shadow(0 0 3px #d3b96369); */
+}
+
+.p-dropdown.status-dropdown.status-accepted {
+  border: 1px solid #c6efd8;
+  background: linear-gradient(40deg, #c6efd8 0%, #e6ffed 100%);
+  transition: border 0.2s ease-out;
+}
+.p-dropdown.status-dropdown.status-accepted:hover {
+  border: 1px solid #28a745;
+}
+
+.p-dropdown.status-dropdown.status-rejected {
+  border: 1px solid #f7c6cc;
+  background: linear-gradient(40deg, #f7c6cc 0%, #ffe6e9 100%);
+  transition: border 0.2s ease-out;
+}
+.p-dropdown.status-dropdown.status-rejected:hover {
+  border: 1px solid #dc3545;
+}
+
+/* Label du dropdown */
+.status-dropdown .p-dropdown-label {
+  color: #333;
+}
+
+/* Panel du dropdown */
+.p-dropdown-panel {
+  background: linear-gradient(
+    40deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(236, 231, 231, 0.7) 40%,
+    rgba(235, 231, 231, 0.8) 45%,
+    rgba(250, 250, 250, 0.8) 55%,
+    rgba(255, 255, 255, 0.7) 60%,
+    rgba(228, 226, 226, 0.8) 100%
+  );
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.3));
+  border-radius: var(--border-radius);
+  backdrop-filter: blur(3px);
+  border: solid 1px white;
+  overflow: hidden;
+}
+
+/* Items dans la liste */
+.p-dropdown-panel li {
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.2s ease-out;
+  display: flex;
+  align-items: center; /* 👈 Centre les icônes verticalement */
+  gap: 6px;
+}
+.p-dropdown-panel li:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Le composant label aussi avec icônes centrées */
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Couleurs des icônes */
+.icon-pending {
+  color: #d3b963;
+}
+
+.icon-accepted {
+  color: #28a745;
+}
+
+.icon-rejected {
+  color: #dc3545;
+}
+/* .icon-accepted,
+.icon-pending,
+.icon-rejected {
+} */
