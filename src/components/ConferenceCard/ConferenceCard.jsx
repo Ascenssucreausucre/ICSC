@@ -15,6 +15,11 @@ export default function ConferenceCard({
   const { openModal } = useAdminModal();
   const filesUrl = import.meta.env.VITE_IMAGE_URL;
   const navigate = useNavigate();
+  const formatLabel = (key) => {
+    return key
+      .replace(/_/g, " ") // Remplace les underscores par des espaces
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // Met la première lettre de chaque mot en majuscule
+  };
 
   const formattedData = Object.fromEntries(
     Object.entries(data).filter(
@@ -81,15 +86,37 @@ export default function ConferenceCard({
                 className="card-title link"
                 to={`/admin/conferences/${data.id}`}
               >{`${data.acronym}'${data.year}`}</Link>
-              {Object.entries(formattedData).map(([name, value]) => (
-                <li key={name}>
-                  <strong>
-                    {String(name).charAt(0).toUpperCase() +
-                      String(name).slice(1)}
-                  </strong>
-                  : {value}
-                </li>
-              ))}
+              {Object.entries(formattedData).map(([name, value]) => {
+                const isColor =
+                  typeof value === "string" &&
+                  /^#([0-9A-F]{3}){1,2}$/i.test(value);
+
+                return (
+                  <li
+                    key={name}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5em",
+                    }}
+                  >
+                    <strong>{formatLabel(name)}:</strong>
+                    {isColor ? (
+                      <>
+                        <span
+                          className="color-preview"
+                          style={{
+                            backgroundColor: value,
+                            // boxShadow: `0 0 2px ${value}`,
+                          }}
+                        ></span>
+                      </>
+                    ) : (
+                      <span>{String(value)}</span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
             <button
               className="button small"

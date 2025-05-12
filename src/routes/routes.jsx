@@ -21,6 +21,8 @@ import Submission from "../pages/public/Submission/Submission";
 import ConferenceArticles from "../components/ConferenceArticles/ConferenceArticles";
 import Authors from "../pages/Admin/Authors/Authors";
 import Author from "../pages/Admin/Author/Author";
+import CustomErrorPage from "../components/CustomErrorPage/CustomErrorPage";
+import Admins from "../pages/Admin/Admins/Admins";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,6 +30,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <CustomErrorPage />,
     children: [
       {
         path: "",
@@ -42,10 +45,18 @@ const router = createBrowserRouter([
           fetch(`${API_URL}/front-routes/registration-fees/current`),
       },
       { path: "submission", element: <Submission /> },
-      { path: "program", element: <Program /> },
+      {
+        path: "program",
+        element: <Program />,
+        loader: () => fetch(`${API_URL}/front-routes/program`),
+      },
       { path: "special-sessions", element: <SpecialSessions /> },
       { path: "workshops", element: <Workshops /> },
-      { path: "local-info", element: <LocalInfo /> },
+      {
+        path: "local-informations",
+        element: <LocalInfo />,
+        loader: () => fetch(`${API_URL}/local-informations/current`),
+      },
       { path: "archives", element: <Archives /> },
     ],
   },
@@ -100,6 +111,14 @@ const router = createBrowserRouter([
           {
             path: "authors/:id",
             element: <Author />,
+          },
+          {
+            path: "authors/country/:country",
+            element: <Authors />,
+          },
+          {
+            path: "admins",
+            element: <Admins />,
           },
         ],
       },

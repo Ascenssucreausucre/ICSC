@@ -58,7 +58,7 @@ const CustomDetails = ({ title, content }) => {
         {isOpen && (
           <motion.div
             ref={contentRef}
-            className="content"
+            className="content glass-background"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

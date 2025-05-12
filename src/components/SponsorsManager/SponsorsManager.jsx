@@ -88,7 +88,9 @@ export default function SponsorsManager({ data, conference_id }) {
           displayedSponsors.map((sponsor) => (
             <div className="card" key={sponsor.id}>
               <div className="card-content">
-                <img src={imgUrl + sponsor.image} alt={sponsor.name} />
+                <div className="sponsor">
+                  <img src={imgUrl + sponsor.image} alt={sponsor.name} />
+                </div>
                 <div className="card-text">
                   <h3>{sponsor.name}</h3>
                   <p>

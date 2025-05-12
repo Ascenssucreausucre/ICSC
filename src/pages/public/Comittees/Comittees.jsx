@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Comittees.css";
-import { useEffect } from "react";
 import useFetch from "../../../hooks/useFetch";
+import React from "react";
 
 export default function Comittees() {
   const [committees, setCommittees] = useState([]);
@@ -37,36 +37,42 @@ export default function Comittees() {
   return (
     <div className="committees">
       <h1 className="title primary">Committees</h1>
-      {!loading &&
+      {!loading && committees && committees.length > 0 ? (
         committees.map((comittee, comitteeIndex) => (
-          <div key={comitteeIndex} className="committee">
-            <h2 className="title secondary">{comittee.type}</h2>
+          <React.Fragment>
+            <div key={comitteeIndex} className="committee">
+              <h2 className="title secondary">{comittee.type}</h2>
 
-            <div className="roles-container">
-              {/* Vérifier si `roles` existe et est un tableau */}
-              {Array.isArray(comittee.roles) && comittee.roles.length > 0 ? (
-                comittee.roles.map((role, roleIndex) => (
-                  <div key={roleIndex} className="committee-role">
-                    {role.title && (
-                      <h3 className="primary bold">{role.title}</h3>
-                    )}
+              <div className="roles-container">
+                {/* Vérifier si `roles` existe et est un tableau */}
+                {Array.isArray(comittee.roles) && comittee.roles.length > 0 ? (
+                  comittee.roles.map((role, roleIndex) => (
+                    <div key={roleIndex} className="committee-role">
+                      {role.title && (
+                        <h3 className="primary bold">{role.title}</h3>
+                      )}
 
-                    {/* Vérifier si `members` existe avant de le parcourir */}
-                    {Array.isArray(role.members) &&
-                      role.members.map((member, memberIndex) => (
-                        <p key={memberIndex}>
-                          {member.name} {member.surname || ""} (
-                          {member.affiliation || "Unknown"})
-                        </p>
-                      ))}
-                  </div>
-                ))
-              ) : (
-                <p>Aucun membre trouvé</p>
-              )}
+                      {/* Vérifier si `members` existe avant de le parcourir */}
+                      {Array.isArray(role.members) &&
+                        role.members.map((member, memberIndex) => (
+                          <p key={memberIndex}>
+                            {member.name} {member.surname || ""} (
+                            {member.affiliation || "Unknown"})
+                          </p>
+                        ))}
+                    </div>
+                  ))
+                ) : (
+                  <p>Aucun membre trouvé</p>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+            {comitteeIndex + 1 < committees.length && <hr />}
+          </React.Fragment>
+        ))
+      ) : (
+        <p>This conference's committees hasn't been defined yet.</p>
+      )}
     </div>
   );
 }

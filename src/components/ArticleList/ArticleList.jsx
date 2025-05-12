@@ -10,7 +10,13 @@ import Pagination from "../Pagination/Pagination";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import { Link } from "react-router-dom";
 
-export default function ArticleList({ data, conference_id, refetch }) {
+export default function ArticleList({
+  data,
+  conference_id,
+  refetch,
+  filters = true,
+  placeholder,
+}) {
   const [articles, setArticles] = useState([]);
   const [statusList, setStatusList] = useState([]);
   const [searchItem, setSearchItem] = useState("");
@@ -20,6 +26,8 @@ export default function ArticleList({ data, conference_id, refetch }) {
     confirm: false,
     id: null,
   });
+  const [profileFilter, setProfileFilter] = useState(null);
+  const [statusFilter, setStatusFilter] = useState(null);
   const { submit } = useSubmit();
   const { openModal } = useAdminModal();
 
@@ -48,7 +56,8 @@ export default function ArticleList({ data, conference_id, refetch }) {
   useEffect(() => {
     const search = searchItem.toLowerCase();
 
-    const results = articles.filter((article) => {
+    // 1. Filtrer par titre ou auteur
+    let results = articles.filter((article) => {
       const titleMatch = article.title?.toLowerCase().includes(search);
       const authorMatch = article.authors?.some((author) => {
         return (
@@ -56,31 +65,26 @@ export default function ArticleList({ data, conference_id, refetch }) {
           author.surname?.toLowerCase().includes(search)
         );
       });
-
       return titleMatch || authorMatch;
     });
 
+    // 2. Filtrer par profil si nécessaire
+    if (profileFilter) {
+      results = results.filter(
+        (el) => el.profile?.toLowerCase() === profileFilter.toLowerCase()
+      );
+    }
+
+    if (statusFilter) {
+      results = results.filter(
+        (el) => el.status?.toLowerCase() === statusFilter.toLowerCase()
+      );
+    }
+
+    // 3. Mettre à jour la liste filtrée et reset la pagination
     setFilteredArticles(results);
-    setCurrentPage(1); // Reset page when search changes
-  }, [searchItem, articles]);
-
-  useEffect(() => {
-    const search = searchItem.toLowerCase();
-
-    const results = articles.filter((article) => {
-      const titleMatch = article.title?.toLowerCase().includes(search);
-      const authorMatch = article.authors?.some((author) => {
-        return (
-          author.name?.toLowerCase().includes(search) ||
-          author.surname?.toLowerCase().includes(search)
-        );
-      });
-
-      return titleMatch || authorMatch;
-    });
-
-    setFilteredArticles(results);
-  }, [articles]);
+    setCurrentPage(1);
+  }, [searchItem, articles, profileFilter, statusFilter]);
 
   const itemsPerPage = 6;
 
@@ -141,6 +145,21 @@ export default function ArticleList({ data, conference_id, refetch }) {
     return article?.status === status;
   };
 
+  const handleAddNonExistantAuthor = () => {
+    openModal({
+      url: "/Authors/",
+      method: "POST",
+      initialData: {
+        name: "",
+        surname: "",
+        country: "",
+        title: "",
+        affiliation: "",
+      },
+      title: "Create author",
+    });
+  };
+
   const handleAddArticle = async () => {
     const articleTemplate = {
       nr: 0,
@@ -157,14 +176,16 @@ export default function ArticleList({ data, conference_id, refetch }) {
       title: "New article",
       memberUrl: "/Authors",
       refreshFunction: refetch,
+      unexists: handleAddNonExistantAuthor,
     });
   };
 
   const handleUpdateArticle = (article) => {
+    const { status, ...articleRows } = article;
     openModal({
       url: `/Articles/update/${article.id}`,
       method: "PUT",
-      initialData: article,
+      initialData: articleRows,
       title: "Update article " + article.title,
       memberUrl: "/Authors",
       refreshFunction: refetch,
@@ -194,11 +215,36 @@ export default function ArticleList({ data, conference_id, refetch }) {
       <SearchBar
         value={searchItem}
         onChange={(e) => setSearchItem(e.target.value)}
-        placeholder="Search article or author"
+        placeholder={placeholder}
       />
 
+      <div className="filters-row">
+        <Dropdown
+          value={profileFilter}
+          onChange={(e) => setProfileFilter(e.target.value)}
+          options={["Contributed", "Invited"]}
+          placeholder="Select profile"
+          showClear
+        />
+        <Dropdown
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          options={["Pending", "Accepted", "Rejected"]}
+          placeholder="Select Status"
+          showClear
+        />
+        <button
+          className="button small"
+          onClick={() => {
+            setStatusFilter(null), setProfileFilter(null);
+          }}
+        >
+          Clear Filters
+        </button>
+      </div>
+
       {articles.length > 0 ? (
-        <p>Total of {articles.length} articles found.</p>
+        <p>Total of {filteredArticles.length} articles found.</p>
       ) : (
         <p>No articles found.</p>
       )}
@@ -211,26 +257,35 @@ export default function ArticleList({ data, conference_id, refetch }) {
           paginatedArticles.map((article) => (
             <div className="article-card card" key={article.id}>
               <div className="flex-1">
-                <h2>{article.title}</h2>
-                <p className="data-detail">
-                  {article.authors?.length > 0 ? (
-                    <>
-                      by{" "}
-                      {article.authors.map((author, index) => (
-                        <React.Fragment key={author.id}>
-                          <Link to={`/admin/authors/${author.id}`}>
-                            {author.name} {author.surname}
-                          </Link>
-                          {index < article.authors.length - 1 ? ", " : "."}
-                        </React.Fragment>
-                      ))}
-                    </>
-                  ) : (
-                    "No authors found for this article."
-                  )}
+                <div className="grouped-title">
+                  <h2>{article.title}</h2>
+                  <p className="data-detail">
+                    {article.authors?.length > 0 ? (
+                      <>
+                        by{" "}
+                        {article.authors.map((author, index) => (
+                          <React.Fragment key={author.id}>
+                            <Link to={`/admin/authors/${author.id}`}>
+                              {author.name} {author.surname}
+                            </Link>
+                            {index < article.authors.length - 1 ? ", " : "."}
+                          </React.Fragment>
+                        ))}
+                      </>
+                    ) : (
+                      "No authors found for this article."
+                    )}
+                  </p>
+                </div>
+                <div className={`tag tag-${article.profile.toLowerCase()}`}>
+                  {article.profile}
+                </div>
+                <p>
+                  <strong>Affiliation: </strong>
+                  {article.affiliation}
                 </p>
               </div>
-              <div className="button-container card-button">
+              <div className="button-container card-button-container">
                 <Dropdown
                   value={article.status}
                   options={statusOptions}

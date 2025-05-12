@@ -1,6 +1,7 @@
 import RegistrationFeesTable from "../../../components/RegistrationFeesTable/RegistrationFeesTable";
 import { ArrowRight } from "lucide-react";
 import { useLoaderData } from "react-router-dom";
+import Button from "../../../components/Button/Button";
 
 export default function Registration() {
   const iconSize = 12;
@@ -12,19 +13,23 @@ export default function Registration() {
       <h1 className="title primary">Registration</h1>
       <section>
         <div className="text-container">
-          <p>
-            The registration phase ends on{" "}
-            <span className="important-info">
-              {new Date(
-                importantDates.initial_submission_due
-              ).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </span>{" "}
-            , each procedure must have been finalized before.
-          </p>
+          {importantDates ? (
+            <p>
+              The registration phase ends on{" "}
+              <span className="important-info">
+                {new Date(
+                  importantDates.initial_submission_due
+                ).toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </span>{" "}
+              , each procedure must have been finalized before.
+            </p>
+          ) : (
+            <p>More information concerning registrations are coming later.</p>
+          )}
         </div>
       </section>
       <section>
@@ -47,15 +52,23 @@ export default function Registration() {
               <ArrowRight size={iconSize} color="#eb4c4c" />A Student
               Registration does not give right to an additional paper.
             </li>
-            <li>
-              <ArrowRight size={iconSize} color="#eb4c4c" />
-              Six pages are allowed for each paper. Up to two additional pages
-              will be permitted for a charge of{" "}
-              <span className="important-info">
-                {additionnalFees.additionnal_page_fee}€
-              </span>{" "}
-              per additional page.
-            </li>
+            {additionnalFees ? (
+              <li>
+                <ArrowRight size={iconSize} color="#eb4c4c" />
+                Six pages are allowed for each paper. Up to two additional pages
+                will be permitted for a charge of{" "}
+                <span className="important-info">
+                  {additionnalFees.additionnal_page_fee}€
+                </span>{" "}
+                per additional page.
+              </li>
+            ) : (
+              <li>
+                <ArrowRight size={iconSize} color="#eb4c4c" /> Additionnal page
+                fees are still under discussion, more informations are coming
+                later.
+              </li>
+            )}
             <li>
               <ArrowRight size={iconSize} color="#eb4c4c" />
               Students must provide concurrently with the Registration Form an
@@ -65,12 +78,20 @@ export default function Registration() {
             </li>
           </ul>
         </div>
-        {registrationFees.map((registrationFee) => (
-          <RegistrationFeesTable
-            data={registrationFee}
-            key={registrationFee.id}
-          />
-        ))}
+        {registrationFees && registrationFees.length > 0 ? (
+          registrationFees.map((registrationFee) => (
+            <RegistrationFeesTable
+              data={registrationFee}
+              key={registrationFee.id}
+            />
+          ))
+        ) : (
+          <p>
+            Registration fees are still under discussion, more information
+            coming later.
+          </p>
+        )}
+        <Button text="Register to the conference" />
       </section>
     </>
   );

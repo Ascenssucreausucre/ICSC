@@ -17,7 +17,7 @@ footer {
   text-align: center;
 }
 .sponsor img {
-  height: 5rem;
+  height: clamp(2.5rem, 10vw, 5rem);
   object-fit: cover;
   aspect-ratio: 2/1;
   border-radius: 10px;

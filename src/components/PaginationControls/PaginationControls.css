@@ -1,0 +1,29 @@
+.pagination-controls {
+  display: flex;
+  padding-block: 1rem;
+  justify-content: space-around;
+}
+.pagination-controls > .button-container {
+  align-items: center;
+}
+.pagination-controls button {
+  border: solid var(--primary-color) 1px;
+  aspect-ratio: 1 / 1;
+  background-color: unset;
+  font-size: 1rem;
+  border-radius: 50%;
+  padding: 0.5rem;
+  box-shadow: inset 0 0 5px transparent;
+  transition: box-shadow 0.2s ease-out;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+  min-width: 2.5rem;
+  cursor: pointer;
+}
+.pagination-controls button.active {
+  box-shadow: inset 0 0 3px var(--primary-color);
+}

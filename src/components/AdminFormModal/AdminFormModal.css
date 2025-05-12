@@ -6,10 +6,11 @@
 }
 .edit-form {
   max-height: 80dvh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .object-array-field {
-  height: 40dvh;
+  max-height: 200px;
+  min-height: 50px;
   overflow-y: scroll;
   padding-inline: 0.5rem;
 }

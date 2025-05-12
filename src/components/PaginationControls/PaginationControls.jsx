@@ -1,5 +1,6 @@
 // components/PaginationControls.js
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import "./PaginationControls.css";
 
 export default function PaginationControls({
   currentPage,

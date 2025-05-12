@@ -4,7 +4,7 @@ import useFetch from "../../hooks/useFetch";
 import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "./MembersList.css";
 
-export default function MembersList({ url, addMember, close }) {
+export default function MembersList({ url, addMember, close, unexists }) {
   const { data: members, loading } = useFetch(url);
   const [searchItem, setSearchItem] = useState("");
   const [filteredMembers, setFilteredMembers] = useState([]);
@@ -43,13 +43,28 @@ export default function MembersList({ url, addMember, close }) {
                 addMember(member);
                 close();
               }}
+              className="member-option"
             >
               {`${member.name} ${member.surname}${
                 member.affiliation ? `, ${member.affiliation}` : ""
               }`}
             </p>
           ))}
-        {!loading && filteredMembers.length === 0 && <p>No members found.</p>}
+        {!loading && filteredMembers.length === 0 && (
+          <>
+            <p>No members found.</p>
+            {unexists && (
+              <button
+                className="button"
+                onClick={() => {
+                  unexists(), close();
+                }}
+              >
+                Add one
+              </button>
+            )}
+          </>
+        )}
       </div>
 
       <div className="button-container">

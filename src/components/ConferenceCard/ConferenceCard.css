@@ -24,3 +24,9 @@
 .card-wrapper.active {
   padding-left: 10px;
 }
+.color-preview {
+  display: inline-block;
+  height: 1rem;
+  aspect-ratio: 2/1;
+  border-radius: 5px;
+}

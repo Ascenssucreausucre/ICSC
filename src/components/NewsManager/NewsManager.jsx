@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAdminModal } from "../../context/AdminModalContext";
 import "./NewsManager.css";
 import { useState, useEffect, useRef } from "react";
@@ -6,6 +6,10 @@ import useSubmit from "../../hooks/useSubmit";
 import { motion, AnimatePresence } from "framer-motion";
 import Linkify from "linkify-react";
 import Pagination from "../Pagination/Pagination"; // Import the new Pagination component
+import { FileCheck2 } from "lucide-react";
+import { LinkIcon } from "lucide-react";
+import { FileX2 } from "lucide-react";
+import { LucideUnlink } from "lucide-react";
 
 export default function NewsManager({ news }) {
   const { id } = useParams();
@@ -16,6 +20,7 @@ export default function NewsManager({ news }) {
     from_date: new Date(),
     to_date: new Date(),
     content: "",
+    file: "",
   };
 
   const { openModal } = useAdminModal();
@@ -177,11 +182,50 @@ export default function NewsManager({ news }) {
                           }
                         )}
                       </p>
-                      <p className="news-content">
+                      <p className="limited-height-content">
                         <Linkify options={{ target: "_blank" }}>
                           {singleNews.content}
                         </Linkify>
                       </p>
+                      {singleNews?.file ? (
+                        <Link
+                          to={`${
+                            import.meta.env.VITE_IMAGE_URL + singleNews.file
+                          }`}
+                          className="link"
+                          target="__blank"
+                          style={{
+                            color: "var(--tertiary-color)",
+                            width: "fit-content",
+                          }}
+                        >
+                          <FileCheck2 className="text-icon" />
+                          Attached file
+                          <LinkIcon
+                            className="text-icon hover-icon"
+                            size="1.2rem"
+                            strokeWidth="2.5"
+                          />
+                        </Link>
+                      ) : (
+                        <div
+                          className="alt-link"
+                          style={{
+                            display: "flex",
+                            color: "var(--secondary-color)",
+                            alignItems: "center",
+                            gap: "0.2rem",
+                            width: "fit-content",
+                          }}
+                        >
+                          <FileX2 className="text-icon" /> No attached file.{" "}
+                          <LucideUnlink
+                            className="text-icon hover-icon broken"
+                            size="1.2rem"
+                            strokeWidth="2.5"
+                          />
+                        </div>
+                      )}
                     </div>
                     <div className="button-container card-button-container">
                       <button

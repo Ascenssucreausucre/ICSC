@@ -102,35 +102,64 @@ export default function AdminFormModal() {
     setFormData((prev) => ({ ...prev, [key]: newArray }));
   };
 
+  // Solution: Modifier la fonction handleSubmit pour normaliser les dates
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Créez une copie de formData pour pouvoir modifier les dates
+    const processedData = { ...formData };
+
+    // Traitez les dates pour les normaliser
+    for (const key in processedData) {
+      // Vérifiez si la valeur est un objet Date
+      if (processedData[key] instanceof Date) {
+        // Option 1: Pour envoyer des chaînes ISO (format standard)
+        processedData[key] = processedData[key].toISOString();
+
+        // OU Option 2: Pour conserver le format de date affiché à l'utilisateur
+        // processedData[key] = processedData[key].toISOString().split('T')[0];
+      }
+    }
+
     let dataToSend;
 
-    if (formData.image instanceof File || formData.banner instanceof File) {
+    if (
+      processedData.image instanceof File ||
+      processedData.banner instanceof File ||
+      processedData.file instanceof File ||
+      processedData.additionnal_file instanceof File
+    ) {
       dataToSend = new FormData();
-      for (const key in formData) {
-        dataToSend.append(key, formData[key]);
+      for (const key in processedData) {
+        dataToSend.append(key, processedData[key]);
       }
+      dataToSend.append("conference_id", conferenceId);
     } else {
-      dataToSend = formData;
+      dataToSend = { ...processedData, conference_id: conferenceId };
     }
 
     const response = await submit({
       url: modalData.url,
       method: modalData.method,
-      data: { ...dataToSend, conference_id: conferenceId },
+      data: dataToSend,
       isFormData:
-        formData.image instanceof File || formData.banner instanceof File,
+        processedData.image instanceof File ||
+        processedData.file instanceof File ||
+        processedData.banner instanceof File ||
+        processedData.additionnal_file instanceof File,
     });
+
     if (response.error) {
       return;
     }
+
     if (modalData.refreshFunction) {
       modalData.refreshFunction(
-        modalData.arg ? response?.newItem ?? formData : null
+        modalData.arg ? response?.newItem ?? processedData : null
       );
     }
+
     closeModal();
   };
 
@@ -231,6 +260,7 @@ export default function AdminFormModal() {
                           addObjectToArray(key, item);
                         }}
                         close={() => setShowList(false)}
+                        unexists={modalData?.unexists}
                       />
                     )}
                   </div>
@@ -243,11 +273,17 @@ export default function AdminFormModal() {
               inputType = "date";
             } else if (typeof formData[key] === "number") {
               inputType = "number";
-            } else if (key === "image" || key === "banner") {
-              // Détection manuelle par clé ou type si tu veux être plus dynamique
+            } else if (
+              key === "image" ||
+              key === "banner" ||
+              key === "file" ||
+              key === "additionnal_file"
+            ) {
               inputType = "file";
-            } else if (key === "content") {
+            } else if (key === "content" || key === "text") {
               inputType = "textarea";
+            } else if (/color/i.test(key)) {
+              inputType = "color";
             }
 
             return (
@@ -274,7 +310,9 @@ export default function AdminFormModal() {
             <button
               type="button"
               className="cancel-button"
-              onClick={closeModal}
+              onClick={() => {
+                setShowList(false), closeModal();
+              }}
             >
               Cancel
             </button>

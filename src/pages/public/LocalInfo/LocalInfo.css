@@ -1,0 +1,12 @@
+.front-local-info-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.local-information {
+  min-width: 200px;
+  flex: 1;
+}
+.front-local-info-container p {
+  text-align: justify;
+}

@@ -7,6 +7,8 @@ export default function AdminNavBar() {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { showFeedback } = useFeedback();
+  const { adminRole } = useAuth();
+  console.log(adminRole);
 
   const handleLogout = () => {
     logout(); // Appel à la fonction logout
@@ -29,6 +31,11 @@ export default function AdminNavBar() {
         <NavLink to={"/admin/authors"} className={"nav-link"}>
           Authors
         </NavLink>
+        {adminRole === "superadmin" && (
+          <NavLink to={"/admin/admins"} className={"nav-link"}>
+            Admins
+          </NavLink>
+        )}
       </div>
       <button onClick={handleLogout} className="button">
         Logout

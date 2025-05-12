@@ -1,0 +1,96 @@
+.p-tabview {
+  position: relative;
+}
+
+.p-tabview-nav-container {
+  position: absolute;
+  background-color: var(--primary-color);
+  font-size: 1.2rem;
+  padding: 1rem;
+  font-weight: 500;
+  transform: translateY(-50%);
+  left: 5%;
+  border-radius: var(--border-radius);
+  outline: 5px solid white;
+  overflow: hidden;
+}
+.p-tabview-nav-container li {
+  font-size: var(--subtitle-font-size);
+}
+.p-tabview-panels {
+  margin-top: 50px;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  padding: var(--text-padding);
+}
+.p-tabview-nav {
+  display: flex;
+  position: relative;
+}
+.p-tabview-nav .p-unselectable-text {
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  margin-inline-end: 10px;
+  transition: color 0.2s ease-out;
+}
+.p-tabview-nav .p-unselectable-text.p-tabview-selected {
+  color: white;
+}
+.p-tabview-ink-bar {
+  position: absolute;
+  background-color: white;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 10px;
+  transition: left 0.2s ease-in-out, width 0.2s ease-in-out;
+}
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+hr {
+  margin-block: 40px;
+  border: none;
+  height: 2px;
+  background-color: var(--primary-color);
+  width: 80%;
+  margin-inline: auto;
+  border-radius: var(--border-radius);
+  opacity: 50%;
+}
+.section-header-text {
+  flex: 1;
+  min-width: 66%;
+}
+.section-header-text .sub-title {
+  color: rgb(143, 116, 116);
+  font-size: 1rem;
+  font-variation-settings: "GRAD" 0, "XOPQ" 96, "XTRA" 500, "YOPQ" 79,
+    "YTAS" 750, "YTDE" -203, "YTFI" 738, "YTLC" 514, "YTUC" 712, "slnt" -500,
+    "wdth" 0;
+}
+.section-header img {
+  width: 20%;
+  min-width: 100px;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-inline: 5px;
+}
+.section .bio-toggle {
+  border: none;
+  background-color: unset;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--tertiary-color);
+}
+.section .bio-toggle:hover {
+  text-decoration: underline;
+}
+.section > p {
+  margin-top: 10px;
+  text-align: justify;
+}

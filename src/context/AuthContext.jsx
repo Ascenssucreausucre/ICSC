@@ -2,40 +2,40 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { useFeedback } from "./FeedbackContext";
 import { useNavigate } from "react-router-dom";
 
-// Créer le context
 const AuthContext = createContext();
 
-// Custom hook pour utiliser l'authentification
-const useAuth = () => {
-  return useContext(AuthContext);
-};
-export { useAuth };
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminRole, setAdminRole] = useState(null); // 👈 rôle ajouté ici
   const [isLoading, setIsLoading] = useState(true);
   const [loggingIn, setLoggingIn] = useState(false);
   const navigate = useNavigate();
   const { showFeedback } = useFeedback();
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // Vérifier la présence du cookie token à chaque montage
+  // Vérifier l'authentification et récupérer le rôle
   useEffect(() => {
-    // Vérifier si le cookie est présent
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch(`${API_URL}/Admin-auth/check-auth`, {
+        const response = await fetch(`${API_URL}/admin-auth/me`, {
           method: "GET",
-          credentials: "include", // Envoie le cookie avec la requête
+          credentials: "include",
         });
 
         if (response.ok) {
+          const data = await response.json();
           setIsAuthenticated(true);
+          setAdminRole(data.role); // 👈 on stocke le rôle
         } else {
           setIsAuthenticated(false);
+          setAdminRole(null);
         }
       } catch (error) {
-        setIsAuthenticated(false);
         console.error("Error checking auth status:", error);
+        setIsAuthenticated(false);
+        setAdminRole(null);
       }
       setIsLoading(false);
     };
@@ -46,20 +46,31 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoggingIn(true);
     try {
-      const response = await fetch(`${API_URL}/Admin-auth/login`, {
+      const response = await fetch(`${API_URL}/admin-auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        credentials: "include", // Envoie le cookie lors de la connexion
+        credentials: "include",
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setIsAuthenticated(true);
-        showFeedback("success", "Logged in usccessfully");
+        showFeedback("success", "Logged in successfully");
+
+        // Récupérer le rôle après login
+        const meRes = await fetch(`${API_URL}/admin-auth/me`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (meRes.ok) {
+          const meData = await meRes.json();
+          setAdminRole(meData.role);
+        }
       } else {
         console.error(data);
         showFeedback("error", data.error);
@@ -73,15 +84,16 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const response = await fetch(`${API_URL}/Admin-auth/logout`, {
+      const response = await fetch(`${API_URL}/admin-auth/logout`, {
         method: "POST",
-        credentials: "include", // Envoie le cookie lors de la déconnexion
+        credentials: "include",
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setIsAuthenticated(false);
+        setAdminRole(null);
         showFeedback("success", data.message);
         navigate("/admin/login");
       } else {
@@ -95,7 +107,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, logout, isLoading, loggingIn }}
+      value={{
+        isAuthenticated,
+        login,
+        logout,
+        isLoading,
+        loggingIn,
+        adminRole,
+      }}
     >
       {children}
     </AuthContext.Provider>

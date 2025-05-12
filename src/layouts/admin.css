@@ -1,8 +1,28 @@
 .admin-main-wrapper {
+  position: relative;
   width: 100%;
-  background-color: var(--secondary-color);
+  background: linear-gradient(
+    100deg,
+    rgb(212, 171, 178) 0%,
+    rgb(218, 199, 206) 20%
+  );
   min-height: 100dvh;
+  overflow: hidden; /* Pour éviter les débordements */
 }
+
+/* .admin-main-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='none'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23noiseFilter)'/></svg>");
+  opacity: 0.2;
+  z-index: 0;
+} */
+
 .admin-main {
   max-width: unset;
   align-self: unset;
@@ -11,13 +31,13 @@
   padding-inline: 10px;
   padding-block-end: 10px;
   margin-bottom: 10px;
-  background-color: rgb(105, 81, 81);
   border-radius: var(--border-radius);
 }
 .admin-section {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.8);
   border-radius: var(--border-radius);
   padding: 1rem 2rem;
   margin-block: 1rem;
+  border: solid rgb(236, 169, 169) 1px;
   /* filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3)); */
 }

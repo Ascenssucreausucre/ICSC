@@ -46,7 +46,7 @@ const useSubmit = () => {
       if (!response.ok) {
         const receivedError =
           responseData?.error || responseData?.errors[0].message;
-        console.log(receivedError);
+        console.error(receivedError);
         throw new Error(receivedError || "Une erreur s'est produite");
       }
 

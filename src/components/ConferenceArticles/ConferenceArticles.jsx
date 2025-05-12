@@ -9,6 +9,7 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
         data={data}
         conference_id={conference_id}
         refetch={refetch}
+        placeholder="Search articles or authors"
       />
     </section>
   );

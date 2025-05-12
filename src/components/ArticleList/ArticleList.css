@@ -2,3 +2,18 @@
   color: inherit;
   font-style: inherit;
 }
+.tag {
+  border-radius: 50px;
+  background-color: brown;
+  color: white;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  width: fit-content;
+  margin-block: 5px;
+}
+.tag-invited {
+  background-color: green;
+}
+.tag-contributed {
+  background-color: rgb(58, 22, 105);
+}

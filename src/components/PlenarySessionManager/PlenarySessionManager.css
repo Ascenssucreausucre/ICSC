@@ -1,0 +1,10 @@
+.form-input .p-dropdown {
+  width: 100%;
+  max-width: unset;
+}
+
+.plenary-session-container img {
+  aspect-ratio: 3/4;
+  height: 100px;
+  border-radius: 10px;
+}

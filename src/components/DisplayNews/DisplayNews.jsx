@@ -4,6 +4,8 @@ import "./DisplayNews.css";
 import Linkify from "linkify-react";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import { LinkIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function DisplayNews({ close, news = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -115,6 +117,27 @@ export default function DisplayNews({ close, news = [] }) {
                   {news[currentIndex].content}
                 </Linkify>
               </p>
+
+              {news[currentIndex]?.file && (
+                <Link
+                  to={`${
+                    import.meta.env.VITE_IMAGE_URL + news[currentIndex].file
+                  }`}
+                  className="link"
+                  target="__blank"
+                  style={{
+                    color: "var(--tertiary-color)",
+                    width: "fit-content",
+                  }}
+                >
+                  Attached file
+                  <LinkIcon
+                    className="text-icon hover-icon"
+                    size="1.2rem"
+                    strokeWidth="2.5"
+                  />
+                </Link>
+              )}
             </div>
           )}
         </div>

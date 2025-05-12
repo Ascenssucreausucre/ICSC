@@ -9,8 +9,7 @@
   border: solid 2px white;
   border-radius: 8px;
   box-shadow: 0 0px 3px rgba(0, 0, 0, 0.2);
-  width: 20vw;
-  min-width: 300px;
+  width: clamp(250px, 25vw, 400px);
   z-index: 20000;
 }
 
@@ -91,4 +90,7 @@
 .news-content {
   padding: 5px 15px;
   margin-bottom: 10px;
+}
+.news-item .link {
+  margin-top: 10px;
 }

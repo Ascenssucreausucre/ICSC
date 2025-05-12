@@ -10,7 +10,7 @@
 }
 
 .region h2 {
-  font-size: 1.8rem;
+  font-size: var(--title-font-size);
   color: var(--secondary-color);
   margin-bottom: 10px;
   border-bottom: 2px solid var(--primary-color);
@@ -26,19 +26,17 @@ table {
 
 th,
 td {
-  padding: 12px;
+  padding: clamp(5px, 1vw, 12px);
   border: 1px solid #ddd;
   text-align: center;
+  font-size: var(--font-size);
+  background-color: #f9f9f9;
 }
 
 th {
   background-color: var(--primary-color);
   color: white;
   font-weight: bold;
-}
-
-td {
-  background-color: #f9f9f9;
 }
 
 tr:nth-child(even) td {
@@ -48,16 +46,4 @@ tr:nth-child(even) td {
 td:last-child {
   font-style: italic;
   color: #555;
-}
-
-@media (max-width: 600px) {
-  th,
-  td {
-    padding: 8px;
-    font-size: 0.9rem;
-  }
-
-  .region h2 {
-    font-size: 1.5rem;
-  }
 }

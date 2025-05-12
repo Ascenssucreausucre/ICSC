@@ -8,27 +8,26 @@ import MagnetLines from "../../../components/MagnetLines/MagnetLines";
 import ScrollVelocity from "../../../components/ScrollVelocity/ScrollVelocity";
 
 export default function Home() {
-  const homePageData = useLoaderData();
-  const convertedDates = {
-    initial_submission_due: new Date(
-      homePageData.importantDatesData.initial_submission_due
-    ),
-    paper_decision_notification: new Date(
-      homePageData.importantDatesData.paper_decision_notification
-    ),
-    final_submission_due: new Date(
-      homePageData.importantDatesData.final_submission_due
-    ),
-    registration: new Date(homePageData.importantDatesData.registration),
-    congress_opening: new Date(
-      homePageData.importantDatesData.congress_opening
-    ),
-    congress_closing: new Date(
-      homePageData.importantDatesData.congress_closing
-    ),
-  };
+  const { conferenceData, importantDatesData, topicsData } = useLoaderData();
+  const convertedDates =
+    !importantDatesData || importantDatesData.length < 0
+      ? null
+      : {
+          initial_submission_due: new Date(
+            importantDatesData.initial_submission_due
+          ),
+          paper_decision_notification: new Date(
+            importantDatesData.paper_decision_notification
+          ),
+          final_submission_due: new Date(
+            importantDatesData.final_submission_due
+          ),
+          registration: new Date(importantDatesData.registration),
+          congress_opening: new Date(importantDatesData.congress_opening),
+          congress_closing: new Date(importantDatesData.congress_closing),
+        };
 
-  const allTexts = homePageData.topicsData.flatMap((topic) =>
+  const allTexts = topicsData.flatMap((topic) =>
     topic.contents.map((content) => content.text)
   );
 
@@ -49,7 +48,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="section">
+      <section className="home-section">
         <h2 className="title primary">Invitation</h2>
         {/* <MagnetLines
           containerSize="50%"
@@ -65,39 +64,39 @@ export default function Home() {
         /> */}
         <p className="sub-title">
           It is our great pleasure to invite you to participate in the IEEE
-          {" " + homePageData.conferenceData.year + " "}
-          {homePageData.conferenceData.conference_index}th International
-          Conference on Systems and Control (
-          {homePageData.conferenceData.acronym}'
-          {homePageData.conferenceData.year}).
+          {" " + conferenceData.year + " "}
+          {conferenceData.conference_index}th International Conference on
+          Systems and Control ({conferenceData.acronym}'{conferenceData.year}).
         </p>
-        <p className="sub-title">
-          Following the previous editions, the{" "}
-          {homePageData.conferenceData.conference_index}th edition of the
-          International Conference on Systems and Control will be held from{" "}
-          <span className="important-info">
-            {" "}
-            {convertedDates.congress_opening.toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-            })}{" "}
-            to{" "}
-            {convertedDates.congress_closing.toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-            , 2025 in {homePageData.conferenceData.city},{" "}
-            {homePageData.conferenceData.country}.
-          </span>
-        </p>
+        {convertedDates && (
+          <p className="sub-title">
+            Following the previous editions, the{" "}
+            {conferenceData.conference_index}
+            th edition of the International Conference on Systems and Control
+            will be held from{" "}
+            <span className="important-info">
+              {" "}
+              {convertedDates.congress_opening.toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+              })}{" "}
+              to{" "}
+              {convertedDates.congress_closing.toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+              , 2025 in {conferenceData.city}, {conferenceData.country}.
+            </span>
+          </p>
+        )}
         <div className="center-button">
           <Link to={"/registration"} className="button">
             Register to the conference
           </Link>
         </div>
       </section>
-      <section className="topics section">
+      <section className="topics home-section">
         <LayoutGroup>
           <motion.div className="text-flex title primary" layout>
             <motion.h2 layout>Topics of interest</motion.h2>
@@ -122,7 +121,7 @@ export default function Home() {
           the conference will treat more topics than just the main ones.
         </p>
         <div className="flex">
-          {homePageData.topicsData.map((topic) => (
+          {topicsData.map((topic) => (
             <CustomDetails
               title={topic.title}
               content={topic.contents}
@@ -135,7 +134,7 @@ export default function Home() {
           className="scroll-velocity special-gothic-expanded-one-regular"
         />
       </section>
-      <section className="send-your-articles section">
+      <section className="send-your-articles home-section">
         <section className="alternative-background">
           <h2 className="title">Send your articles !</h2>
           <p>
@@ -144,6 +143,10 @@ export default function Home() {
             <Link to={"/submission"} className="link white">
               submission page.
             </Link>
+          </p>
+          <p>
+            Selected articles will be presented during conferences, !!!describe
+            why ppl should submit their articles!!!
           </p>
         </section>
         <ImportantDates data={convertedDates} />

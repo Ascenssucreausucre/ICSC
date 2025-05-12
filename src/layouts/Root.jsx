@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { Helmet } from "react-helmet";
+import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -38,7 +39,7 @@ function Root() {
   }, []);
 
   if (!headerData || !footerData) {
-    return <div>Chargement...</div>;
+    return <LoadingScreen />;
   }
 
   return (

@@ -1,0 +1,109 @@
+.vertical-menu {
+  position: fixed;
+  top: 100px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  z-index: 1000;
+  height: 80dvh;
+  filter: var(--drop-shadow);
+}
+
+.scroll-progress-bar {
+  position: absolute;
+  left: 23px; /* Ajuste selon ton design */
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: white;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 2px;
+  z-index: -1;
+}
+
+.scroll-progress-bar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--progress-height, 0%);
+  background-color: var(--primary-color);
+  transition: height 0.1s linear;
+  z-index: -1;
+}
+
+/* Conteneur dynamique via Framer Motion */
+.vertical-menu-item-container {
+  background-color: var(--primary-color, #333);
+  border-radius: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+/* Bouton rond + nom */
+.vertical-menu-item {
+  border: none;
+  background: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Nom caché par défaut */
+.item-fullname {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vertical-menu-item-container:hover .item-fullname {
+  opacity: 1;
+}
+.vertical-menu-entry {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.segment-container {
+  width: 6px;
+  flex: 1;
+  margin: 0.2rem auto;
+  border-radius: 100px;
+  background-color: white;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.segment-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--primary-color);
+  /* transition: height 0.2s ease-out; */
+}
+
+.vertical-menu {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-30%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.vertical-menu.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}

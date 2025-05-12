@@ -11,5 +11,11 @@
 }
 .committee-role {
   padding: 0.5rem;
+  /* width: 100%; */
+  /* text-align: center; */
+
   margin-inline: auto;
+}
+.committee-role:has(h3) {
+  width: 100%;
 }

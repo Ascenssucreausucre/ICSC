@@ -1,0 +1,35 @@
+.author-bio {
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: var(--text-padding);
+  width: 80vw;
+  max-width: 1000px;
+  max-height: 80dvh;
+  position: relative;
+  overflow-y: auto;
+}
+.author-bio p {
+  text-align: justify;
+  margin-top: 20px;
+}
+.author-modal-header {
+  display: flex;
+  align-items: center;
+  color: var(--primary-color);
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.author-modal-header img {
+  object-fit: cover;
+  aspect-ratio: 4/5;
+  height: 200px;
+  border-radius: var(--border-radius);
+}
+.author-modal-header .title {
+  max-width: 500px;
+}
+.author-bio .button-svg {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
