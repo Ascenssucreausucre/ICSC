@@ -1,27 +1,3 @@
-.nav-link {
-  text-decoration: none;
-  margin-inline-end: 10px;
-  color: black;
-  transition: color 0.2s ease-out;
-}
-.nav-link:hover {
-  color: var(--primary-color);
-}
-.nav-link.active {
-  color: var(--primary-color);
-}
-nav {
-  height: clamp(40px, 6dvh, 100px);
-  width: 100vw;
-  padding-inline: 20px;
-  background-color: white;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  z-index: 10000;
-}
 .admin-nav {
   display: flex;
   justify-content: space-between;
