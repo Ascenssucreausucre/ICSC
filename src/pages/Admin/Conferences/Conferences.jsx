@@ -61,8 +61,8 @@ export default function Conferences() {
   }
 
   return (
-    <div>
-      <h1 className="white">All conferences</h1>
+    <section className="admin-section">
+      <h1 className="secondary title">All conferences</h1>
       <AnimatePresence>
         {!loading ? (
           conferenceData && conferenceData.length > 0 ? (
@@ -89,10 +89,10 @@ export default function Conferences() {
           <SkeletonConferenceCard />
         )}
       </AnimatePresence>
-      <button className="button alt" onClick={handleCreateConference}>
+      <button className="button" onClick={handleCreateConference}>
         New Conference
       </button>
       <Outlet />
-    </div>
+    </section>
   );
 }

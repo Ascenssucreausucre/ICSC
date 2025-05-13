@@ -16,11 +16,26 @@ export default function AdminFormModal() {
   const [showList, setShowList] = useState(false);
   const [conferenceId, setConferenceId] = useState();
 
-  // Met à jour le formulaire si modalData change
   useEffect(() => {
     if (modalData?.initialData) {
       const { conference_id, id, ...initialData } = modalData.initialData;
-      setFormData(initialData || {});
+
+      const processedInitialData = {};
+      for (const key in initialData) {
+        const value = initialData[key];
+        if (value instanceof Date) {
+          processedInitialData[key] = value.toISOString().split("T")[0];
+        } else if (
+          typeof value === "string" &&
+          /^\d{4}-\d{2}-\d{2}T/.test(value)
+        ) {
+          processedInitialData[key] = value.split("T")[0];
+        } else {
+          processedInitialData[key] = value;
+        }
+      }
+
+      setFormData(processedInitialData);
       setConferenceId(conference_id);
     }
   }, [modalData]);
@@ -36,14 +51,13 @@ export default function AdminFormModal() {
         typeof value[0] === "object"
       ) {
         const objectTemplate = { ...value[0] };
-        // Tu peux stocker ce template dans un state, par exemple :
         setObjectArrayTemplate(objectTemplate);
-        break; // On s'arrête au premier tableau d'objets trouvé
+        break;
       }
     }
   }, [modalData]);
 
-  if (!modalData) return null; // Si le modalData est null, ne rien afficher
+  if (!modalData) return null;
 
   const handleChange = (e) => {
     const { name, type, files, value } = e.target;
@@ -51,13 +65,7 @@ export default function AdminFormModal() {
     setFormData((prevData) => ({
       ...prevData,
       [name]:
-        type === "file"
-          ? files[0]
-          : type === "date"
-          ? new Date(value)
-          : type === "number"
-          ? Number(value)
-          : value,
+        type === "file" ? files[0] : type === "number" ? Number(value) : value,
     }));
   };
 
@@ -73,25 +81,6 @@ export default function AdminFormModal() {
   const addObjectToArray = (key, item) => {
     const newArray = [...(formData[key] || [])];
     const newItem = item ? item : objectArrayTemplate;
-
-    // if (firstItem && typeof firstItem === "object") {
-    //   Object.keys(firstItem).forEach((k) => {
-    //     newItem[k] = typeof firstItem[k] === "object" ? {} : "";
-    //   });
-    // }
-    newArray.push(newItem);
-    setFormData((prev) => ({ ...prev, [key]: newArray }));
-  };
-
-  const addExistingObjectToArray = (item) => {
-    const newArray = [...(formData[key] || [])];
-    const newItem = objectArrayTemplate ? objectArrayTemplate : {}; // Crée un objet vide ou avec des valeurs par défaut
-    const firstItem = formData[key]?.[0];
-    if (firstItem && typeof firstItem === "object") {
-      Object.keys(firstItem).forEach((k) => {
-        newItem[k] = typeof firstItem[k] === "object" ? {} : "";
-      });
-    }
     newArray.push(newItem);
     setFormData((prev) => ({ ...prev, [key]: newArray }));
   };
@@ -102,34 +91,28 @@ export default function AdminFormModal() {
     setFormData((prev) => ({ ...prev, [key]: newArray }));
   };
 
-  // Solution: Modifier la fonction handleSubmit pour normaliser les dates
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Créez une copie de formData pour pouvoir modifier les dates
     const processedData = { ...formData };
 
-    // Traitez les dates pour les normaliser
     for (const key in processedData) {
-      // Vérifiez si la valeur est un objet Date
-      if (processedData[key] instanceof Date) {
-        // Option 1: Pour envoyer des chaînes ISO (format standard)
-        processedData[key] = processedData[key].toISOString();
-
-        // OU Option 2: Pour conserver le format de date affiché à l'utilisateur
-        // processedData[key] = processedData[key].toISOString().split('T')[0];
+      if (
+        typeof processedData[key] === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(processedData[key])
+      ) {
+        processedData[key] = new Date(processedData[key]).toISOString();
       }
     }
 
     let dataToSend;
-
-    if (
+    const isFormData =
       processedData.image instanceof File ||
       processedData.banner instanceof File ||
       processedData.file instanceof File ||
-      processedData.additionnal_file instanceof File
-    ) {
+      processedData.additionnal_file instanceof File;
+
+    if (isFormData) {
       dataToSend = new FormData();
       for (const key in processedData) {
         dataToSend.append(key, processedData[key]);
@@ -143,16 +126,10 @@ export default function AdminFormModal() {
       url: modalData.url,
       method: modalData.method,
       data: dataToSend,
-      isFormData:
-        processedData.image instanceof File ||
-        processedData.file instanceof File ||
-        processedData.banner instanceof File ||
-        processedData.additionnal_file instanceof File,
+      isFormData,
     });
 
-    if (response.error) {
-      return;
-    }
+    if (response.error) return;
 
     if (modalData.refreshFunction) {
       modalData.refreshFunction(
@@ -163,11 +140,8 @@ export default function AdminFormModal() {
     closeModal();
   };
 
-  const formatLabel = (key) => {
-    return key
-      .replace(/_/g, " ") // Remplace les underscores par des espaces
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // Met la première lettre de chaque mot en majuscule
-  };
+  const formatLabel = (key) =>
+    key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
   return (
     <motion.div
@@ -186,19 +160,14 @@ export default function AdminFormModal() {
       >
         <h1 className="secondary">{modalData.title}</h1>
         <form onSubmit={handleSubmit}>
-          {/* Génération automatique des inputs */}
           {Object.keys(formData).map((key) => {
             let value = formData[key] || "";
-
-            if (formData[key] instanceof Date) {
-              value = formData[key].toISOString().split("T")[0];
-            }
 
             if (Array.isArray(value)) {
               return (
                 <div key={key}>
                   <label className="array-label">{formatLabel(key)}</label>
-                  <div key={key} className="object-array-field">
+                  <div className="object-array-field">
                     {value.map((item, index) => (
                       <div key={index} className="object-array-item">
                         {Object.entries(item).map(([subKey, subValue]) => {
@@ -239,13 +208,6 @@ export default function AdminFormModal() {
                     ))}
                   </div>
                   <div className="button-container">
-                    {/* <button
-                      type="button"
-                      onClick={() => addObjectToArray(key)}
-                      className="small button"
-                    >
-                      + Add {formatLabel(key)}
-                    </button> */}
                     <button
                       type="button"
                       onClick={() => setShowList(true)}
@@ -268,10 +230,11 @@ export default function AdminFormModal() {
               );
             }
 
+            // Détection du type de champ
             let inputType = null;
-            if (formData[key] instanceof Date) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
               inputType = "date";
-            } else if (typeof formData[key] === "number") {
+            } else if (typeof value === "number") {
               inputType = "number";
             } else if (
               key === "image" ||
@@ -291,7 +254,7 @@ export default function AdminFormModal() {
                 key={key}
                 name={key}
                 onChange={handleChange}
-                value={inputType === "file" ? undefined : value} // Ne pas forcer value pour file
+                value={inputType === "file" ? undefined : value}
                 placeholder={formatLabel(key)}
                 label={formatLabel(key)}
                 type={inputType}
@@ -311,7 +274,8 @@ export default function AdminFormModal() {
               type="button"
               className="cancel-button"
               onClick={() => {
-                setShowList(false), closeModal();
+                setShowList(false);
+                closeModal();
               }}
             >
               Cancel

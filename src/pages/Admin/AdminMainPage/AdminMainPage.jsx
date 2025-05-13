@@ -9,9 +9,9 @@ export default function AdminMainPage() {
   console.log(currentConference);
 
   return (
-    <div className="admin-dashboard">
-      <h1 className="white title dashboard-title">Admin Dashboard</h1>
-      <h2 className="title white">Current Conference :</h2>
+    <section className="admin-dashboard admin-section">
+      <h1 className="title dashboard-title secondary">Admin Dashboard</h1>
+      <h2 className="title secondary">Current Conference :</h2>
       <div className="admin-infos-container">
         {currentConference ? (
           <ConferenceCard
@@ -24,9 +24,9 @@ export default function AdminMainPage() {
           <p>No conference found.</p>
         )}
       </div>
-      <Link to="conferences" className="link white">
+      <Link to="conferences" className="link">
         See all the conferences
       </Link>
-    </div>
+    </section>
   );
 }
