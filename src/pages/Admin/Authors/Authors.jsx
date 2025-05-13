@@ -366,7 +366,7 @@ export default function Authors() {
           <LoadingScreen />
         ) : (
           <div className="authors-list">
-            {!loading && (
+            {!loading ? (
               <>
                 {authors.length > 0
                   ? authors.map((author) => {
@@ -440,6 +440,8 @@ export default function Authors() {
                     })
                   : null}
               </>
+            ) : (
+              <p>No author found.</p>
             )}
           </div>
         )}
