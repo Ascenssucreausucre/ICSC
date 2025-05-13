@@ -27,9 +27,11 @@ export default function Home() {
           congress_closing: new Date(importantDatesData.congress_closing),
         };
 
-  const allTexts = topicsData.flatMap((topic) =>
-    topic.contents.map((content) => content.text)
-  );
+  const allTexts = topicsData
+    ? topicsData.flatMap((topic) =>
+        topic.contents.map((content) => content.text)
+      )
+    : null;
 
   const allTextsTwoLines = () => {
     const half = Math.ceil(allTexts.length / 2);
