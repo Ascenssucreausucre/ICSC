@@ -34,19 +34,25 @@ export default function Home() {
     : null;
 
   const allTextsTwoLines = () => {
-    const half = Math.ceil(allTexts.length / 2);
+    if (allTexts) {
+      const half = Math.ceil(allTexts.length / 2);
 
-    const firstHalf = allTexts.slice(0, half).join(", ");
-    const secondHalf = allTexts.slice(half).join(", ");
+      const firstHalf = allTexts.slice(0, half).join(", ");
+      const secondHalf = allTexts.slice(half).join(", ");
 
-    return secondHalf.length > 1 ? [firstHalf, secondHalf] : [firstHalf];
+      return secondHalf.length > 1 ? [firstHalf, secondHalf] : [firstHalf];
+    }
   };
 
-  const filteredTexts = allTexts.filter((text) => text.length < 18);
+  const filteredTexts = allTexts
+    ? allTexts.filter((text) => text.length < 18)
+    : null;
 
-  const shuffledTexts = filteredTexts.sort(() => 0.5 - Math.random()); // Mélange
+  const shuffledTexts = shuffledTexts
+    ? filteredTexts.sort(() => 0.5 - Math.random())
+    : null; // Mélange
 
-  const randomTexts = shuffledTexts.slice(0, 10); // Prend les 10 premiers
+  const randomTexts = shuffledTexts ? shuffledTexts.slice(0, 10) : null; // Prend les 10 premiers
 
   return (
     <>
