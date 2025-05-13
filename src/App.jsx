@@ -6,12 +6,12 @@ import useFetch from "./hooks/useFetch";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 
 function App() {
-  const { data, loading } = useFetch("/Conferences/current");
+  const { data: currentConference, loading } = useFetch("/Conferences/current");
 
   useEffect(() => {
-    if (data) {
+    if (currentConference) {
       const { primary_color, secondary_color, tertiary_color } =
-        data.currentConference;
+        currentConference;
       // Appliquer les couleurs dynamiquement
       document.documentElement.style.setProperty(
         "--primary-color",
@@ -26,7 +26,7 @@ function App() {
         tertiary_color
       );
     }
-  }, [data]);
+  }, [currentConference]);
 
   const value = {
     ripple: true,
