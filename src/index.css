@@ -61,7 +61,7 @@ h2 {
 }
 p,
 li,
-a.link {
+a.link:not(.card-title) {
   font-size: var(--font-size);
 }
 .flex {

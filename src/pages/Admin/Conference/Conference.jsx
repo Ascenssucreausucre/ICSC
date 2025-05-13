@@ -88,11 +88,11 @@ export default function Conference() {
         <LoadingScreen />
       ) : (
         <>
-          <VerticalMenu
+          {/* <VerticalMenu
             values={menuItems}
             sectionRefs={sectionRefs}
             yOffset={yOffset}
-          />
+          /> */}
           <div className="conference">
             <ConferenceCard
               isActive={true}
