@@ -11,7 +11,7 @@ export default function AdminMainPage() {
       <h1 className="white title dashboard-title">Admin Dashboard</h1>
       <h2 className="title white">Current Conference :</h2>
       <div className="admin-infos-container">
-        {data ? (
+        {data.length > 0 ? (
           <ConferenceCard
             data={data.currentConference}
             key={data.currentConference.year}
@@ -19,7 +19,7 @@ export default function AdminMainPage() {
             editTo={`conferences/edit/${data.currentConference.id}`}
           />
         ) : (
-          <LoadingScreen />
+          <p>No conference found.</p>
         )}
       </div>
       <Link to="conferences" className="link white">
