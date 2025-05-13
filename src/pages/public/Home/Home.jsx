@@ -9,6 +9,7 @@ import ScrollVelocity from "../../../components/ScrollVelocity/ScrollVelocity";
 
 export default function Home() {
   const { conferenceData, importantDatesData, topicsData } = useLoaderData();
+  console.log(useLoaderData());
   const convertedDates =
     !importantDatesData || importantDatesData.length < 0
       ? null
@@ -48,7 +49,7 @@ export default function Home() {
     ? allTexts.filter((text) => text.length < 18)
     : null;
 
-  const shuffledTexts = shuffledTexts
+  const shuffledTexts = filteredTexts
     ? filteredTexts.sort(() => 0.5 - Math.random())
     : null; // Mélange
 
