@@ -1,7 +1,6 @@
 .admin-nav {
   display: flex;
   justify-content: space-between;
-  height: unset;
 }
 .link-container {
   display: flex;
