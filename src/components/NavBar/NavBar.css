@@ -1,5 +1,5 @@
 nav {
-  height: clamp(40px, 6dvh, 100px);
+  height: clamp(50px, 5dvh, 100px);
   width: 100vw;
   padding-inline: 20px;
   background-color: rgba(255, 255, 255, 0.9);
@@ -96,13 +96,16 @@ nav {
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.9);
     left: 0;
-    top: 0;
-    padding: 60px 1rem 0 1rem;
+    top: clamp(50px, 5dvh, 100px);
+    padding: 1rem;
     width: 100vw;
-    transform: translateY(-100%);
+    transform-origin: top;
+    will-change: transform;
+    transform: scaleY(0%);
     transition: transform 0.2s ease-in-out;
-    z-index: -1;
+    z-index: 100;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   .nav-links::before {
     content: "";
@@ -113,13 +116,13 @@ nav {
     pointer-events: none;
   }
   .nav-links.active {
-    transform: translateY(0);
+    transform: scaleY(1);
   }
   .nav-link::after {
     content: "";
     position: absolute;
     top: 50%;
-    left: 100%;
+    left: calc(100% + 5px);
     transform: translate(100%, 0) scale(0.5) rotate(45deg);
   }
   .nav-link.active::after {
@@ -128,5 +131,7 @@ nav {
   }
   .nav-link {
     margin-block: 0.5rem;
+    width: fit-content;
+    display: inline-block;
   }
 }
