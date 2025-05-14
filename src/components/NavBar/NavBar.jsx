@@ -84,7 +84,7 @@ export default function NavBar({ data }) {
         animate={isOpen ? "open" : "closed"}
       >
         {pages.map((page) => (
-          <div key={page.name} style={{ overflow: "hidden" }}>
+          <div key={page.name} className="nav-link-container">
             <MotionNavLink
               to={page.link}
               className="nav-link"

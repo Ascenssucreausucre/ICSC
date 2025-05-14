@@ -46,7 +46,7 @@
   font-style: normal;
 }
 main {
-  padding-inline: clamp(10px, 10vw, 10vw);
+  padding-inline: clamp(10px, 10vw - 1.5rem, 10vw);
   flex: 1;
   width: 95vw;
   max-width: 1400px;

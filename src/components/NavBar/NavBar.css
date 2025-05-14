@@ -129,6 +129,9 @@ nav {
     transform: translate(100%, -50%) scale(1) rotate(-45deg);
     opacity: 1;
   }
+  .nav-link-container {
+    overflow: hidden;
+  }
   .nav-link {
     margin-block: 0.5rem;
     width: fit-content;
