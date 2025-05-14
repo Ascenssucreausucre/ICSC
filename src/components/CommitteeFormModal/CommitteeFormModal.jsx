@@ -227,9 +227,9 @@ export default function CommitteeFormModal() {
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1 className="secondary">
+        <h2 className="secondary title">
           {detailedModalData.title || "Committee Form"}
-        </h1>
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="form-section">
             <Input

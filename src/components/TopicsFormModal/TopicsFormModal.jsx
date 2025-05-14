@@ -83,7 +83,7 @@ export default function TopicsFormModal({
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1>{data ? data.title : "New topic"}</h1>
+        <h2 className="title secondary">{data ? data.title : "New topic"}</h2>
         <form>
           <Input
             value={formData.title}

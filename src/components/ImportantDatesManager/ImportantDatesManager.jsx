@@ -95,10 +95,13 @@ export default function ImportantDatesManager({ data, conference_id }) {
         <>
           <ImportantDates data={importantDates} />
           <div className="button-container">
-            <button className="button" onClick={handleEditDates}>
+            <button className="button small" onClick={handleEditDates}>
               Edit
             </button>
-            <button className="button" onClick={() => setConfirmation(true)}>
+            <button
+              className="button small"
+              onClick={() => setConfirmation(true)}
+            >
               Delete
             </button>
           </div>
@@ -108,14 +111,15 @@ export default function ImportantDatesManager({ data, conference_id }) {
           No important dates yet for this conference.
         </p>
       )}
-
-      <button
-        className="button"
-        disabled={!!importantDates}
-        onClick={handleCreateDates}
-      >
-        Add important dates
-      </button>
+      <div className="button-container">
+        <button
+          className="button"
+          disabled={!!importantDates}
+          onClick={handleCreateDates}
+        >
+          Add important dates
+        </button>
+      </div>
     </div>
   );
 }

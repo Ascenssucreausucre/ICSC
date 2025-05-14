@@ -81,11 +81,11 @@ export default function SponsorsManager({ data, conference_id }) {
     <div className="sponsors-manager admin-section">
       {confirmation && <ConfirmationModal />}
       <h2 className="title secondary">Sponsors</h2>
-      <div className="sponsors-wrapper">
-        {displayedSponsors.length === 0 ? (
-          <p>This conference has no sponsors.</p>
-        ) : (
-          displayedSponsors.map((sponsor) => (
+      {displayedSponsors.length === 0 ? (
+        <p>This conference has no sponsors.</p>
+      ) : (
+        <div className="sponsors-wrapper">
+          {displayedSponsors.map((sponsor) => (
             <div className="card" key={sponsor.id}>
               <div className="card-content">
                 <div className="sponsor">
@@ -121,9 +121,9 @@ export default function SponsorsManager({ data, conference_id }) {
                 </button>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
       {sponsors.length > 4 && (
         <div className="center-button">
           <button className="button small" onClick={() => setShowAll(!showAll)}>
@@ -131,9 +131,11 @@ export default function SponsorsManager({ data, conference_id }) {
           </button>
         </div>
       )}
-      <button className="button" onClick={handleCreateSponsor}>
-        New Sponsor
-      </button>
+      <div className="button-container">
+        <button className="button" onClick={handleCreateSponsor}>
+          New Sponsor
+        </button>
+      </div>
     </div>
   );
 }

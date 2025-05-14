@@ -55,7 +55,7 @@ export default function SpecialSessionManager({
       )}
       <h2 className="secondary title">Special Session</h2>
       <div className="session-container">
-        {data ? (
+        {data && data.length > 0 ? (
           data.map((session) => (
             <div className="card row">
               <div className="flex-1">
@@ -72,13 +72,13 @@ export default function SpecialSessionManager({
               </div>
               <div className="button-container card-button-container">
                 <button
-                  className="button"
+                  className="button small"
                   onClick={() => handleEditSession(session)}
                 >
                   Edit
                 </button>
                 <button
-                  className="button"
+                  className="button small"
                   onClick={() =>
                     setConfirmation(() => () => handleDeleteSession(session.id))
                   }

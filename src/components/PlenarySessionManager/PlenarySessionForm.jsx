@@ -112,7 +112,9 @@ export default function PlenarySessionForm({ data, close, refetch }) {
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1>{formData?.id ? "Edit" : "Create"} plenary session</h1>
+        <h2 className="title secondary">
+          {formData?.id ? "Edit" : "Create"} plenary session
+        </h2>
         <form>
           <Input
             name="title"

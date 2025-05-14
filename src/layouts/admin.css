@@ -36,7 +36,7 @@
 .admin-section {
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: var(--border-radius);
-  padding: 1rem 2rem;
+  padding: 1rem clamp(1rem, 5vw - 1rem, 2rem);
   margin-block: 1rem;
   border: solid rgb(236, 169, 169) 1px;
   /* filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3)); */

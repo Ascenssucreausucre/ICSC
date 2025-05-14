@@ -51,7 +51,7 @@ export default function CommitteesBack({ data, setCommittees }) {
       ) : null}
       <div className="committee-back-container flex-1 card">
         <div className="committee-data flex-1">
-          <h2 className="secondary">{data.type}</h2>
+          <h2 className="secondary card-title">{data.type}</h2>
           <p>
             This committee has {data.members.length}{" "}
             {data.members.length > 1 ? "members" : "member"}.

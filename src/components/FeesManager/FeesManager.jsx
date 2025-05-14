@@ -107,10 +107,16 @@ export default function FeesManager({
             {additionnalFees.additionnal_page_fee}
           </p>
           <div className="button-container">
-            <button className="button" onClick={handleEditAdditionnalFees}>
+            <button
+              className="button small"
+              onClick={handleEditAdditionnalFees}
+            >
               Edit
             </button>
-            <button className="button" onClick={handleDeleteAdditionnalFees}>
+            <button
+              className="button small"
+              onClick={handleDeleteAdditionnalFees}
+            >
               Delete
             </button>
           </div>
@@ -125,6 +131,7 @@ export default function FeesManager({
           Add addtionnal fees
         </button>
       </div>
+      <hr style={{ backgroundColor: "var(--secondary-color)" }} />
       <h2 className="title secondary">Registration fees</h2>
       {dataToSend ? (
         <FeesModal
@@ -160,12 +167,14 @@ export default function FeesManager({
           </div>
         ))
       )}
-      <button
-        className="button"
-        onClick={() => setDataToSend(registrationFeestemplate)}
-      >
-        New registration fees
-      </button>
+      <div className="button-container">
+        <button
+          className="button"
+          onClick={() => setDataToSend(registrationFeestemplate)}
+        >
+          New registration fees
+        </button>
+      </div>
     </div>
   );
 }

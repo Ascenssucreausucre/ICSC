@@ -39,7 +39,7 @@ export default function AdminLogin() {
     <div className="admin-login">
       <Feedback />
       <form onSubmit={handleSubmit}>
-        <h1 className="title">Login</h1>
+        <h1 className="title white">Login</h1>
         <Input
           label="E-mail"
           name="email"

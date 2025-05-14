@@ -258,7 +258,7 @@ export default function ArticleList({
             <div className="article-card card" key={article.id}>
               <div className="flex-1">
                 <div className="grouped-title">
-                  <h2>{article.title}</h2>
+                  <h2 className="card-title">{article.title}</h2>
                   <p className="data-detail">
                     {article.authors?.length > 0 ? (
                       <>
@@ -311,13 +311,13 @@ export default function ArticleList({
               </div>
               <div className="button-container" style={{ width: "100%" }}>
                 <button
-                  className="button"
+                  className="button small"
                   onClick={() => handleUpdateArticle(article)}
                 >
                   Edit
                 </button>
                 <button
-                  className="button"
+                  className="button small"
                   onClick={() =>
                     setConfirmation({ confirm: true, id: article.id })
                   }

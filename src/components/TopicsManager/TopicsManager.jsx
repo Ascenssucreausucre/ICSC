@@ -82,7 +82,7 @@ export default function TopicManager({ data, conference_id }) {
               className="card committee-back-container flex-1"
             >
               <div className="card-data flex-1">
-                <h2 className="secondary">{topic.title}</h2>
+                <h2 className="secondary card-title">{topic.title}</h2>
                 <p>
                   This topic has{" "}
                   <CountUp
@@ -113,9 +113,11 @@ export default function TopicManager({ data, conference_id }) {
           <p>This conference has no topics yet.</p>
         )}
       </div>
-      <button className="button" onClick={() => handleManageTopic(null)}>
-        New topic
-      </button>
+      <div className="button-container">
+        <button className="button" onClick={() => handleManageTopic(null)}>
+          New topic
+        </button>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@
 .form-input textarea {
   border: none;
   margin-block-start: 5px;
-  font-size: var(--small-font-size);
+  font-size: var(--font-size);
   padding: 10px 20px;
   background-color: white;
   width: 100%;
@@ -30,5 +30,4 @@ input:focus-visible {
 }
 label {
   margin-bottom: 5px;
-  font-size: var(--small-font-size);
 }

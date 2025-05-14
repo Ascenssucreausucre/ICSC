@@ -139,7 +139,7 @@ export default function NewsManager({ news }) {
             onChange={(e) => setFilterTo(e.target.value)}
           />
         </label>
-        <button className="" onClick={handleSortToggle}>
+        <button className="button" onClick={handleSortToggle}>
           Sort: {sortOrder === "asc" ? "Oldest → Newest" : "Newest → Oldest"}
         </button>
       </div>
@@ -257,9 +257,11 @@ export default function NewsManager({ news }) {
         onPageChange={setCurrentPage}
       />
 
-      <button className="button" onClick={handleCreateNews}>
-        Add news
-      </button>
+      <div className="button-container">
+        <button className="button" onClick={handleCreateNews}>
+          Add news
+        </button>
+      </div>
     </div>
   );
 }

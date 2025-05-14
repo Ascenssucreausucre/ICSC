@@ -47,7 +47,7 @@ export default function CommitteesManager({ committees, conference_id }) {
           })
         )}
       </div>
-      <div className="data-button-container">
+      <div className="button-container">
         <button className="button small" onClick={handleCreateCommittee}>
           New Committee
         </button>

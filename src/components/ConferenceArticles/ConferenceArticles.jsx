@@ -4,7 +4,7 @@ import ArticleList from "../ArticleList/ArticleList";
 export default function ConferenceArticles({ data, conference_id, refetch }) {
   return (
     <section className="conference-articles admin-section">
-      <h1 className="title secondary">Articles</h1>
+      <h2 className="title secondary">Articles</h2>
       <ArticleList
         data={data}
         conference_id={conference_id}

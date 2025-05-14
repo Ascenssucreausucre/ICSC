@@ -158,7 +158,7 @@ export default function AdminFormModal() {
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1 className="secondary">{modalData.title}</h1>
+        <h2 className="title secondary">{modalData.title}</h2>
         <form onSubmit={handleSubmit}>
           {Object.keys(formData).map((key) => {
             let value = formData[key] || "";
