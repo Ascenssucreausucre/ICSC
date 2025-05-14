@@ -1,7 +1,12 @@
 .admin-login {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding-block: 50px;
+  align-items: center;
+  padding-block: 2rem;
+}
+.admin-login h1 {
+  margin-bottom: 1rem;
 }
 .admin-login form {
   width: 90vw;

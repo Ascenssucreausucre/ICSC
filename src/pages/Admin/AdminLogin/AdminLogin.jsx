@@ -38,6 +38,7 @@ export default function AdminLogin() {
   return (
     <div className="admin-login">
       <Feedback />
+      <h1 className="title primary">ICSC Dashboard</h1>
       <form onSubmit={handleSubmit}>
         <h1 className="title white">Login</h1>
         <Input
