@@ -91,7 +91,7 @@ export default function SponsorsManager({ data, conference_id }) {
                 <div className="sponsor">
                   <img src={imgUrl + sponsor.image} alt={sponsor.name} />
                 </div>
-                <div className="card-text">
+                <div className="card-text flex-1">
                   <h3>{sponsor.name}</h3>
                   <p>
                     {`"${sponsor.type}" for ${

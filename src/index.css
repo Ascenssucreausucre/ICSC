@@ -254,6 +254,7 @@ a.link:not(.card-title) {
 }
 .card.row {
   display: flex;
+  flex-wrap: wrap;
 }
 .card > * {
   margin-block: 2px;

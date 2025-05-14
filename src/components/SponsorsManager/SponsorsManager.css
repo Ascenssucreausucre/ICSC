@@ -1,5 +1,5 @@
 .sponsors-wrapper {
-  padding: 1rem 4rem;
+  padding: 1rem clamp(0.8rem, 10vw - 2rem, 4rem);
 }
 .sponsors-manager {
   padding-block: 2rem;
