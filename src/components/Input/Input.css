@@ -31,3 +31,29 @@ input:focus-visible {
 label {
   margin-bottom: 5px;
 }
+.required-symbol {
+  color: orangered;
+}
+
+.form-input.radio,
+.form-input.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.form-input.radio label,
+.form-input.radio input,
+.form-input.checkbox label,
+.form-input.checkbox input {
+  margin: 0;
+  width: auto;
+}
+
+.form-input.checkbox input,
+.form-input.checkbox input:focus {
+  outline: unset;
+}
+
+.form-input.checkbox label {
+  font-weight: bold;
+}

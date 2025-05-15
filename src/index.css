@@ -198,7 +198,7 @@ a.link:not(.card-title) {
 .edit-form,
 .confirmation-modal {
   background-color: white;
-  padding: 20px 40px;
+  padding: var(--text-padding);
   margin-inline: 15px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -223,7 +223,7 @@ a.link:not(.card-title) {
   border: unset;
   color: black;
   cursor: pointer;
-  transition: color 0.1s ease-in;
+  transition: color 0.2s ease;
 }
 .button-svg:hover {
   color: red;

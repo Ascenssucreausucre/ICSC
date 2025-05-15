@@ -28,7 +28,9 @@ export function Input({
   numberMin,
   disabled,
   pattern,
-  className,
+  className = "",
+  inputId,
+  ...props
 }) {
   const numberProps =
     type === "number" && numberMax && numberMin
@@ -48,39 +50,50 @@ export function Input({
       : "";
 
   return (
-    <div className={`form-input ${className}`}>
-      {label && <label htmlFor={name}>{label}</label>}
-      <div>
-        {type === "textarea" ? (
-          <textarea
-            id={name}
-            name={name}
-            value={value}
-            placeholder={placeholder}
-            onChange={onChange}
-            style={style}
-            required={required}
-            disabled={disabled}
-            className="form-control"
-            rows={5} // Nombre de lignes visibles par défaut
-          ></textarea>
-        ) : (
-          <input
-            id={name}
-            type={type}
-            name={name}
-            value={value}
-            placeholder={placeholder}
-            onChange={onChange}
-            style={style}
-            required={required}
-            disabled={disabled}
-            {...numberProps}
-            pattern={pattern}
-            className="form-control"
-          />
-        )}
-      </div>
+    <div
+      className={`form-input ${className}${" " + type}${
+        disabled ? " disabled" : ""
+      }`}
+    >
+      {label && (
+        <label htmlFor={inputId ? inputId : name}>
+          {label}
+          {required && type !== "radio" && (
+            <span className="required-symbol"> *</span>
+          )}
+        </label>
+      )}
+      {type === "textarea" ? (
+        <textarea
+          {...props}
+          id={name}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          style={style}
+          required={required}
+          disabled={disabled}
+          className="form-control"
+          rows={5} // Nombre de lignes visibles par défaut
+        ></textarea>
+      ) : (
+        <input
+          {...props}
+          id={inputId ? inputId : name}
+          type={type}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          style={style}
+          required={required}
+          disabled={disabled}
+          {...numberProps}
+          pattern={pattern}
+          className="form-control"
+        />
+      )}
       {/* Affichage du nombre de caractères uniquement si caractereMin ou caractereMax est renseigné */}
       {(caractereMin || caractereMax) && !disabled && (
         <p style={{ color: "gray", fontSize: "0.85em" }}>
