@@ -19,6 +19,7 @@ export default function TopicsFormModal({
     title: "",
     id: "",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -44,7 +45,9 @@ export default function TopicsFormModal({
     setContent(content.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     const dataToSend = {
       ...formData,
       content: content,
@@ -58,14 +61,18 @@ export default function TopicsFormModal({
       data: dataToSend,
       url: submit_url,
     });
+    setLoading(false);
+
+    if (!response) {
+      return;
+    }
+
     refreshFunction
       ? response.id
         ? refreshFunction({ ...dataToSend, id: response.id })
         : refreshFunction(dataToSend)
       : null;
-    if (response) {
-      close();
-    }
+    close();
   };
 
   return (
@@ -125,7 +132,7 @@ export default function TopicsFormModal({
         </button>
         <div className="button-container">
           <button className="button" onClick={handleSubmit}>
-            {data ? "Update" : "Create topic"}
+            {loading ? "Submitting..." : data ? "Update" : "Create topic"}
           </button>
           <button className="cancel-button" onClick={close}>
             Cancel

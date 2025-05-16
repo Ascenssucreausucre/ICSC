@@ -11,6 +11,7 @@ export default function FeesModal({ data, close, refreshFunction }) {
     description: "",
     feecategories: [],
   });
+  const [loading, setLoading] = useState(false);
   const { submit } = useSubmit();
 
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function FeesModal({ data, close, refreshFunction }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const updatedFee = {
       ...registrationFee,
       feecategories: feeCategories,
@@ -59,6 +61,8 @@ export default function FeesModal({ data, close, refreshFunction }) {
       method: id ? "PUT" : "POST",
       data: updatedFee,
     });
+
+    setLoading(false);
 
     if (!response) return;
 
@@ -159,7 +163,11 @@ export default function FeesModal({ data, close, refreshFunction }) {
           </div>
           <div className="button-container">
             <button className="button small" type="submit">
-              {registrationFee.id ? "Update" : "Create"}
+              {loading
+                ? "Submitting..."
+                : registrationFee.id
+                ? "Update"
+                : "Create"}
             </button>
             <button className="cancel-button" type="button" onClick={close}>
               Cancel

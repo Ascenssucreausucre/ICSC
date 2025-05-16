@@ -14,6 +14,7 @@ export default function SpecialSessionModal({ data, close, refetch }) {
   });
   const [formAuthors, setFormAuthors] = useState([]);
   const [showList, setShowList] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { submit } = useSubmit();
 
   useEffect(() => {
@@ -52,12 +53,14 @@ export default function SpecialSessionModal({ data, close, refetch }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const { id, ...dataToSend } = formData;
-    const response = submit({
+    const response = await submit({
       url: `/special-sessions/${id ? id : ""}`,
       method: id ? "PUT" : "POST",
       data: { ...dataToSend, authors: formAuthors },
     });
+    setLoading(false);
     if (!response) {
       return;
     }
@@ -131,7 +134,7 @@ export default function SpecialSessionModal({ data, close, refetch }) {
           </button>
           <div className="button-container">
             <button className="button" type="submit">
-              {data?.id ? "Update" : "Create"}
+              {loading ? "Submitting..." : data?.id ? "Update" : "Create"}
             </button>
             <button className="cancel-button" onClick={close}>
               Cancel
