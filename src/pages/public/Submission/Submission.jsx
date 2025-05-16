@@ -9,7 +9,6 @@ export default function Submission() {
     if (data) {
       setFees(data.fees);
       setDates(data.dates);
-      console.log(data);
     }
   }, [data]);
   return (

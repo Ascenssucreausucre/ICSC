@@ -4,6 +4,7 @@ import { useAdminModal } from "../../../context/AdminModalContext";
 import useSubmit from "../../../hooks/useSubmit";
 import { useState } from "react";
 import ConfirmationModal from "../../../components/ConfirmationModal/ConfirmationModal";
+import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function Admins() {
   const { data, loading, refetch } = useFetch(`/admin-auth/`, {
@@ -73,6 +74,8 @@ export default function Admins() {
               </button>
             </div>
           ))
+        ) : loading ? (
+          <LoadingScreen />
         ) : (
           <p>Error retreiving admins.</p>
         )}

@@ -57,9 +57,7 @@ export default function Authors() {
         const match = countriesMap.find(
           (country) => country.name.toLowerCase() === name.toLowerCase()
         );
-        return match
-          ? { name: match.name, code: match.code }
-          : console.log(name);
+        return match ? { name: match.name, code: match.code } : null;
       })
       .filter(Boolean); // retire les nulls si aucun match trouvé
   }
@@ -95,14 +93,8 @@ export default function Authors() {
   }, [authors, listHeight]);
 
   // Charger les auteurs en utilisant l'API de recherche
-  const fetchAuthors = async (countryFilter, affiliationFilter) => {
+  const fetchAuthors = async () => {
     if (loading === false) setLoading(true);
-
-    console.log({
-      title: "Fetch",
-      country: selectedCountry?.name,
-      affiliation: selectedAffiliation,
-    });
 
     try {
       const response = await axios.get(
@@ -399,8 +391,7 @@ export default function Authors() {
                                 <span
                                   className={`flag-icon flag-icon-${flagCode.code}`}
                                 />
-                              ) : // console.log(flagCode)
-                              null}{" "}
+                              ) : null}{" "}
                               {author.country}
                             </Link>
                           </div>

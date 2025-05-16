@@ -10,10 +10,8 @@ export default function NavigationProgress() {
 
   useEffect(() => {
     if (navigation.state === "loading") {
-      console.log("Loading bar");
       NProgress.start();
     } else {
-      console.log("No more loading bar");
       NProgress.done();
     }
   }, [navigation.state]);

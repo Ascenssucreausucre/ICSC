@@ -20,7 +20,6 @@ export default function SpecialSessionManager({
   };
 
   const handleEditSession = (session) => {
-    console.log(session);
     setFormData(session);
     setDisplayModal(true);
   };

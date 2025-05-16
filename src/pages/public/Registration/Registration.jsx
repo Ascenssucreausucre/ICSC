@@ -92,7 +92,6 @@ export default function Registration() {
         }
       });
       const dataToSend = { articles: articleToSend, ...formData };
-      console.log(dataToSend);
     }
     setShowForm(false);
     setConfirm(false);

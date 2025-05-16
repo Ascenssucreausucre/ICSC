@@ -1,16 +1,16 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { LinkIcon } from "lucide-react";
 import "./LocalInfo.css";
+import React from "react";
 
 export default function LocalInfo() {
   const localInformations = useLoaderData();
-  console.log(localInformations);
   return (
     <>
       <h1 className="title secondary">Local Info</h1>
       <div className="front-local-info-container">
         {localInformations.map((localInfo, index) => (
-          <>
+          <React.Fragment key={index}>
             <div className="local-information">
               <h2 className="card-title secondary">{localInfo.title}</h2>
               {localInfo?.text && <p>{localInfo.text}</p>}
@@ -34,7 +34,7 @@ export default function LocalInfo() {
               )}
             </div>
             {/* {index + 1 < localInformations.length && <hr />} */}
-          </>
+          </React.Fragment>
         ))}
       </div>
     </>

@@ -38,8 +38,8 @@ export default function Comittees() {
       <h1 className="title primary">Committees</h1>
       {committees && committees.length > 0 ? (
         committees.map((comittee, comitteeIndex) => (
-          <React.Fragment>
-            <div key={comitteeIndex} className="committee">
+          <React.Fragment key={comitteeIndex}>
+            <div className="committee">
               <h2 className="title secondary">{comittee.type}</h2>
 
               <div className="roles-container">

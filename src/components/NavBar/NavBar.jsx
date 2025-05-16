@@ -80,8 +80,8 @@ export default function NavBar({ data }) {
         ref={navLinksRef}
         className={`nav-links ${isOpen ? "active" : ""}`}
         variants={containerVariants}
-        initial={false}
         animate={isOpen ? "open" : "closed"}
+        initial="closed"
       >
         {pages.map((page) => (
           <div key={page.name} className="nav-link-container">
@@ -89,6 +89,7 @@ export default function NavBar({ data }) {
               to={page.link}
               className="nav-link"
               variants={linkVariants}
+              animate={isOpen ? "open" : "closed"}
               onClick={() => setIsOpen(false)}
             >
               {page.name}

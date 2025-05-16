@@ -6,8 +6,6 @@ import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 export default function AdminMainPage() {
   const currentConference = useLoaderData();
 
-  console.log(currentConference);
-
   return (
     <section className="admin-dashboard admin-section">
       <h1 className="title dashboard-title secondary">Admin Dashboard</h1>

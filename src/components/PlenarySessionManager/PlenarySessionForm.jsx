@@ -39,10 +39,6 @@ export default function PlenarySessionForm({ data, close, refetch }) {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (formData) console.log(formData.authors.id);
-  }, [formData]);
-
   const handleChange = (e) => {
     const { name, type, files, value } = e.target;
 
