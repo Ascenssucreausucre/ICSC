@@ -4,6 +4,7 @@ import { Feedback } from "../components/Feedback/Feedback";
 import AdminFormModal from "../components/AdminFormModal/AdminFormModal";
 import "./admin.css";
 import { Helmet } from "react-helmet";
+import NavigationProgress from "../components/NavigationProgress/NavigationProgress";
 
 function AdminRoot() {
   return (
@@ -14,6 +15,7 @@ function AdminRoot() {
       <AdminNavBar />
       <div className="admin-main-wrapper">
         <main className="admin-main">
+          <NavigationProgress />
           <Feedback />
           <AdminFormModal />
           <Outlet />

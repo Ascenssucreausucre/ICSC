@@ -33,3 +33,7 @@
   height: 2.5rem;
   width: 100%;
 }
+.admin-login .required-symbol {
+  color: white;
+  font-weight: 700;
+}

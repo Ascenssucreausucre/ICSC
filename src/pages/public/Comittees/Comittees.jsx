@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import "./Comittees.css";
-import useFetch from "../../../hooks/useFetch";
 import React from "react";
+import { useLoaderData } from "react-router-dom";
 
 export default function Comittees() {
   const [committees, setCommittees] = useState([]);
-
-  const { data: committeesData, loading } = useFetch(`/Committee/current`);
+  const committeesData = useLoaderData();
 
   useEffect(() => {
     if (committeesData) {
@@ -37,7 +36,7 @@ export default function Comittees() {
   return (
     <div className="committees">
       <h1 className="title primary">Committees</h1>
-      {!loading && committees && committees.length > 0 ? (
+      {committees && committees.length > 0 ? (
         committees.map((comittee, comitteeIndex) => (
           <React.Fragment>
             <div key={comitteeIndex} className="committee">

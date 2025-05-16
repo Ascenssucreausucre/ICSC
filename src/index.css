@@ -31,6 +31,15 @@
   font-variation-settings: "slnt" 0, "wdth" 100, "GRAD" 0, "XOPQ" 96, "XTRA" 468,
     "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738, "YTLC" 514, "YTUC" 712;
 }
+
+.nprogress-busy #nprogress .bar {
+  background-color: var(--primary-color);
+  z-index: 1000000;
+}
+.nprogress-busy #nprogress .peg {
+  box-shadow: 0 0 10px var(--tertiary-color), 0 0 5px var(--tertiary-color);
+}
+
 @media (pointer: coarse) {
   * {
     -webkit-tap-highlight-color: transparent;

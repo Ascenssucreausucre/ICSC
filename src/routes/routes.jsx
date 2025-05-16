@@ -37,27 +37,32 @@ const router = createBrowserRouter([
         element: <Home />,
         loader: () => fetch(`${API_URL}/front-routes/homepage-data`),
       },
-      { path: "committees", element: <Comittees /> },
+      {
+        path: "committees",
+        element: <Comittees />,
+        loader: () => fetch(`${API_URL}/committee/current`),
+      },
       {
         path: "registration",
         element: <Registration />,
         loader: () =>
           fetch(`${API_URL}/front-routes/registration-fees/current`),
       },
-      { path: "submission", element: <Submission /> },
+      {
+        path: "submission",
+        element: <Submission />,
+        loader: () => fetch(`${API_URL}/front-routes/submission`),
+      },
       {
         path: "program",
         element: <Program />,
         loader: () => fetch(`${API_URL}/front-routes/program`),
       },
-      { path: "special-sessions", element: <SpecialSessions /> },
-      { path: "workshops", element: <Workshops /> },
       {
         path: "local-informations",
         element: <LocalInfo />,
         loader: () => fetch(`${API_URL}/local-informations/current`),
       },
-      { path: "archives", element: <Archives /> },
     ],
   },
   {

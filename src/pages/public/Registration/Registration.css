@@ -16,6 +16,7 @@ fieldset {
 legend {
   margin-inline-start: 1rem;
   padding-inline: 0.2rem;
+  font-size: var(--font-size);
 }
 fieldset.button-container {
   justify-content: space-around;

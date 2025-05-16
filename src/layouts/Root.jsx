@@ -4,6 +4,7 @@ import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { Helmet } from "react-helmet";
 import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
+import NavigationProgress from "../components/NavigationProgress/NavigationProgress";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -53,6 +54,7 @@ function Root() {
       </Helmet>
       <Header banner={isHome} data={headerData} />
       <main>
+        <NavigationProgress />
         <Outlet />
       </main>
       <Footer data={footerData} />
