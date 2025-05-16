@@ -21,11 +21,10 @@ export default function Registration() {
     email: "",
     creditCardCountry: "",
     pin: "",
-    attendanceMode: "",
+    attendanceMode: "Face to face",
   };
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(defaultFormData);
-  const [userData, setUserData] = useState();
   const [confirm, setConfirm] = useState(false);
   const [articles, setArticles] = useState([]);
 
@@ -37,10 +36,12 @@ export default function Registration() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/authors/${id}`
       );
-      setUserData({
+      setFormData({
         email: formData.email,
         attendanceMode: formData.attendanceMode,
         creditCardCountry: formData.creditCardCountry,
+        isAuthor: formData.isAuthor,
+        pin: formData.pin,
         student: false,
         ieeeMember: false,
         paypal: false,
@@ -52,11 +53,21 @@ export default function Registration() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log(name, value);
+    const { name, type, checked, value } = e.target;
+
+    let newValue;
+
+    if (type === "checkbox") {
+      newValue = checked;
+    } else if (value === "true" || value === "false") {
+      newValue = value === "true";
+    } else {
+      newValue = value;
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
@@ -69,22 +80,27 @@ export default function Registration() {
   };
 
   const handleSubmit = async () => {
-    const articleToSend = articles.map((article) => {
-      const submitted = article.submit ? article : null;
-      if (submitted && article.extraPages < 0) {
-        return console.error({
-          error: `Article ${article.id} has negative extra pages.`,
-        });
-      } else {
-        return submitted;
-      }
-    });
-    const dataToSend = { articles: articleToSend, ...userData };
-    console.log(dataToSend);
+    if (formData.isAuthor) {
+      const articleToSend = articles.map((article) => {
+        const submitted = article.submit ? article : null;
+        if (submitted && article.extraPages < 0) {
+          return console.error({
+            error: `Article ${article.id} has negative extra pages.`,
+          });
+        } else {
+          return submitted;
+        }
+      });
+      const dataToSend = { articles: articleToSend, ...formData };
+      console.log(dataToSend);
+    }
     setShowForm(false);
     setConfirm(false);
     setFormData(defaultFormData);
   };
+
+  const formatLabel = (key) =>
+    key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
   const form = [
     {
@@ -120,12 +136,7 @@ export default function Registration() {
               label="I am an author"
               name="isAuthor"
               checked={formData.isAuthor === true}
-              onChange={() =>
-                setFormData((prev) => ({
-                  ...prev,
-                  isAuthor: !prev.isAuthor,
-                }))
-              }
+              onChange={handleChange}
               className="toggle-pin"
             />
             {formData.isAuthor && (
@@ -177,17 +188,21 @@ export default function Registration() {
           return false;
         }
 
-        if (formData.isAuthor) {
+        if (formData.isAuthor === true) {
           fetchData(formData.pin);
         } else {
-          setUserData({
+          setFormData({
+            name: "",
+            surname: "",
             email: formData.email,
+            country: "",
             attendanceMode: formData.attendanceMode,
             creditCardCountry: formData.creditCardCountry,
+            isAuthor: formData.isAuthor,
+            pin: null,
             student: false,
             ieeeMember: false,
             paypal: false,
-            ...response.data,
           });
         }
 
@@ -197,36 +212,74 @@ export default function Registration() {
     },
     {
       title: "Step 2",
-      description: formData.isAuthor
-        ? "Please confirm your informations."
-        : "Please enter your informations.",
+      description:
+        formData.isAuthor === true
+          ? "Please confirm your informations."
+          : "Please enter your informations.",
       content: (
         <>
           <form ref={formRef2} onSubmit={(e) => e.preventDefault()}>
-            {userData ? (
+            {formData ? (
               <>
-                <Input label="Name" value={userData.name} disabled />
-                <Input label="Surname" value={userData.surname} disabled />
-                <Input label="E-mail" value={userData.email} disabled />
-                <Input label="Country" value={userData.country} disabled />
+                <Input
+                  label="Name"
+                  value={formData.name}
+                  disabled={formData.isAuthor}
+                  onChange={handleChange}
+                  name="name"
+                  required
+                />
+                <Input
+                  label="Surname"
+                  value={formData.surname}
+                  disabled={formData.isAuthor}
+                  onChange={handleChange}
+                  name="surname"
+                  required
+                />
+                <Input
+                  label="E-mail"
+                  type="email"
+                  value={formData.email}
+                  disabled={formData.isAuthor}
+                  onChange={handleChange}
+                  name="email"
+                  required
+                />
+                <Input
+                  label="Country"
+                  value={formData.country}
+                  disabled={formData.isAuthor}
+                  onChange={handleChange}
+                  name="country"
+                  required
+                />
                 <Input
                   label="Credit-card country"
-                  value={userData.creditCardCountry}
-                  disabled
+                  value={formData.creditCardCountry}
+                  disabled={formData.isAuthor}
+                  onChange={handleChange}
+                  name="creditCardCountry"
+                  required
                 />
                 <Input
                   label="Attendance mode"
-                  value={userData.attendanceMode}
+                  value={formData.attendanceMode}
+                  onChange={handleChange}
+                  name="attendanceMode"
+                  required
                   disabled
                 />
-                <Input
-                  type="checkbox"
-                  label="I confirm these informations are accurate"
-                  name="confirmation"
-                  onChange={() => setConfirm(!confirm)}
-                  checked={confirm}
-                  required
-                />
+                {formData.isAuthor === true && (
+                  <Input
+                    type="checkbox"
+                    label="I confirm these informations are accurate"
+                    name="confirmation"
+                    onChange={() => setConfirm(!confirm)}
+                    checked={confirm}
+                    required
+                  />
+                )}
               </>
             ) : (
               <LoadingScreen />
@@ -234,21 +287,25 @@ export default function Registration() {
           </form>
         </>
       ),
-      onPrevious: () => {
-        setUserData(null);
-        return true;
-      },
       onNext: () => {
         const formElement = document.querySelector("form");
         if (!formElement.checkValidity()) {
           formElement.reportValidity();
           return false;
         }
-        setArticles(
-          userData.articles.map((article) => {
-            return { ...article, submit: false, extraPages: 0 };
-          })
-        );
+        if (
+          formData.attendanceMode !== "Face to face" &&
+          formData.attendanceMode !== "Online"
+        ) {
+          return false;
+        }
+        if (formData?.articles) {
+          setArticles(
+            formData.articles.map((article) => {
+              return { ...article, submit: false, extraPages: 0 };
+            })
+          );
+        }
         setConfirm(false);
         return true;
       },
@@ -258,20 +315,95 @@ export default function Registration() {
       description: "Ensure your status.",
       content: (
         <>
-          <fieldset>
-            <legend>IEEE Member</legend>
-            <div className="button-container">
-              <Input type="radio" />
-              <Input type="radio" />
-            </div>
+          <fieldset className="button-container">
+            <legend>
+              Are you IEEE Member ? <span className="required-symbol">*</span>
+            </legend>
+            <Input
+              type="radio"
+              label="Yes"
+              name="ieeeMember"
+              value={true}
+              inputId={`ieeeMemberTrue`}
+              onChange={handleChange}
+              checked={formData.ieeeMember === true}
+              required
+            />
+            <Input
+              type="radio"
+              label="No"
+              name="ieeeMember"
+              value={false}
+              inputId={`ieeeMemberFalse`}
+              onChange={handleChange}
+              checked={formData.ieeeMember === false}
+              required
+            />
+          </fieldset>
+          <fieldset className="button-container">
+            <legend>
+              Are you a student ? <span className="required-symbol">*</span>
+            </legend>
+            <Input
+              type="radio"
+              label="Yes"
+              name="student"
+              value={true}
+              inputId={`studentTrue`}
+              onChange={handleChange}
+              checked={formData.student === true}
+              required
+            />
+            <Input
+              type="radio"
+              label="No"
+              name="student"
+              value={false}
+              inputId={`studentFalse`}
+              onChange={handleChange}
+              checked={formData.student === false}
+              required
+            />
+          </fieldset>
+          <fieldset className="button-container">
+            <legend>
+              Will you pay with paypal ?{" "}
+              <span className="required-symbol">*</span>
+            </legend>
+            <Input
+              type="radio"
+              label="Yes"
+              name="paypal"
+              value={true}
+              inputId={`paypalTrue`}
+              onChange={handleChange}
+              checked={formData.paypal === true}
+              required
+            />
+            <Input
+              type="radio"
+              label="No"
+              name="paypal"
+              value={false}
+              inputId={`paypalFalse`}
+              onChange={handleChange}
+              checked={formData.paypal === false}
+              required
+            />
           </fieldset>
         </>
       ),
+      onPrevious: () => {
+        setArticles(null);
+        return true;
+      },
     },
     {
       title: "Step 4",
-      description: "Select the articles you want to submit.",
-      content: (
+      description: formData.isAuthor
+        ? "Select the articles you want to submit."
+        : "You can now confirm, a new window will open for the payment.",
+      content: formData.isAuthor ? (
         <>
           <p>
             You can submit a maximum of{" "}
@@ -313,9 +445,26 @@ export default function Registration() {
                 </div>
               ))
             ) : (
-              <LoadingScreen />
+              <p>Error retreiving articles.</p>
             )}
           </div>
+        </>
+      ) : (
+        <>
+          {Object.keys(formData).map((key) => {
+            let value = formData[key];
+            if (typeof value === "boolean") {
+              value = value ? "Yes" : "No";
+            }
+            return (
+              value &&
+              key !== "isAuthor" && (
+                <p>
+                  <strong>{formatLabel(key)}</strong>: {value}
+                </p>
+              )
+            );
+          })}
         </>
       ),
       next: "Submit",
@@ -324,17 +473,18 @@ export default function Registration() {
 
   return (
     <>
-      {showForm && (
-        <AnimatePresence>
+      <AnimatePresence mode="wait">
+        {showForm && (
           <motion.div
-            className="modal-overlay"
+            className="modal-overlay register"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
             <motion.div
-              className="edit-form register"
+              className="edit-form"
+              layout="position"
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
@@ -349,16 +499,20 @@ export default function Registration() {
               >
                 <LucideX />
               </button>
-              <CustomStepper
-                steps={form}
-                title="Register to the conference"
-                onEnd={handleSubmit}
-                disableNav
-              />
+
+              <motion.div layout>
+                <CustomStepper
+                  steps={form}
+                  title="Register to the conference"
+                  onEnd={handleSubmit}
+                  disableNav
+                />
+              </motion.div>
             </motion.div>
           </motion.div>
-        </AnimatePresence>
-      )}
+        )}
+      </AnimatePresence>
+
       <h1 className="title primary">Registration</h1>
       <section>
         <div className="text-container">

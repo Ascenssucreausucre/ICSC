@@ -1,5 +1,9 @@
-.edit-form.register {
-  max-height: calc(100dvh - 80px);
+.register.modal-overlay {
+  padding-block: 80px;
+}
+.register .edit-form {
+  overflow-x: hidden;
+  max-height: 100%;
 }
 .edit-form > .button-svg {
   position: absolute;

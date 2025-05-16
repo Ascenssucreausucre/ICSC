@@ -1,16 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import "./CustomStepper.css";
-import { useEffect } from "react";
 
-/**
- * Composant Stepper customisable qui accepte un tableau d'éléments React/HTML comme contenu
- * @param {Object} props
- * @param {Array} props.steps - Tableau d'objets décrivant les étapes avec {title, description, content}
- * @param {string} [props.initialColor='#3b82f6'] - Couleur initiale du stepper
- * @param {boolean} [props.showCustomization=true] - Afficher ou non le panneau de personnalisation
- * @param {string} [props.title='Stepper Customisable'] - Titre du stepper
- * @returns {JSX.Element}
- */
 export default function CustomStepper({
   steps: initialSteps = null,
   initialColor = "var(--primary-color)",
@@ -18,7 +9,6 @@ export default function CustomStepper({
   onEnd,
   disableNav = false,
 }) {
-  // Si aucun tableau de steps n'est fourni, utiliser des steps par défaut
   const defaultSteps = [
     {
       title: "Étape 1",
@@ -42,48 +32,64 @@ export default function CustomStepper({
     },
   ];
 
-  const [activeStep, setActiveStep] = useState(0);
-  const [steps, setSteps] = useState(initialSteps || defaultSteps);
   const [stepperColor, setStepperColor] = useState(initialColor);
+  const [steps, setSteps] = useState(initialSteps || defaultSteps);
+  const [stepState, setStepState] = useState({ index: 0, direction: 1 });
 
   useEffect(() => {
-    setSteps(initialSteps);
+    setSteps(initialSteps || defaultSteps);
   }, [initialSteps]);
 
   const handleNext = async () => {
-    if (steps[activeStep].onNext) {
-      const shouldProceed = await steps[activeStep].onNext();
+    const step = steps[stepState.index];
+    if (step.onNext) {
+      const shouldProceed = await step.onNext();
       if (!shouldProceed) return;
     }
 
-    if (activeStep < steps.length - 1) {
-      setActiveStep((prevActiveStep) =>
-        prevActiveStep < steps.length - 1 ? prevActiveStep + 1 : prevActiveStep
-      );
+    if (stepState.index < steps.length - 1) {
+      setStepState({ index: stepState.index + 1, direction: 1 });
     } else {
-      onEnd();
+      onEnd?.();
     }
   };
 
   const handleBack = () => {
-    if (steps[activeStep].onPrevious) {
-      const shouldProceed = steps[activeStep].onPrevious();
+    const step = steps[stepState.index];
+    if (step.onPrevious) {
+      const shouldProceed = step.onPrevious();
       if (!shouldProceed) return;
     }
-    setActiveStep((prevActiveStep) =>
-      prevActiveStep > 0 ? prevActiveStep - 1 : prevActiveStep
-    );
+
+    setStepState({ index: Math.max(0, stepState.index - 1), direction: -1 });
   };
 
   const goToStep = (stepIndex) => {
-    setActiveStep(stepIndex);
+    const newDirection = stepIndex > stepState.index ? 1 : -1;
+    setStepState({ index: stepIndex, direction: newDirection });
+  };
+
+  const { index: activeStep, direction } = stepState;
+
+  const variants = {
+    enter: (direction) => ({
+      x: direction * 50,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction) => ({
+      x: direction * -50,
+      opacity: 0,
+    }),
   };
 
   return (
     <div className="stepper-container">
       <h2 className="title secondary">{title}</h2>
 
-      {/* Stepper */}
       <div className="stepper">
         <div className={`steps-container${disableNav ? " disabled" : ""}`}>
           {steps.map((step, index) => (
@@ -114,7 +120,6 @@ export default function CustomStepper({
             </div>
           ))}
 
-          {/* Barres de progression */}
           <div className="progress-bar-bg" />
           <div
             className="progress-bar-fill"
@@ -126,20 +131,40 @@ export default function CustomStepper({
         </div>
       </div>
 
-      {/* Contenu de l'étape */}
-      <div className="step-content">
-        <h3 className="step-content-title" style={{ color: stepperColor }}>
-          {steps[activeStep].title}
-        </h3>
-        {steps[activeStep].description && (
-          <p className="step-content-description">
-            {steps[activeStep].description}
-          </p>
-        )}
-        <div className="step-content-demo">{steps[activeStep].content}</div>
-      </div>
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={activeStep}
+          className="step-content"
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{ duration: 0.3 }}
+        >
+          <motion.h3
+            className="step-content-title"
+            style={{ color: stepperColor }}
+          >
+            {steps[activeStep].title}
+          </motion.h3>
 
-      {/* Navigation */}
+          {steps[activeStep].description && (
+            <motion.p
+              className="step-content-description"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              {steps[activeStep].description}
+            </motion.p>
+          )}
+
+          <div className="step-content-demo">{steps[activeStep].content}</div>
+        </motion.div>
+      </AnimatePresence>
+
       <div className="navigation">
         <button
           onClick={handleBack}
@@ -151,14 +176,12 @@ export default function CustomStepper({
           Previous
         </button>
         <p className="navigation-indicator">
-          Étape {activeStep + 1} sur {steps.length}
+          Step {activeStep + 1}/{steps.length}
         </p>
         <button
           onClick={handleNext}
           className={`btn-next${activeStep + 1 < steps.length ? "" : " last"}`}
-          style={{
-            backgroundColor: stepperColor,
-          }}
+          style={{ backgroundColor: stepperColor }}
         >
           {steps[activeStep].next ? steps[activeStep].next : "Next"}
         </button>
