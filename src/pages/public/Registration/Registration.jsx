@@ -458,7 +458,7 @@ export default function Registration() {
             return (
               value &&
               key !== "isAuthor" && (
-                <p>
+                <p key={key}>
                   <strong>{formatLabel(key)}</strong>: {value}
                 </p>
               )

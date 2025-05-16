@@ -45,7 +45,7 @@ export default function NavBar({ data }) {
     },
     closed: {
       transition: {
-        staggerChildren: 0.05,
+        staggerChildren: 0.1,
         staggerDirection: -1,
       },
     },
@@ -89,7 +89,7 @@ export default function NavBar({ data }) {
               to={page.link}
               className="nav-link"
               variants={linkVariants}
-              animate={isOpen ? "open" : "closed"}
+              // animate={isOpen ? "open" : "closed"}
               onClick={() => setIsOpen(false)}
             >
               {page.name}
