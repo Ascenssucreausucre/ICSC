@@ -96,7 +96,7 @@
   margin-top: 10px;
 }
 .display-news-container hr {
-  margin-block: clamp(1rem, 2vw - 1rem, 5rem);
+  margin-block: clamp(0.5rem, 2vw - 1rem, 5rem);
 }
 .button.cta-button {
   padding: var(--button-padding);
