@@ -1,0 +1,20 @@
+{
+  "short_name": "ICSC",
+  "name": "International Conference on Systems and Control",
+  "icons": [
+    {
+      "src": "./images/template128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "./images/template256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

@@ -81,7 +81,11 @@ export default function Header({ banner = false, data }) {
       )}
       <AnimatePresence>
         {displayNews ? (
-          <DisplayNews news={newsData} close={() => setDisplayNews(false)} />
+          <DisplayNews
+            news={newsData}
+            close={() => setDisplayNews(false)}
+            vapidPublicKey={import.meta.env.VITE_VAPID_PUBLIC_KEY}
+          />
         ) : null}
       </AnimatePresence>
     </header>

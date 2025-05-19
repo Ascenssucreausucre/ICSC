@@ -7,7 +7,6 @@ import CustomStepper from "../../../components/Stepper/Stepper";
 import { Input } from "../../../components/Input/Input";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Registration.css";
-import useFetch from "../../../hooks/useFetch";
 import axios from "axios";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
@@ -15,6 +14,8 @@ export default function Registration() {
   const { registrationFees, importantDates, additionnalFees } = useLoaderData();
 
   const iconSize = 12;
+
+  const maxArticles = 4;
 
   const defaultFormData = {
     isAuthor: false,
@@ -27,6 +28,14 @@ export default function Registration() {
   const [formData, setFormData] = useState(defaultFormData);
   const [confirm, setConfirm] = useState(false);
   const [articles, setArticles] = useState([]);
+  const [selectedArticles, setSelectedArticles] = useState(0);
+
+  useEffect(() => {
+    const articlesLength = articles.filter(
+      (article) => article.submit === true
+    ).length;
+    setSelectedArticles(articlesLength);
+  }, [articles]);
 
   const formRef = useRef(null);
   const formRef2 = useRef(null);
@@ -81,17 +90,29 @@ export default function Registration() {
 
   const handleSubmit = async () => {
     if (formData.isAuthor) {
-      const articleToSend = articles.map((article) => {
-        const submitted = article.submit ? article : null;
-        if (submitted && article.extraPages < 0) {
-          return console.error({
-            error: `Article ${article.id} has negative extra pages.`,
-          });
-        } else {
-          return submitted;
-        }
+      const articlesToSend = articles.filter(
+        (article) => article.submit !== false
+      );
+      if (articlesToSend.length > 4) {
+        console.error(
+          `You can't submit more than ${maxArticles} articles of which you either are author or co-author.`
+        );
+        return;
+      }
+      if (articlesToSend.find((article) => article.extraPages < 0)) {
+        console.error(`Articles can't have negative extra pages.`);
+        return;
+      }
+      const dataToSend = { ...formData, articles: articlesToSend };
+      console.log({
+        message: "Success!",
+        data: dataToSend,
       });
-      const dataToSend = { articles: articleToSend, ...formData };
+
+      setShowForm(false);
+      setConfirm(false);
+      setFormData(defaultFormData);
+      return;
     }
     setShowForm(false);
     setConfirm(false);
@@ -406,8 +427,8 @@ export default function Registration() {
         <>
           <p>
             You can submit a maximum of{" "}
-            <strong className="important-info">4</strong> articles of which you
-            are an author or a co-author
+            <strong className="important-info">{maxArticles}</strong> articles
+            of which you are an author or a co-author
           </p>
           <div className="articles-container">
             {articles ? (
@@ -423,6 +444,10 @@ export default function Registration() {
                         ...article,
                         submit: !article.submit,
                       })
+                    }
+                    disabled={
+                      selectedArticles >= maxArticles &&
+                      article.submit === false
                     }
                   />
                   {article.submit && (
@@ -542,21 +567,21 @@ export default function Registration() {
           <h2 className="secondary">Good to know :</h2>
           <ul>
             <li>
-              <ArrowRight size={iconSize} color="#eb4c4c" />
+              <ArrowRight size={iconSize} color="var(--primary-color)" />
               The registration fee includes the conference Proceedings.
             </li>
             <li>
-              <ArrowRight size={iconSize} color="#eb4c4c" />
+              <ArrowRight size={iconSize} color="var(--primary-color)" />
               At most one additional paper is accepted by a non-student
               registration.
             </li>
             <li>
-              <ArrowRight size={iconSize} color="#eb4c4c" />A Student
-              Registration does not give right to an additional paper.
+              <ArrowRight size={iconSize} color="var(--primary-color)" />A
+              Student Registration does not give right to an additional paper.
             </li>
             {additionnalFees ? (
               <li>
-                <ArrowRight size={iconSize} color="#eb4c4c" />
+                <ArrowRight size={iconSize} color="var(--primary-color)" />
                 Six pages are allowed for each paper. Up to two additional pages
                 will be permitted for a charge of{" "}
                 <span className="important-info">
@@ -566,13 +591,13 @@ export default function Registration() {
               </li>
             ) : (
               <li>
-                <ArrowRight size={iconSize} color="#eb4c4c" /> Additionnal page
-                fees are still under discussion, more informations are coming
-                later.
+                <ArrowRight size={iconSize} color="var(--primary-color)" />{" "}
+                Additionnal page fees are still under discussion, more
+                informations are coming later.
               </li>
             )}
             <li>
-              <ArrowRight size={iconSize} color="#eb4c4c" />
+              <ArrowRight size={iconSize} color="var(--primary-color)" />
               Students must provide concurrently with the Registration Form an
               official university letter confirming their status (or Student
               card) as full time students and the degree program they are

@@ -6,7 +6,7 @@ import { Spin } from "hamburger-react";
 import { useAuth } from "../../context/AuthContext";
 import { useFeedback } from "../../context/FeedbackContext";
 
-const MotionNavLink = motion(NavLink);
+const MotionNavLink = motion.create(NavLink);
 
 export default function AdminNavBar() {
   const navigate = useNavigate();

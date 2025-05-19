@@ -3,7 +3,7 @@ import "./NavBar.css";
 import { Spin } from "hamburger-react";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-const MotionNavLink = motion(NavLink);
+const MotionNavLink = motion.create(NavLink);
 
 export default function NavBar({ data }) {
   const navigate = useNavigate();
@@ -89,6 +89,7 @@ export default function NavBar({ data }) {
               to={page.link}
               className="nav-link"
               variants={linkVariants}
+              // initial="closed"
               // animate={isOpen ? "open" : "closed"}
               onClick={() => setIsOpen(false)}
             >

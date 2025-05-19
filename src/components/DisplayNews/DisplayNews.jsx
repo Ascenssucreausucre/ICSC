@@ -1,23 +1,71 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X as Cross, ChevronRight, ChevronLeft } from "lucide-react";
 import "./DisplayNews.css";
 import Linkify from "linkify-react";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
 import { LinkIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function DisplayNews({ close, news = [] }) {
+// Import des modules séparés
+import InstallPWAModule from "../InstallPWAModule/InstallPWAModule";
+import {
+  subscribeUserToPush,
+  getNotificationPermissionStatus,
+  checkPushSubscription,
+} from "../../utils/pushNotification";
+import { Bell } from "lucide-react";
+import { Smartphone } from "lucide-react";
+
+export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [countDown, setCountDown] = useState(true);
+  const [permission, setPermission] = useState(
+    getNotificationPermissionStatus()
+  );
+  const [pushSubscription, setPushSubscription] = useState(null);
   const totalNews = news.length;
 
+  // Utilisation du module PWA - on n'utilise pas le bouton directement
+  const { deferredPrompt, isInstalled, isFirefox, handleInstallClick } =
+    InstallPWAModule({ renderButton: false });
+
+  const showInstallButton = !isInstalled && deferredPrompt;
+  const showFirefoxHint = !isInstalled && isFirefox && !deferredPrompt;
+
+  // Vérification de l'abonnement aux notifications
+  useEffect(() => {
+    const checkExistingSubscription = async () => {
+      const subscription = await checkPushSubscription();
+      setPushSubscription(subscription);
+    };
+
+    checkExistingSubscription();
+  }, []);
+
+  // Gestion des notifications push
+  const handleAskPermission = async () => {
+    try {
+      const subscription = await subscribeUserToPush(
+        vapidPublicKey,
+        `${import.meta.env.VITE_API_URL}/notifications/subscribe`
+      );
+
+      // Mise à jour de l'état des permissions et de l'abonnement
+      setPermission(getNotificationPermissionStatus());
+      setPushSubscription(subscription);
+    } catch (error) {
+      console.error("Erreur lors de l'activation des notifications:", error);
+    }
+  };
+
+  // Countdown pour l'affichage initial
   useEffect(() => {
     setTimeout(() => {
       setCountDown(false);
     }, 2000);
-  });
+  }, []);
 
+  // Navigation dans les actualités
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? news.length - 1 : prevIndex - 1
@@ -49,10 +97,14 @@ export default function DisplayNews({ close, news = [] }) {
     />
   );
 
-  // Si pas d'actualités, afficher un message
+  // Si pas d'actualités, ne rien afficher
   if (!news.length) {
     return null;
   }
+
+  // Vérifie si nous devons afficher des CTA pour PWA ou notifications
+  const showNotificationButton = permission === "default" && !pushSubscription;
+  const showActions = showNotificationButton || showInstallButton;
 
   return (
     !countDown && (
@@ -141,6 +193,35 @@ export default function DisplayNews({ close, news = [] }) {
             </div>
           )}
         </div>
+
+        {/* Boutons d'action pour PWA et notifications */}
+        {showActions && (
+          <>
+            <hr />
+            <div className="news-actions">
+              <p>Want to go further ?</p>
+              <div className="button-container">
+                {showNotificationButton && (
+                  <button
+                    className="cta-button button"
+                    onClick={handleAskPermission}
+                  >
+                    <Bell strokeWidth={3} /> Activate notifications
+                  </button>
+                )}
+
+                {showInstallButton && (
+                  <button
+                    className="cta-button button"
+                    onClick={handleInstallClick}
+                  >
+                    <Smartphone /> Install the app
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </motion.div>
     )
   );
