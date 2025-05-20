@@ -90,8 +90,8 @@ self.addEventListener("push", (event) => {
   const {
     title = "Notification",
     body = "",
-    icon,
-    badge,
+    icon = "./images/template128.png",
+    badge = "./images/template128.png",
     image,
     vibrate,
     tag,
