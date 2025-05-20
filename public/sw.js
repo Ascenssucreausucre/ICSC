@@ -87,7 +87,7 @@ self.addEventListener("push", (event) => {
   const options = {
     body: data.body || "Tu as un nouveau message.",
     icon: "./images/template128.png",
-    badge: "./images/template128.png",
+    // badge: "./images/template128.png",
     data: {
       url: data.url || "/", // URL à ouvrir en cliquant
     },
