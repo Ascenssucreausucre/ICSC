@@ -3,9 +3,8 @@ const CACHE_NAME = "my-pwa-cache-v1";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/styles/main.css",
-  "/src/main.js",
   "/images/template128.png",
+  "/manifest.json",
 ];
 
 // Installation du service worker et mise en cache des ressources
