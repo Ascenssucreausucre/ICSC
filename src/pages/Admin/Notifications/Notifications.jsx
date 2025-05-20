@@ -63,7 +63,7 @@ export default function Notifications() {
         />
         <Input
           label="Badge URL"
-          placeholder="The url of monochrome image that is in the notification bar"
+          placeholder="The url of a transparent svg"
           name="badge"
           value={formData.badge}
           onChange={handleChange}
@@ -71,7 +71,7 @@ export default function Notifications() {
         <Input
           label="Image URL"
           placeholder="The url of the banner of the notification"
-          name="badge"
+          name="image"
           value={formData.image}
           onChange={handleChange}
         />
@@ -83,15 +83,24 @@ export default function Notifications() {
       </form>
       {showPreview && (
         <div className="notification-preview">
-          <img
-            src={formData?.icon ? formData.icon : "/images/template128.png"}
-            alt=""
-            className="notification-image"
-          />
+          <div className="notification-badge">
+            <img
+              src={
+                formData?.badge ? formData.badge : "/images/default-badge.svg"
+              }
+              alt=""
+            />
+          </div>
+
           <div className="notification-content">
             <h2 className="card-title secondary">{formData.title}</h2>
             <p className="notification-text">{formData.content}</p>
           </div>
+          <img
+            src={formData?.icon ? formData.icon : "/images/template128.png"}
+            alt=""
+            className="notification-icon"
+          />
         </div>
       )}
     </section>
