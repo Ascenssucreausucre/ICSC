@@ -1,5 +1,5 @@
 // Nom du cache et ressources à mettre en cache initialement
-const CACHE_NAME = "icsc-cache-v1";
+const CACHE_NAME = "icsc-cache-v2";
 const urlsToCache = [
   "/",
   "/index.html",
@@ -77,20 +77,42 @@ function fetchFallbackPage(request) {
 
 // Gestion des push notifications
 self.addEventListener("push", (event) => {
-  let data = {};
-  console.log(event.data);
+  let payload = {};
   if (event.data) {
-    data = event.data.json();
+    try {
+      payload = event.data.json();
+    } catch (err) {
+      // Si ce n'est pas du JSON, le traiter comme du texte simple
+      payload = { title: "Notification", body: event.data.text() };
+    }
   }
 
-  const title = data.title || "Notification";
+  const {
+    title = "Notification",
+    body = "",
+    icon,
+    badge,
+    image,
+    vibrate,
+    tag,
+    renotify,
+    actions,
+    data,
+    ...others
+  } = payload;
+
   const options = {
-    body: data.body || "Tu as un nouveau message.",
-    icon: "./images/template128.png",
-    // badge: "./images/template128.png",
-    data: {
-      url: data.url || "/", // URL à ouvrir en cliquant
-    },
+    body,
+    // Only include if defined
+    ...(icon && { icon }),
+    ...(badge && { badge }),
+    ...(image && { image }),
+    ...(vibrate && { vibrate }),
+    ...(tag && { tag }),
+    ...(renotify === true || renotify === false ? { renotify } : {}),
+    ...(Array.isArray(actions) && actions.length ? { actions } : {}),
+    data: data || {}, // tu récupères tout ce que tu as passé côté API
+    ...others, // propagation de tout nouveau champ non listé
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
@@ -99,18 +121,39 @@ self.addEventListener("push", (event) => {
 // Action au clic sur la notification
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = event.notification.data.url;
-  event.waitUntil(clients.openWindow(url));
+
+  const clickData = event.notification.data || {};
+  const { url, ...rest } = clickData;
+
+  // Exemples de traitement possible :
+  // – Ouvrir une URL
+  // – Envoyer un fetch vers ton API pour tracker le clic
+  // – Brancher un BroadcastChannel…
+
+  const promiseChain = (async () => {
+    if (rest.clickTrackUrl) {
+      // si tu passes un endpoint pour le tracking dans data.clickTrackUrl
+      await fetch(rest.clickTrackUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rest),
+      });
+    }
+
+    if (url) {
+      return clients.openWindow(url);
+    }
+  })();
+
+  event.waitUntil(promiseChain);
 });
 
-// Gestion des synchronisations en arrière-plan
+// Gestion des synchronisations en arrière-plan (existant)
 self.addEventListener("sync", (event) => {
   if (event.tag === "sync-data") {
     event.waitUntil(syncData());
   }
 });
-
-// Fonction pour synchroniser les données en arrière-plan
 function syncData() {
   // Logique de synchronisation des données
   return Promise.resolve();
