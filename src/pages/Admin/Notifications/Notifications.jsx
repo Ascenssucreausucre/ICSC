@@ -46,7 +46,7 @@ export default function Notifications() {
     await submit({
       method: "POST",
       url: "/notifications/notify-all",
-      data: formData,
+      data: { ...formData, actions },
     });
     setLoading(false);
   };
