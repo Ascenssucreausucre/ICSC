@@ -1,5 +1,5 @@
 // Nom du cache et ressources à mettre en cache initialement
-const CACHE_NAME = "my-pwa-cache-v1";
+const CACHE_NAME = "icsc-cache-v1";
 const urlsToCache = [
   "/",
   "/index.html",
