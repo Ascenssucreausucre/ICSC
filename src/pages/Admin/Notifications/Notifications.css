@@ -45,3 +45,7 @@
   filter: brightness(100);
   box-sizing: border-box;
 }
+.action-row {
+  display: flex;
+  gap: 0.5rem;
+}

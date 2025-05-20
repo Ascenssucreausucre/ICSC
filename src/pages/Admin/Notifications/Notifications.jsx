@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Input } from "../../../components/Input/Input";
 import "./Notifications.css";
 import useSubmit from "../../../hooks/useSubmit";
+import { Trash2Icon } from "lucide-react";
 
 export default function Notifications() {
   const [showPreview, setShowPreview] = useState(true);
@@ -13,6 +14,22 @@ export default function Notifications() {
     image: "",
   });
   const [loading, setLoading] = useState(false);
+  const [actions, setActions] = useState([{ title: "", action: "", icon: "" }]);
+
+  const handleActionChange = (index, field, value) => {
+    const updated = [...actions];
+    updated[index][field] = value;
+    setActions(updated);
+  };
+
+  const addAction = () => {
+    setActions([...actions, { title: "", action: "", icon: "" }]);
+  };
+
+  const removeAction = (index) => {
+    const updated = actions.filter((_, i) => i !== index);
+    setActions(updated);
+  };
   const { submit } = useSubmit();
 
   const handleChange = (e) => {
@@ -60,6 +77,7 @@ export default function Notifications() {
           name="icon"
           value={formData.icon}
           onChange={handleChange}
+          type="url"
         />
         <Input
           label="Badge URL"
@@ -67,6 +85,7 @@ export default function Notifications() {
           name="badge"
           value={formData.badge}
           onChange={handleChange}
+          type="url"
         />
         <Input
           label="Image URL"
@@ -74,7 +93,47 @@ export default function Notifications() {
           name="image"
           value={formData.image}
           onChange={handleChange}
+          type="url"
         />
+        <h3>Actions de notification</h3>
+        {actions.map((act, index) => (
+          <div key={index} className="action-row">
+            <Input
+              type="text"
+              placeholder="Titre (ex: Ouvrir)"
+              value={act.title}
+              onChange={(e) =>
+                handleActionChange(index, "title", e.target.value)
+              }
+            />
+            <Input
+              type="text"
+              placeholder="Nom interne (ex: open)"
+              value={act.action}
+              onChange={(e) =>
+                handleActionChange(index, "action", e.target.value)
+              }
+            />
+            <Input
+              type="url"
+              placeholder="Icon (URL)"
+              value={act.icon}
+              onChange={(e) =>
+                handleActionChange(index, "icon", e.target.value)
+              }
+            />
+            <button
+              type="button"
+              onClick={() => removeAction(index)}
+              className="delete-button"
+            >
+              <Trash2Icon />
+            </button>
+          </div>
+        ))}
+        <button type="button" onClick={addAction} className="button small">
+          + Ajouter une action
+        </button>
         <div className="button-container">
           <button className="button" formAction="submit" disabled={loading}>
             {loading ? "Submitting..." : "Send the notification"}
