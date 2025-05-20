@@ -30,6 +30,9 @@ export function PWAInstallProvider({ children }) {
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    console.log(
+      "🧪 InstallPWAContext mounted, waiting for beforeinstallprompt"
+    );
     window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {

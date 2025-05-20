@@ -4,9 +4,8 @@ const urlsToCache = [
   "/",
   "/index.html",
   "/styles/main.css",
-  "/scripts/main.js",
+  "/src/main.js",
   "/images/template128.png",
-  // Ajoutez ici toutes les ressources importantes pour votre application
 ];
 
 // Installation du service worker et mise en cache des ressources
@@ -48,39 +47,34 @@ self.addEventListener("activate", (event) => {
 // Stratégie de récupération des ressources : Cache First, puis réseau
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Cache hit - retourne la réponse du cache
-      if (response) {
-        return response;
-      }
+    fetch(event.request)
+      .then((response) => {
+        const cloned = response.clone();
 
-      // Faire une copie de la requête car elle ne peut être utilisée qu'une fois
-      return fetch(event.request.clone())
-        .then((response) => {
-          // Vérifie si nous avons reçu une réponse valide
-          if (
-            !response ||
-            response.status !== 200 ||
-            response.type !== "basic"
-          ) {
-            return response;
-          }
-
-          // Mettre en cache la nouvelle ressource
-          const responseToCache = response.clone();
+        // Cache seulement les requêtes GET réussies
+        if (event.request.method === "GET" && response.status === 200) {
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            cache.put(event.request, cloned);
           });
+        }
 
-          return response;
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request).then((cachedResponse) => {
+          return cachedResponse || fetchFallbackPage(event.request);
         })
-        .catch(() => {
-          // Fallback pour les ressources qui ne peuvent pas être récupérées
-          // Vous pouvez retourner une page offline.html par exemple
-        });
-    })
+      )
   );
 });
+
+// Optionnel : fonction de fallback
+function fetchFallbackPage(request) {
+  if (request.destination === "document") {
+    return caches.match("/offline.html"); // si tu en as une
+  }
+  return Response.error(); // ou rien
+}
 
 // Gestion des push notifications
 self.addEventListener("push", (event) => {
