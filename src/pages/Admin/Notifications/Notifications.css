@@ -1,0 +1,25 @@
+.notification-form {
+  margin-inline: calc(15% - 1rem);
+  background-color: white;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+}
+.notification-preview {
+  width: clamp(200px, 70%, 800px);
+  background-color: white;
+  padding: 1rem;
+  margin: 4rem auto;
+  border-radius: var(--border-radius);
+  filter: var(--card-drop-shadow);
+  display: flex;
+  gap: 1rem;
+}
+.notification-content {
+  flex: 1;
+}
+.notification-image {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  height: 150px;
+  border-radius: 50%;
+}

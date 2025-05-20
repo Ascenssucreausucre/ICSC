@@ -2,11 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/public/Home/Home";
 import Comittees from "../pages/public/Comittees/Comittees";
 import Program from "../pages/public/Program/Program";
-import SpecialSessions from "../pages/public/SpecialSessions/SpecialSessions";
 import Registration from "../pages/public/Registration/Registration";
-import Workshops from "../pages/public/Workshops/Workshops";
 import LocalInfo from "../pages/public/LocalInfo/LocalInfo";
-import Archives from "../pages/public/Archives/Archives";
 import AdminLogin from "../pages/Admin/AdminLogin/AdminLogin";
 import AdminMainPage from "../pages/Admin/AdminMainPage/AdminMainPage";
 import Root from "../layouts/Root"; // Layout pour le front
@@ -23,6 +20,7 @@ import Authors from "../pages/Admin/Authors/Authors";
 import Author from "../pages/Admin/Author/Author";
 import CustomErrorPage from "../components/CustomErrorPage/CustomErrorPage";
 import Admins from "../pages/Admin/Admins/Admins";
+import Notifications from "../pages/Admin/Notifications/Notifications";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -125,6 +123,7 @@ const router = createBrowserRouter([
             path: "admins",
             element: <Admins />,
           },
+          { path: "notifications", element: <Notifications /> },
         ],
       },
     ],
