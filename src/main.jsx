@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App.jsx";
 import "flag-icon-css/css/flag-icons.min.css";
 import CustomErrorBoundary from "./components/CustomErrorBoundary/CustomErrorBoundary.jsx";
+import { PWAInstallProvider } from "./context/InstallPWAContext";
 
 // Activation de StrictMode uniquement en développement
 const rootElement = document.getElementById("root");
@@ -25,15 +26,19 @@ if ("serviceWorker" in navigator) {
 if (process.env.NODE_ENV === "development") {
   root.render(
     <StrictMode>
-      <CustomErrorBoundary>
-        <App />
-      </CustomErrorBoundary>
+      <PWAInstallProvider>
+        <CustomErrorBoundary>
+          <App />
+        </CustomErrorBoundary>
+      </PWAInstallProvider>
     </StrictMode>
   );
 } else {
   root.render(
-    <CustomErrorBoundary>
-      <App />
-    </CustomErrorBoundary>
+    <PWAInstallProvider>
+      <CustomErrorBoundary>
+        <App />
+      </CustomErrorBoundary>
+    </PWAInstallProvider>
   );
 }

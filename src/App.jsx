@@ -4,7 +4,6 @@ import router from "./routes/routes";
 import { PrimeReactProvider } from "primereact/api";
 import useFetch from "./hooks/useFetch";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
-import { PWAInstallProvider } from "./context/InstallPWAContext";
 
 function App() {
   const { data: currentConference, loading } = useFetch("/Conferences/current");
@@ -37,9 +36,7 @@ function App() {
 
   return (
     <PrimeReactProvider value={value}>
-      <PWAInstallProvider>
-        <RouterProvider router={router} />
-      </PWAInstallProvider>
+      <RouterProvider router={router} />
     </PrimeReactProvider>
   );
 }
