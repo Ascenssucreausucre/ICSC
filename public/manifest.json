@@ -13,8 +13,9 @@
       "sizes": "256x256"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "description": "The application for the International Conference on Systems and Control."
 }

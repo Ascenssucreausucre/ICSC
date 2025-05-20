@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export default function InstallPWAModule({ renderButton = true }) {
+const PWAInstallContext = createContext();
+
+export function PWAInstallProvider({ children }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [isFirefox, setIsFirefox] = useState(false);
 
   useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    setIsFirefox(userAgent.includes("firefox"));
-
-    // Vérifie si la PWA est déjà installée (en standalone)
     const checkStandalone = () => {
       const isStandalone =
         window.matchMedia("(display-mode: standalone)").matches ||
@@ -20,30 +17,28 @@ export default function InstallPWAModule({ renderButton = true }) {
     checkStandalone();
     window.addEventListener("visibilitychange", checkStandalone);
 
-    // Écoute l'événement pour installation possible
     const handleBeforeInstallPrompt = (e) => {
-      e.preventDefault(); // On bloque l'invite native
+      console.log("📦 beforeinstallprompt triggered");
+      e.preventDefault();
       setDeferredPrompt(e);
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
-    // Écoute installation effective
     const handleAppInstalled = () => {
       console.log("✅ PWA installée !");
       setIsInstalled(true);
       setDeferredPrompt(null);
     };
 
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
+      window.removeEventListener("visibilitychange", checkStandalone);
       window.removeEventListener(
         "beforeinstallprompt",
         handleBeforeInstallPrompt
       );
       window.removeEventListener("appinstalled", handleAppInstalled);
-      window.removeEventListener("visibilitychange", checkStandalone);
     };
   }, []);
 
@@ -51,7 +46,6 @@ export default function InstallPWAModule({ renderButton = true }) {
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
-
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
       console.log("✅ Installation acceptée");
@@ -59,19 +53,18 @@ export default function InstallPWAModule({ renderButton = true }) {
       console.log("❌ Installation refusée");
     }
 
-    setDeferredPrompt(null); // L’événement ne peut être utilisé qu’une fois
+    setDeferredPrompt(null);
   };
 
-  return {
-    deferredPrompt,
-    isInstalled,
-    isFirefox,
-    handleInstallClick,
-    button:
-      renderButton && deferredPrompt && !isInstalled ? (
-        <button onClick={handleInstallClick} className="cta-button">
-          📱 Installer l'application
-        </button>
-      ) : null,
-  };
+  return (
+    <PWAInstallContext.Provider
+      value={{ deferredPrompt, isInstalled, handleInstallClick }}
+    >
+      {children}
+    </PWAInstallContext.Provider>
+  );
+}
+
+export function usePWAInstall() {
+  return useContext(PWAInstallContext);
 }

@@ -7,7 +7,6 @@ import { LinkIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Import des modules séparés
-import InstallPWAModule from "../InstallPWAModule/InstallPWAModule";
 import {
   subscribeUserToPush,
   getNotificationPermissionStatus,
@@ -15,6 +14,7 @@ import {
 } from "../../utils/pushNotification";
 import { Bell } from "lucide-react";
 import { Smartphone } from "lucide-react";
+import { usePWAInstall } from "../../context/InstallPWAContext";
 
 export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,13 +24,9 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   );
   const [pushSubscription, setPushSubscription] = useState(null);
   const totalNews = news.length;
-
-  // Utilisation du module PWA - on n'utilise pas le bouton directement
-  const { deferredPrompt, isInstalled, isFirefox, handleInstallClick } =
-    InstallPWAModule({ renderButton: false });
+  const { deferredPrompt, isInstalled, handleInstallClick } = usePWAInstall();
 
   const showInstallButton = !isInstalled && deferredPrompt;
-  const showFirefoxHint = !isInstalled && isFirefox && !deferredPrompt;
 
   // Vérification de l'abonnement aux notifications
   useEffect(() => {
@@ -215,7 +211,7 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
                     className="cta-button button"
                     onClick={handleInstallClick}
                   >
-                    <Smartphone /> Install the app
+                    <Smartphone strokeWidth={3} /> Install the app
                   </button>
                 )}
               </div>
