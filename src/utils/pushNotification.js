@@ -45,7 +45,9 @@ export const requestNotificationPermission = async () => {
 
 // Vérifie l'état actuel des permissions de notification
 export const getNotificationPermissionStatus = () => {
-  return Notification.permission;
+  return typeof Notification !== "undefined"
+    ? Notification.permission
+    : "unsupported";
 };
 
 // S'abonne aux notifications push
