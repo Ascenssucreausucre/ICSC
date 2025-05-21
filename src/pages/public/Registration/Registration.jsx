@@ -11,11 +11,12 @@ import axios from "axios";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function Registration() {
-  const { registrationFees, importantDates, additionnalFees } = useLoaderData();
+  const { registrationFees, importantDates, additionalFees } = useLoaderData();
 
   const iconSize = 12;
 
-  const maxArticles = 4;
+  const maxArticles = additionalFees.max_articles;
+  const freeArticle = additionalFees.given_articles_with_registration;
 
   const defaultFormData = {
     isAuthor: false,
@@ -120,7 +121,7 @@ export default function Registration() {
 
       console.log({
         dataToSend,
-        additionnalFees,
+        additionalFees,
         registrationFees,
       });
 
@@ -438,14 +439,14 @@ export default function Registration() {
           <p>
             You can submit a maximum of{" "}
             <strong className="important-info">{maxArticles}</strong> articles
-            of which you are an author or a co-author. Each additionnal article
+            of which you are an author or a co-author. Each additional article
             will be factured{" "}
             <strong className="important-info">
-              {additionnalFees.additionnal_paper_fee}€
+              {additionalFees.additional_paper_fee}€
             </strong>
             , and each extra page will be factured{" "}
             <strong className="important-info">
-              {additionnalFees.additionnal_page_fee}€
+              {additionalFees.additional_page_fee}€
             </strong>
             .
           </p>
@@ -487,7 +488,7 @@ export default function Registration() {
                         <p>
                           +
                           {article.extraPages *
-                            additionnalFees.additionnal_page_fee}
+                            additionalFees.additional_page_fee}
                           €
                         </p>
                       )}
@@ -502,12 +503,12 @@ export default function Registration() {
 
           <h3>
             Additional article price:{" "}
-            {selectedArticles.length <= 1 ? (
+            {selectedArticles.length <= freeArticle ? (
               "-"
             ) : (
               <strong className="important-info">
-                {(selectedArticles.length - 1) *
-                  additionnalFees.additionnal_paper_fee}
+                {(selectedArticles.length - freeArticle) *
+                  additionalFees.additional_paper_fee}
                 €
               </strong>
             )}
@@ -564,12 +565,12 @@ export default function Registration() {
           price: baseFee,
           articles: selectedArticles.length,
           articlesPrice:
-            selectedArticles.length > 1
-              ? (selectedArticles.length - 1) *
-                additionnalFees.additionnal_paper_fee
+            selectedArticles.length > freeArticle
+              ? (selectedArticles.length - freeArticle) *
+                additionalFees.additional_paper_fee
               : 0,
           extraPages: extraPages,
-          extraPagesPrice: extraPages * additionnalFees.additionnal_page_fee,
+          extraPagesPrice: extraPages * additionalFees.additional_page_fee,
         });
         console.log(formData);
         return true;
@@ -615,14 +616,14 @@ export default function Registration() {
                     selectedArticles.map((article, index) => {
                       const paperFee =
                         index > 0
-                          ? `${additionnalFees.additionnal_paper_fee}€`
+                          ? `${additionalFees.additional_paper_fee}€`
                           : "-";
                       const extraPageCount = article.extraPages || 0;
                       const extraPageFee =
                         extraPageCount > 0
                           ? `${
                               extraPageCount *
-                              additionnalFees.additionnal_page_fee
+                              additionalFees.additional_page_fee
                             }€`
                           : "-";
 
@@ -754,20 +755,20 @@ export default function Registration() {
               <ArrowRight size={iconSize} color="var(--primary-color)" />A
               Student Registration does not give right to an additional paper.
             </li>
-            {additionnalFees ? (
+            {additionalFees ? (
               <li>
                 <ArrowRight size={iconSize} color="var(--primary-color)" />
                 Six pages are allowed for each paper. Up to two additional pages
                 will be permitted for a charge of{" "}
                 <span className="important-info">
-                  {additionnalFees.additionnal_page_fee}€
+                  {additionalFees.additional_page_fee}€
                 </span>{" "}
                 per additional page.
               </li>
             ) : (
               <li>
                 <ArrowRight size={iconSize} color="var(--primary-color)" />{" "}
-                Additionnal page fees are still under discussion, more
+                Additional page fees are still under discussion, more
                 informations are coming later.
               </li>
             )}
@@ -793,7 +794,11 @@ export default function Registration() {
             coming later.
           </p>
         )}
-        <Button text="Register to the conference" onClick={setShowForm} />
+        <Button
+          text="Register to the conference"
+          onClick={setShowForm}
+          disabled={!additionalFees || !registrationFees}
+        />
       </section>
     </>
   );

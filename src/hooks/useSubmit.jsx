@@ -22,7 +22,7 @@ const useSubmit = () => {
   }) => {
     setSubmitLoading(true);
 
-    // console.log(baseUrl + url, data);
+    console.log(baseUrl + url, data);
 
     try {
       const response = await fetch(baseUrl + url, {

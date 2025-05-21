@@ -10,13 +10,13 @@ import { FeedbackProvider, useFeedback } from "../../context/FeedbackContext";
 
 export default function FeesManager({
   registrationFeesData,
-  additionnalFeesData,
+  additionalFeesData,
   conference_id,
   refetch,
 }) {
   const [dataToSend, setDataToSend] = useState(null);
   const [feesData, setFeesData] = useState([]);
-  const [additionnalFees, setAdditionnalFees] = useState();
+  const [additionalFees, setadditionalFees] = useState();
   const [confirmation, setConfirmation] = useState({
     id: "",
     display: false,
@@ -34,12 +34,12 @@ export default function FeesManager({
     }
   }, [registrationFeesData]);
   useEffect(() => {
-    if (additionnalFeesData) {
-      setAdditionnalFees(additionnalFeesData);
+    if (additionalFeesData) {
+      setadditionalFees(additionalFeesData);
     } else {
-      setAdditionnalFees(null);
+      setadditionalFees(null);
     }
-  }, [additionnalFeesData]);
+  }, [additionalFeesData]);
 
   const registrationFeestemplate = {
     description: "",
@@ -47,36 +47,38 @@ export default function FeesManager({
     feecategories: [],
   };
 
-  const additionnalFeesTemplate = {
-    additionnal_paper_fee: "",
-    additionnal_page_fee: "",
+  const additionalFeesTemplate = {
+    additional_paper_fee: "",
+    additional_page_fee: "",
+    max_articles: "",
+    given_articles_per_registration: "",
     conference_id,
   };
 
-  const handleAddAdditionnalFees = () => {
+  const handleAddadditionalFees = () => {
     openModal({
-      url: `/Additionnal-fee/`,
-      initialData: additionnalFeesTemplate,
+      url: `/additional-fee/`,
+      initialData: additionalFeesTemplate,
       method: "POST",
-      title: "Create additionnal fees",
+      title: "Create additional fees",
       refreshFunction: refetch,
     });
   };
 
-  const handleEditAdditionnalFees = () => {
+  const handleEditadditionalFees = () => {
     openModal({
-      url: `/Additionnal-fee/${additionnalFeesData.id}`,
-      initialData: additionnalFeesData,
+      url: `/additional-fee/${additionalFeesData.id}`,
+      initialData: additionalFeesData,
       method: "PUT",
-      title: "Update additionnal fees",
+      title: "Update additional fees",
       arg: true,
       refreshFunction: refetch,
     });
   };
 
-  const handleDeleteAdditionnalFees = async () => {
+  const handleDeleteadditionalFees = async () => {
     const response = submit({
-      url: `/Additionnal-fee/${additionnalFeesData.id}`,
+      url: `/additional-fee/${additionalFeesData.id}`,
       method: "DELETE",
     });
 
@@ -93,29 +95,33 @@ export default function FeesManager({
 
   return (
     <div className="fees-manager admin-section">
-      <h2 className="title secondary">Additionnal Fees</h2>
-      {!additionnalFees ? (
-        <p>No additionnal fee found for this conference</p>
+      <h2 className="title secondary">Additional Fees</h2>
+      {!additionalFees ? (
+        <p>No additional fee found for this conference</p>
       ) : (
         <div className="card">
           <p>
-            <strong>Additionnal paper charge: </strong>{" "}
-            {additionnalFees.additionnal_paper_fee}
+            <strong>Additional paper charge: </strong>{" "}
+            {additionalFees.additional_paper_fee}
           </p>
           <p>
-            <strong>Additionnal page charge: </strong>{" "}
-            {additionnalFees.additionnal_page_fee}
+            <strong>Additional page charge: </strong>{" "}
+            {additionalFees.additional_page_fee}
+          </p>
+          <p>
+            <strong>Max articles: </strong> {additionalFees.max_articles}
+          </p>
+          <p>
+            <strong>Given articles with registration: </strong>{" "}
+            {additionalFees.given_articles_per_registration}
           </p>
           <div className="button-container">
-            <button
-              className="button small"
-              onClick={handleEditAdditionnalFees}
-            >
+            <button className="button small" onClick={handleEditadditionalFees}>
               Edit
             </button>
             <button
               className="button small"
-              onClick={handleDeleteAdditionnalFees}
+              onClick={handleDeleteadditionalFees}
             >
               Delete
             </button>
@@ -124,9 +130,9 @@ export default function FeesManager({
       )}
       <div className="button-container">
         <button
-          onClick={handleAddAdditionnalFees}
+          onClick={handleAddadditionalFees}
           className="button"
-          disabled={!!additionnalFeesData}
+          disabled={!!additionalFeesData}
         >
           Add addtionnal fees
         </button>

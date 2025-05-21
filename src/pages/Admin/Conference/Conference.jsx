@@ -128,7 +128,7 @@ export default function Conference() {
               <div ref={feesRef}>
                 <FeesManager
                   registrationFeesData={conferenceData.registrationFees}
-                  additionnalFeesData={conferenceData.additionnalFees}
+                  additionalFeesData={conferenceData.additionalFees}
                   conference_id={conferenceData.conference.id}
                   refetch={refetch}
                 />

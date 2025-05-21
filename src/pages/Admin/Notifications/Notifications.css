@@ -43,6 +43,7 @@
   height: auto;
   object-fit: cover;
   filter: brightness(100);
+  color: white;
   box-sizing: border-box;
 }
 .action-row {

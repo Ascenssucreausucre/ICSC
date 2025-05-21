@@ -134,11 +134,11 @@ export default function Program() {
                         )} to ${formatDate(workshop.date_to)}.`}</p>
                       </div>
                       <p>{workshop.text}</p>
-                      {workshop?.additionnal_file && (
+                      {workshop?.additional_file && (
                         <Link
                           to={`${
                             import.meta.env.VITE_IMAGE_URL +
-                            workshop.additionnal_file
+                            workshop.additional_file
                           }`}
                           className="link"
                           target="__blank"

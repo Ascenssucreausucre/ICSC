@@ -50,7 +50,7 @@ export default function Submission() {
             <p>
               Six pages are allowed for each paper. Up to two additional pages
               will be permitted for a charge of{" "}
-              <strong>{fees.additionnal_page_fee}</strong>€ per additional page.
+              <strong>{fees.additional_page_fee}</strong>€ per additional page.
             </p>
             <p>Illustrations and references are included in the page count.</p>
             <p>

@@ -42,11 +42,21 @@ export default function Notifications() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const actionsToSend = actions.filter((action) =>
+      action.title.length > 0 && action.action.length > 0 ? action : null
+    );
     setLoading(true);
     await submit({
       method: "POST",
       url: "/notifications/notify-all",
-      data: { ...formData, actions },
+      data: {
+        ...formData,
+        image:
+          formData.image.length > 0
+            ? formData.image
+            : "/images/template128.png",
+        actions: actionsToSend,
+      },
     });
     setLoading(false);
   };
@@ -96,41 +106,43 @@ export default function Notifications() {
           type="url"
         />
         <h3>Actions de notification</h3>
-        {actions.map((act, index) => (
-          <div key={index} className="action-row">
-            <Input
-              type="text"
-              placeholder="Titre (ex: Ouvrir)"
-              value={act.title}
-              onChange={(e) =>
-                handleActionChange(index, "title", e.target.value)
-              }
-            />
-            <Input
-              type="text"
-              placeholder="Nom interne (ex: open)"
-              value={act.action}
-              onChange={(e) =>
-                handleActionChange(index, "action", e.target.value)
-              }
-            />
-            <Input
-              type="url"
-              placeholder="Icon (URL)"
-              value={act.icon}
-              onChange={(e) =>
-                handleActionChange(index, "icon", e.target.value)
-              }
-            />
-            <button
-              type="button"
-              onClick={() => removeAction(index)}
-              className="delete-button"
-            >
-              <Trash2Icon />
-            </button>
-          </div>
-        ))}
+        <div className="actions-container">
+          {actions.map((act, index) => (
+            <div key={index} className="action-row">
+              <Input
+                type="text"
+                placeholder="Titre (ex: Ouvrir)"
+                value={act.title}
+                onChange={(e) =>
+                  handleActionChange(index, "title", e.target.value)
+                }
+              />
+              <Input
+                type="text"
+                placeholder="Nom interne (ex: open)"
+                value={act.action}
+                onChange={(e) =>
+                  handleActionChange(index, "action", e.target.value)
+                }
+              />
+              <Input
+                type="url"
+                placeholder="Icon (URL)"
+                value={act.icon}
+                onChange={(e) =>
+                  handleActionChange(index, "icon", e.target.value)
+                }
+              />
+              <button
+                type="button"
+                onClick={() => removeAction(index)}
+                className="delete-button"
+              >
+                <Trash2Icon />
+              </button>
+            </div>
+          ))}
+        </div>
         <button type="button" onClick={addAction} className="button small">
           + Ajouter une action
         </button>

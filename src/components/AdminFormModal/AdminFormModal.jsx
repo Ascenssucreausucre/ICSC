@@ -110,7 +110,7 @@ export default function AdminFormModal() {
       processedData.image instanceof File ||
       processedData.banner instanceof File ||
       processedData.file instanceof File ||
-      processedData.additionnal_file instanceof File;
+      processedData.additional_file instanceof File;
 
     if (isFormData) {
       dataToSend = new FormData();
@@ -240,7 +240,7 @@ export default function AdminFormModal() {
               key === "image" ||
               key === "banner" ||
               key === "file" ||
-              key === "additionnal_file"
+              key === "additional_file"
             ) {
               inputType = "file";
             } else if (key === "content" || key === "text") {

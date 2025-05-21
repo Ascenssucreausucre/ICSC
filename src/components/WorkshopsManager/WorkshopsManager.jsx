@@ -26,7 +26,7 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
         date_from: new Date(),
         date_to: new Date(),
         text: "",
-        additionnal_file: "",
+        additional_file: "",
         ...(conference_id && { conference_id }),
       },
       title: "New workshop",
@@ -35,7 +35,7 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
   };
 
   const editWorkshop = (workshop) => {
-    const { additionnal_file, date_to, date_from, title, text, presenters } =
+    const { additional_file, date_to, date_from, title, text, presenters } =
       workshop;
     const dates = {
       date_from: new Date(date_from),
@@ -49,7 +49,7 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
         presenters,
         ...dates,
         text,
-        additionnal_file: "",
+        additional_file: "",
         conference_id,
       },
       title: "New workshop",
@@ -91,10 +91,10 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
                   workshop.date_from
                 )} to ${formatDate(workshop.date_to)}.`}</p>
                 <p className="limited-height-content">{workshop.text}</p>
-                {workshop?.additionnal_file ? (
+                {workshop?.additional_file ? (
                   <Link
                     to={`${
-                      import.meta.env.VITE_IMAGE_URL + workshop.additionnal_file
+                      import.meta.env.VITE_IMAGE_URL + workshop.additional_file
                     }`}
                     className="link"
                     target="__blank"
