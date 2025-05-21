@@ -1,14 +1,35 @@
 // utils/pushNotifications.js
-// J'adapte légèrement ce fichier pour qu'il soit plus modulaire et utilisable dans différents contextes
+
+// Vérifie si les push notifications sont supportées par le navigateur
+export const isPushNotificationSupported = () => {
+  return (
+    "serviceWorker" in navigator &&
+    "PushManager" in window &&
+    "Notification" in window
+  );
+};
+
+// Vérifie si l'appareil est un appareil Apple (iOS ou macOS avec écran tactile)
+export const isAppleDevice = () => {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.userAgent.includes("Macintosh") && "ontouchend" in document)
+  );
+};
 
 // Conversion de la clé VAPID
 function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, "+")
-    .replace(/_/g, "/");
-  const rawData = atob(base64);
-  return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+  try {
+    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+  } catch (e) {
+    console.error("Erreur de décodage Base64:", e);
+    return new Uint8Array();
+  }
 }
 
 // Demande la permission de notifications et retourne le statut
@@ -34,6 +55,18 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
     return null;
   }
 
+  if (!isPushNotificationSupported()) {
+    console.warn("Notifications push non supportées par ce navigateur.");
+    return null;
+  }
+
+  if (isAppleDevice() && !isRunningAsPWA()) {
+    console.warn(
+      "Les notifications push ne sont disponibles sur iOS que pour les PWA installées."
+    );
+    return null;
+  }
+
   const permission = await requestNotificationPermission();
   if (permission !== "granted") {
     console.warn("Permission de notification refusée");
@@ -41,12 +74,6 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
   }
 
   try {
-    // Vérifie si le service worker est disponible
-    if (!("serviceWorker" in navigator)) {
-      console.error("Service Worker non pris en charge");
-      return null;
-    }
-
     const registration = await navigator.serviceWorker.ready;
 
     const subscription = await registration.pushManager.subscribe({
@@ -54,7 +81,6 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
     });
 
-    // Si un URL d'API est fourni, envoie la subscription au serveur
     if (apiUrl) {
       const res = await fetch(apiUrl, {
         method: "POST",
@@ -63,7 +89,9 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
       });
 
       if (!res.ok) {
-        console.error("Subscription aux notifications a échoué.");
+        console.error(
+          "Échec de l'enregistrement de la subscription sur le serveur."
+        );
       }
     }
 
@@ -76,7 +104,8 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
 
 // Vérifie si l'utilisateur est déjà abonné aux notifications push
 export const checkPushSubscription = async () => {
-  if (!("serviceWorker" in navigator)) {
+  if (!isPushNotificationSupported()) {
+    console.warn("Push non supporté.");
     return null;
   }
 
@@ -90,6 +119,13 @@ export const checkPushSubscription = async () => {
   }
 };
 
+export const isRunningAsPWA = () => {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true
+  );
+};
+
 // Exporte les fonctions principales et l'utilitaire
 export default {
   subscribeUserToPush,
@@ -97,4 +133,7 @@ export default {
   getNotificationPermissionStatus,
   checkPushSubscription,
   urlBase64ToUint8Array,
+  isPushNotificationSupported,
+  isAppleDevice,
+  isRunningAsPWA,
 };

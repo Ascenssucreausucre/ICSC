@@ -28,12 +28,19 @@ export default function Registration() {
   const [formData, setFormData] = useState(defaultFormData);
   const [confirm, setConfirm] = useState(false);
   const [articles, setArticles] = useState([]);
-  const [selectedArticles, setSelectedArticles] = useState(0);
+  const [selectedArticles, setSelectedArticles] = useState([]);
+  const [paymentDetails, setPaymentDetails] = useState({
+    price: 0,
+    articles: 0,
+    articlesPrice: 0,
+    extraPages: 0,
+    extraPagesPrice: 0,
+  });
 
   useEffect(() => {
     const articlesLength = articles.filter(
       (article) => article.submit === true
-    ).length;
+    );
     setSelectedArticles(articlesLength);
   }, [articles]);
 
@@ -81,11 +88,13 @@ export default function Registration() {
   };
 
   const handleArticleChange = (changedArticle) => {
-    setArticles((prev) =>
-      prev.map((article) =>
-        article.id === changedArticle.id ? changedArticle : article
-      )
-    );
+    if (changedArticle.extraPages >= 0) {
+      setArticles((prev) =>
+        prev.map((article) =>
+          article.id === changedArticle.id ? changedArticle : article
+        )
+      );
+    }
   };
 
   const handleSubmit = async () => {
@@ -107,6 +116,12 @@ export default function Registration() {
       console.log({
         message: "Success!",
         data: dataToSend,
+      });
+
+      console.log({
+        dataToSend,
+        additionnalFees,
+        registrationFees,
       });
 
       setShowForm(false);
@@ -244,7 +259,6 @@ export default function Registration() {
                 <Input
                   label="Name"
                   value={formData.name}
-                  disabled={formData.isAuthor}
                   onChange={handleChange}
                   name="name"
                   required
@@ -252,7 +266,6 @@ export default function Registration() {
                 <Input
                   label="Surname"
                   value={formData.surname}
-                  disabled={formData.isAuthor}
                   onChange={handleChange}
                   name="surname"
                   required
@@ -261,7 +274,6 @@ export default function Registration() {
                   label="E-mail"
                   type="email"
                   value={formData.email}
-                  disabled={formData.isAuthor}
                   onChange={handleChange}
                   name="email"
                   required
@@ -269,7 +281,6 @@ export default function Registration() {
                 <Input
                   label="Country"
                   value={formData.country}
-                  disabled={formData.isAuthor}
                   onChange={handleChange}
                   name="country"
                   required
@@ -277,7 +288,6 @@ export default function Registration() {
                 <Input
                   label="Credit-card country"
                   value={formData.creditCardCountry}
-                  disabled={formData.isAuthor}
                   onChange={handleChange}
                   name="creditCardCountry"
                   required
@@ -414,7 +424,7 @@ export default function Registration() {
         </>
       ),
       onPrevious: () => {
-        setArticles(null);
+        setArticles([]);
         return true;
       },
     },
@@ -422,13 +432,22 @@ export default function Registration() {
       title: "Step 4",
       description: formData.isAuthor
         ? "Select the articles you want to submit."
-        : "You can now confirm, a new window will open for the payment.",
+        : "Confirm your informations.",
       content: formData.isAuthor ? (
         <>
           <p>
             You can submit a maximum of{" "}
             <strong className="important-info">{maxArticles}</strong> articles
-            of which you are an author or a co-author
+            of which you are an author or a co-author. Each additionnal article
+            will be factured{" "}
+            <strong className="important-info">
+              {additionnalFees.additionnal_paper_fee}€
+            </strong>
+            , and each extra page will be factured{" "}
+            <strong className="important-info">
+              {additionnalFees.additionnal_page_fee}€
+            </strong>
+            .
           </p>
           <div className="articles-container">
             {articles ? (
@@ -446,7 +465,7 @@ export default function Registration() {
                       })
                     }
                     disabled={
-                      selectedArticles >= maxArticles &&
+                      selectedArticles.length >= maxArticles &&
                       article.submit === false
                     }
                   />
@@ -464,6 +483,14 @@ export default function Registration() {
                           })
                         }
                       />
+                      {article.extraPages > 0 && (
+                        <p>
+                          +
+                          {article.extraPages *
+                            additionnalFees.additionnal_page_fee}
+                          €
+                        </p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -472,6 +499,19 @@ export default function Registration() {
               <p>Error retreiving articles.</p>
             )}
           </div>
+
+          <h3>
+            Additional article price:{" "}
+            {selectedArticles.length <= 1 ? (
+              "-"
+            ) : (
+              <strong className="important-info">
+                {(selectedArticles.length - 1) *
+                  additionnalFees.additionnal_paper_fee}
+                €
+              </strong>
+            )}
+          </h3>
         </>
       ) : (
         <>
@@ -491,7 +531,142 @@ export default function Registration() {
           })}
         </>
       ),
-      next: "Submit",
+      next: !formData.isAuthor && "Confirm",
+      onNext: () => {
+        const category = formData.isStudent ? "Student" : "Academics";
+
+        const registration = registrationFees.find(
+          (r) => r.description === "Other Countries"
+        );
+
+        const feeCategory = registration.feecategories.find(
+          (fc) => fc.type === category
+        );
+
+        let baseFee = 0;
+        if (formData.attendanceMode === "Online") {
+          baseFee = parseFloat(feeCategory.virtual_attendance);
+        } else {
+          baseFee = formData.IeeeMember
+            ? parseFloat(feeCategory.ieee_member)
+            : parseFloat(feeCategory.non_ieee_member);
+        }
+
+        let extraPages = 0;
+
+        if (selectedArticles.length > 0) {
+          selectedArticles.map((article) => {
+            extraPages = extraPages + Number(article.extraPages);
+          });
+        }
+
+        setPaymentDetails({
+          price: baseFee,
+          articles: selectedArticles.length,
+          articlesPrice:
+            selectedArticles.length > 1
+              ? (selectedArticles.length - 1) *
+                additionnalFees.additionnal_paper_fee
+              : 0,
+          extraPages: extraPages,
+          extraPagesPrice: extraPages * additionnalFees.additionnal_page_fee,
+        });
+        console.log(formData);
+        return true;
+      },
+    },
+    {
+      title: "Step 5",
+      description: "Payment details",
+      content: (
+        <>
+          <h3>
+            {formData.name} {formData.surname}
+          </h3>
+          <p>
+            <strong>Attendance mode:</strong> {formData.attendanceMode}
+          </p>
+          <p>
+            <strong>IEEE member:</strong> {formData.ieeeMember ? "Yes" : "No"}
+          </p>
+          <p>
+            <strong>Student:</strong> {formData.student ? "Yes" : "No"}
+          </p>
+          <p>
+            <strong>Registration:</strong>{" "}
+            <span className="important-info">{paymentDetails.price}€</span>
+          </p>
+          {paymentDetails.articles > 0 && (
+            <div className="payment-details-articles">
+              <p>
+                <strong>Selected articles:</strong>
+              </p>
+              <table className="payment-details-articles-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Paper Fee</th>
+                    <th>Extra Pages</th>
+                    <th>Extra Page Fee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedArticles.length > 0 &&
+                    selectedArticles.map((article, index) => {
+                      const paperFee =
+                        index > 0
+                          ? `${additionnalFees.additionnal_paper_fee}€`
+                          : "-";
+                      const extraPageCount = article.extraPages || 0;
+                      const extraPageFee =
+                        extraPageCount > 0
+                          ? `${
+                              extraPageCount *
+                              additionnalFees.additionnal_page_fee
+                            }€`
+                          : "-";
+
+                      return (
+                        <tr key={article.id || index}>
+                          <td>
+                            <strong className="payment-details-article-title">
+                              {article.title}
+                            </strong>
+                          </td>
+                          <td>{paperFee}</td>
+                          <td>{extraPageCount > 0 ? extraPageCount : "-"}</td>
+                          <td>{extraPageFee}</td>
+                        </tr>
+                      );
+                    })}
+                  <tr>
+                    <td>
+                      <strong>TOTAL</strong>
+                    </td>
+                    <td className="important-info">
+                      {paymentDetails.articlesPrice}€
+                    </td>
+                    <td>{paymentDetails.extraPages}</td>
+                    <td className="important-info">
+                      {paymentDetails.extraPagesPrice}€
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
+          <h3 className="payment-details-total">
+            TOTAL:{" "}
+            <span className="important-info">
+              {paymentDetails.price +
+                paymentDetails.articlesPrice +
+                paymentDetails.extraPagesPrice}
+              €
+            </span>
+          </h3>
+        </>
+      ),
+      next: "Proceed to payment",
     },
   ];
 

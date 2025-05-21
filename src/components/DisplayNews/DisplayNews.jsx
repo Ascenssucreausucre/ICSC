@@ -5,12 +5,12 @@ import Linkify from "linkify-react";
 import { motion } from "framer-motion";
 import { LinkIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-
-// Import des modules séparés
 import {
   subscribeUserToPush,
   getNotificationPermissionStatus,
   checkPushSubscription,
+  isAppleDevice,
+  isRunningAsPWA,
 } from "../../utils/pushNotification";
 import { Bell } from "lucide-react";
 import { Smartphone } from "lucide-react";
@@ -40,6 +40,12 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
 
   // Gestion des notifications push
   const handleAskPermission = async () => {
+    if (isAppleDevice() && !isRunningAsPWA()) {
+      alert(
+        "Push notifications are only available on iOS when the app is installed on your home screen."
+      );
+      return;
+    }
     try {
       const subscription = await subscribeUserToPush(
         vapidPublicKey,
@@ -99,7 +105,8 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   }
 
   // Vérifie si nous devons afficher des CTA pour PWA ou notifications
-  const showNotificationButton = permission === "default" && !pushSubscription;
+  const showNotificationButton =
+    permission === "default" && !pushSubscription && isRunningAsPWA();
   const showActions = showNotificationButton || showInstallButton;
 
   return (

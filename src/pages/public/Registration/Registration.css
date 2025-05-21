@@ -51,6 +51,12 @@ fieldset .form-input .form-control[type="radio"]:checked {
 .author-pin {
   overflow-y: hidden;
 }
+.form-extra-pages-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+}
 .form-article .form-input {
   margin-block: 0.5rem;
 }
@@ -80,4 +86,40 @@ fieldset .form-input .form-control[type="radio"]:checked {
 }
 .toggle-pin {
   margin-block-end: 0;
+}
+.form-extra-pages-container p {
+  color: red;
+}
+.payment-details-articles {
+  margin-top: 0.5rem;
+}
+.payment-details-articles-container {
+  padding-inline-start: 2rem;
+}
+.payment-details-article {
+  margin-top: 0.2rem;
+}
+.payment-details-article .extra-pages {
+  padding-inline-start: 1rem;
+}
+.payment-details-total {
+  font-weight: 900;
+  margin-top: 0.5rem;
+}
+.payment-details-article-title {
+  white-space: nowrap; /* ❌ Ce que tu as mis: "none" n'existe pas */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block; /* Important pour que text-overflow fonctionne */
+  max-width: 100%; /* S'assure que la contrainte s'applique */
+}
+.payment-details-articles-table {
+  max-width: 100%;
+  table-layout: fixed;
+  margin-block: 0.5rem;
+}
+.payment-details-articles-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

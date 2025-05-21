@@ -43,7 +43,7 @@ tr:nth-child(even) td {
   background-color: #f1f1f1;
 }
 
-td:last-child {
+.fees-table td:last-child {
   font-style: italic;
   color: #555;
 }
