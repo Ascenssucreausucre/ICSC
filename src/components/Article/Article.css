@@ -1,0 +1,36 @@
+.data-detail a {
+  color: inherit;
+  font-style: inherit;
+}
+.tag {
+  border-radius: 50px;
+  background-color: brown;
+  color: white;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  width: fit-content;
+  margin-block: 5px;
+  font-size: var(--font-size);
+}
+.tag-invited {
+  background-color: green;
+}
+.tag-contributed {
+  background-color: rgb(58, 22, 105);
+}
+.tag-accepted {
+  background-color: white;
+  color: green;
+}
+.tag-rejected {
+  background-color: white;
+  color: red;
+}
+.tag-pending {
+  background-color: white;
+  color: rgb(121, 96, 51);
+}
+.tag-container {
+  display: flex;
+  gap: 0.2rem;
+}

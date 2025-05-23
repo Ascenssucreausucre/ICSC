@@ -33,9 +33,13 @@ export function Input({
   ...props
 }) {
   const numberProps =
-    type === "number" && numberMax && numberMin
-      ? { min: numberMin, max: numberMax }
+    type === "number"
+      ? {
+          ...(numberMin !== undefined && { min: numberMin }),
+          ...(numberMax !== undefined && { max: numberMax }),
+        }
       : {};
+
   // Calcul de la longueur de l'input
   const length = value ? value.length : 0;
 

@@ -16,12 +16,16 @@
 .admin-nav .nav-links {
   align-items: center;
 }
-@media screen and (max-width: 800px) {
+.admin-nav .nav-links .logout-button {
+  margin-left: auto;
+}
+@media screen and (max-width: 900px) {
   .admin-nav .nav-links {
     align-items: start;
   }
   .logout-button {
     width: 100%;
     border-radius: 5px;
+    margin-left: unset;
   }
 }

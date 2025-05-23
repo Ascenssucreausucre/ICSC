@@ -1,38 +1,35 @@
+// FeedbackContext.jsx
 import { createContext, useContext, useState, useRef } from "react";
 
-// Crée le contexte pour le feedback
 const FeedbackContext = createContext();
 
-// Fournisseur du contexte
+let idCounter = 0;
+
 export const FeedbackProvider = ({ children }) => {
-  const [feedback, setFeedback] = useState(null);
-  const timeoutRef = useRef(null); // Stocke l'ID du timeout
+  const [feedbackList, setFeedbackList] = useState([]);
+  const timeoutMap = useRef({}); // { [id]: timeoutId }
 
-  // Fonction pour afficher un message de feedback
   const showFeedback = (type, message) => {
-    // Annule le timeout précédent s'il existe
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+    const id = idCounter++;
+    const newFeedback = { id, type, message };
 
-    // Affiche le feedback
-    setFeedback(null); // Force la réinitialisation de l'état
-    setTimeout(() => {
-      setFeedback({ type, message });
-    }, 10); // Petit délai pour réinitialiser l'animation
+    // Ajoute le message à la liste
+    setFeedbackList((prev) => [...prev, newFeedback]);
 
-    // Définir un nouveau timeout pour masquer le message
-    timeoutRef.current = setTimeout(() => {
-      setFeedback(null);
+    // Configure un timeout pour le retirer après 3s
+    const timeoutId = setTimeout(() => {
+      setFeedbackList((prev) => prev.filter((f) => f.id !== id));
+      delete timeoutMap.current[id];
     }, 3000);
+
+    timeoutMap.current[id] = timeoutId;
   };
 
   return (
-    <FeedbackContext.Provider value={{ feedback, showFeedback }}>
+    <FeedbackContext.Provider value={{ feedbackList, showFeedback }}>
       {children}
     </FeedbackContext.Provider>
   );
 };
 
-// Hook pour utiliser le contexte dans n'importe quel composant
 export const useFeedback = () => useContext(FeedbackContext);

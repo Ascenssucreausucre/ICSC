@@ -1,0 +1,48 @@
+.update-profile-form {
+  max-width: 400px;
+  margin-inline: auto;
+  padding: 1rem;
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius);
+  filter: var(--drop-shadow);
+}
+.update-profile-form .button {
+  color: var(--secondary-color);
+  background-color: white;
+}
+.update-profile-form .button:hover {
+  color: white;
+  background-color: var(--secondary-color);
+}
+.update-profile-form .button:disabled {
+  color: var(--secondary-color);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.update-profile-form .required-symbol {
+  color: white;
+}
+.articles-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(1fr);
+  gap: 1rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-block: 1rem;
+  @media screen and (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+.articles-container .article-card .grouped-title {
+}
+.profile .article-card.pending {
+  background: var(--pending-gradient);
+}
+.profile .article-card.accepted {
+  background: var(--accepted-gradient);
+}
+.profile .article-card.rejected {
+  background: var(--rejected-gradient);
+}

@@ -3,11 +3,13 @@ import "./NavBar.css";
 import { Spin } from "hamburger-react";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useUserAuth } from "../../context/UserAuthContext";
 const MotionNavLink = motion.create(NavLink);
 
 export default function NavBar({ data }) {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated, logout } = useUserAuth();
 
   const navLinksRef = useRef(null);
 
@@ -19,6 +21,10 @@ export default function NavBar({ data }) {
     { link: "/program", name: "Program" },
     { link: "/local-informations", name: "Local Informations" },
   ];
+
+  if (isAuthenticated) {
+    pages.push({ link: "/profile", name: "Profile" });
+  }
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -97,6 +103,40 @@ export default function NavBar({ data }) {
             </MotionNavLink>
           </div>
         ))}
+        <div className="button-container">
+          {isAuthenticated ? (
+            <button
+              className="button"
+              onClick={() => {
+                setIsOpen(false);
+                logout();
+              }}
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <button
+                className="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate("/login");
+                }}
+              >
+                Login
+              </button>
+              <button
+                className="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate("/sign-up");
+                }}
+              >
+                Signup
+              </button>
+            </>
+          )}
+        </div>
       </motion.div>
 
       <Spin

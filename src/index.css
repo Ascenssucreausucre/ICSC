@@ -2,12 +2,20 @@
 
 :root {
   --primary-color: #eb4c4c;
+  --primary-color-75: #eb4c4cb2;
+  --primary-color-50: #eb4c4c79;
   --secondary-color: #502f2f;
   --tertiary-color: #4736a8;
 
+  --pending-gradient: linear-gradient(40deg, #f1e6c2 0%, #fffbe6 100%);
+  --accepted-gradient: linear-gradient(40deg, #c6efd8 0%, #e6ffed 100%);
+  --rejected-gradient: linear-gradient(40deg, #f7c6cc 0%, #ffe6e9 100%);
+
+  --nav-bar-height: clamp(50px, 5dvh, 100px);
+
   --header-title-font-size: clamp(3rem, 4.8vw, 5rem);
   --title-font-size: clamp(1.5rem, 2vw, 2rem);
-  --card-title-font-size: clamp(1rem, 1.9vw, 1.5rem);
+  --card-title-font-size: clamp(1rem, 1.5vw, 1.3rem);
   --subtitle-font-size: clamp(0.8rem, 1.3vw, 1.3rem);
   --font-size: clamp(0.7rem, 1.2vw, 1rem);
   --button-font-size: clamp(0.85rem, 1vw, 1rem);
@@ -157,7 +165,11 @@ a.link:not(.card-title) {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   gap: 5px;
+}
+.pagination-controls .button-container {
+  flex-wrap: nowrap;
 }
 .button-container.card-button-container {
   align-items: start;
@@ -293,7 +305,6 @@ a.link:not(.card-title) {
 .card-content {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 .card-content img {
   height: 4rem;
@@ -354,7 +365,7 @@ input.p-dropdown-filter:focus-visible {
 .p-dropdown-filter-icon {
   position: unset;
 }
-.p-inputwrapper-filled:not(.status-dropdown) {
+.p-inputwrapper-filled:not(.status-dropdown, .p-chips) {
   box-shadow: 0 0 3px var(--primary-color);
 }
 /* Panel du dropdown */

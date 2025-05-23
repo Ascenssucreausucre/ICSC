@@ -7,7 +7,7 @@ export default function LocalInfo() {
   const localInformations = useLoaderData();
   return (
     <>
-      <h1 className="title secondary">Local Info</h1>
+      <h1 className="title primary">Local Info</h1>
       <div className="front-local-info-container">
         {localInformations.map((localInfo, index) => (
           <React.Fragment key={index}>

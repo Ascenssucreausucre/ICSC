@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { Clock, CheckCircle, XCircle } from "lucide-react";
-import React from "react";
 import "./ArticleList.css"; // Vous devrez créer ce fichier CSS
 import SearchBar from "../SearchBar/SearchBar";
 import { Dropdown } from "primereact/dropdown";
@@ -8,7 +7,7 @@ import useSubmit from "../../hooks/useSubmit";
 import { useAdminModal } from "../../context/AdminModalContext";
 import Pagination from "../Pagination/Pagination";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
-import { Link } from "react-router-dom";
+import Article from "../Article/Article";
 
 export default function ArticleList({
   data,
@@ -200,6 +199,13 @@ export default function ArticleList({
     if (refetch) refetch();
   };
 
+  const handleChange = (e, article) => {
+    const updatedArticles = articles.map((a) =>
+      a.id === article.id ? { ...a, status: e.value } : a
+    );
+    setArticles(updatedArticles);
+  };
+
   return (
     <div className="article-list" ref={articleListRef}>
       {confirmation.confirm ? (
@@ -255,87 +261,20 @@ export default function ArticleList({
       >
         {paginatedArticles.length > 0 ? (
           paginatedArticles.map((article) => (
-            <div className="article-card card" key={article.id}>
-              <div className="flex-1">
-                <div className="grouped-title">
-                  <h2 className="card-title">{article.title}</h2>
-                  <p className="data-detail">
-                    {article.authors?.length > 0 ? (
-                      <>
-                        by{" "}
-                        {article.authors.map((author, index) => (
-                          <React.Fragment key={author.id}>
-                            <Link to={`/admin/authors/${author.id}`}>
-                              {author.name} {author.surname}
-                            </Link>
-                            {index < article.authors.length - 1 ? ", " : "."}
-                          </React.Fragment>
-                        ))}
-                      </>
-                    ) : (
-                      "No authors found for this article."
-                    )}
-                  </p>
-                </div>
-                <div className={`tag tag-${article.profile.toLowerCase()}`}>
-                  {article.profile}
-                </div>
-                <p>
-                  <strong>Affiliation: </strong>
-                  {article.affiliation}
-                </p>
-              </div>
-              <div className="button-container card-button-container">
-                <Dropdown
-                  value={article.status}
-                  options={statusOptions}
-                  onChange={(e) => {
-                    const updatedArticles = articles.map((a) =>
-                      a.id === article.id ? { ...a, status: e.value } : a
-                    );
-                    setArticles(updatedArticles);
-                  }}
-                  placeholder="Select status"
-                  className={`status-dropdown status-${article.status}`}
-                  optionLabel="label"
-                  itemTemplate={statusItemTemplate}
-                  valueTemplate={selectedStatusTemplate}
-                />
-                <button
-                  className="button small"
-                  onClick={() => handleSetStatus(article.id, article.status)}
-                  disabled={isStatusUpToDate(article.id, article.status)}
-                >
-                  Save
-                </button>
-              </div>
-              <div className="button-container" style={{ width: "100%" }}>
-                <button
-                  className="button small"
-                  onClick={() => handleUpdateArticle(article)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="button small"
-                  onClick={() =>
-                    setConfirmation({ confirm: true, id: article.id })
-                  }
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
+            <Article
+              article={article}
+              onChange={handleChange}
+              statusOptions={statusOptions}
+              statusItemTemplate={statusItemTemplate}
+              selectedStatusTemplate={selectedStatusTemplate}
+              isStatusUpToDate={isStatusUpToDate}
+              handleUpdateArticle={handleUpdateArticle}
+              handleSetStatus={handleSetStatus}
+            />
           ))
         ) : (
           <p>No matching articles found.</p>
         )}
-      </div>
-
-      <div className="button-container">
-        <button className="button" onClick={handleAddArticle}>
-          Add an article
-        </button>
       </div>
 
       <Pagination
@@ -344,6 +283,12 @@ export default function ArticleList({
         currentPage={currentPage}
         onPageChange={setCurrentPage}
       />
+
+      <div className="button-container">
+        <button className="button" onClick={handleAddArticle}>
+          Add an article
+        </button>
+      </div>
     </div>
   );
 }

@@ -21,13 +21,23 @@ import Author from "../pages/Admin/Author/Author";
 import CustomErrorPage from "../components/CustomErrorPage/CustomErrorPage";
 import Admins from "../pages/Admin/Admins/Admins";
 import Notifications from "../pages/Admin/Notifications/Notifications";
+import { UserAuthProvider } from "../context/UserAuthContext";
+import Login from "../pages/public/Login/Login";
+import SignUp from "../pages/public/SignUp/SignUp";
+import Profile from "../pages/public/Profile/Profile";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: (
+      <FeedbackProvider>
+        <UserAuthProvider>
+          <Root />
+        </UserAuthProvider>
+      </FeedbackProvider>
+    ),
     errorElement: <CustomErrorPage />,
     children: [
       {
@@ -60,6 +70,22 @@ const router = createBrowserRouter([
         path: "local-informations",
         element: <LocalInfo />,
         loader: () => fetch(`${API_URL}/local-informations/current`),
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+        loader: () =>
+          fetch(`${API_URL}/user/profile`, {
+            credentials: "include",
+          }),
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "sign-up",
+        element: <SignUp />,
       },
     ],
   },

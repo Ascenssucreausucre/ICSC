@@ -1,0 +1,52 @@
+.sign-up-form {
+  max-width: 600px;
+  margin-inline: clamp(10px, 15vw - 2rem, 15vw);
+  margin-block: 6rem 50dvh;
+}
+.sign-up-form .button.wide {
+  width: 100%;
+  border-radius: 5px;
+}
+.sign-up-form p:not(.unmatched-password-text) {
+  text-align: center;
+  margin-block: 1rem;
+  font-weight: 600;
+}
+.unmatched-password-text {
+  color: red;
+  margin-bottom: 1rem;
+}
+@keyframes shake-input {
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(10px);
+  }
+  30% {
+    transform: translateX(-10px);
+  }
+  45% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+  90% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.unmatched-password .form-control {
+  animation: shake-input 0.4s ease-out;
+  box-shadow: 0 0 10px var(--primary-color-75);
+  outline: solid red 2px;
+}
+.unmatched-password label {
+  color: red;
+}

@@ -7,14 +7,13 @@
   flex-wrap: wrap;
 }
 .p-dropdown.status-dropdown {
-  min-width: 160px;
   font-weight: 500;
   border-radius: var(--border-radius);
 }
 
 .p-dropdown.status-dropdown.status-pending {
   border: 1px solid #f1e6c2;
-  background: linear-gradient(40deg, #f1e6c2 0%, #fffbe6 100%);
+  background: var(--pending-gradient);
   transition: border 0.2s ease-out, filter 0.2s ease-out;
 }
 .p-dropdown.status-dropdown.status-pending:hover {
@@ -24,7 +23,7 @@
 
 .p-dropdown.status-dropdown.status-accepted {
   border: 1px solid #c6efd8;
-  background: linear-gradient(40deg, #c6efd8 0%, #e6ffed 100%);
+  background: var(--accepted-gradient);
   transition: border 0.2s ease-out;
 }
 .p-dropdown.status-dropdown.status-accepted:hover {
@@ -33,7 +32,7 @@
 
 .p-dropdown.status-dropdown.status-rejected {
   border: 1px solid #f7c6cc;
-  background: linear-gradient(40deg, #f7c6cc 0%, #ffe6e9 100%);
+  background: var(--rejected-gradient);
   transition: border 0.2s ease-out;
 }
 .p-dropdown.status-dropdown.status-rejected:hover {
@@ -64,7 +63,93 @@
 .icon-rejected {
   color: #dc3545;
 }
-/* .icon-accepted,
-.icon-pending,
-.icon-rejected {
-} */
+
+/* GROUPED ACTIONS */
+/* GROUPED ACTIONS */
+
+.grouped-actions-container {
+  margin-top: 40px;
+  width: 75%;
+  margin-inline: auto;
+  background-color: white;
+  border-radius: var(--border-radius);
+  padding: 1rem calc(20% - 2rem);
+}
+
+.action-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.p-chips {
+  width: 100%;
+  background-color: white;
+  padding: 0.6rem 1rem;
+  border-radius: var(--border-radius);
+  border: rgba(128, 128, 128, 0.5) solid 1px;
+  outline: transparent solid 3px;
+  transition: border 0.2s ease-in, outline 0.2s ease-in;
+}
+.p-chips ul {
+  width: 100%;
+}
+.p-chips:hover {
+  border: var(--primary-color) solid 1px;
+}
+.p-chips.p-inputwrapper-focus {
+  border: var(--primary-color) solid 1px;
+  outline: var(--primary-color-50) solid 3px;
+}
+.p-chips input:focus-visible {
+  outline: none;
+}
+.p-chips input {
+  flex: 1;
+}
+.p-chips-token {
+  gap: 0.2rem;
+}
+.p-chips input,
+.p-chips-token {
+  padding: 0.2rem 0.4rem;
+  font-size: var(--font-size);
+}
+.p-chips-token {
+  background-color: var(--primary-color-75);
+  color: rgb(255, 255, 255);
+  font-weight: 500;
+  margin-right: 0.2rem;
+  border-radius: 50px;
+}
+.p-chips-multiple-container li {
+  margin-block: 0.1rem;
+}
+.p-chips-token-icon {
+  stroke-width: 2;
+}
+.p-float-label {
+  margin-block-start: 2rem;
+}
+.p-float-label label {
+  padding: 0.8rem 1.4rem;
+  /* margin: 0.6rem 1rem; */
+  transition-duration: 0.2s;
+  color: rgba(0, 0, 0, 0.5);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size);
+}
+.p-float-label:has(input:focus) label,
+.p-float-label label.active {
+  color: black;
+  top: -1rem;
+  padding: 0.5rem;
+}
+.grouped-actions-container .input-infos {
+  color: transparent;
+  margin-block: 0.2rem;
+  transition: color 0.2s ease;
+}
+.grouped-actions-container .input-infos.active {
+  color: var(--primary-color-75);
+}

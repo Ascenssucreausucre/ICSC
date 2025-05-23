@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
+import { Feedback } from "../components/Feedback/Feedback";
 import { Helmet } from "react-helmet";
 import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
 import NavigationProgress from "../components/NavigationProgress/NavigationProgress";
@@ -13,6 +14,7 @@ function Root() {
   const isHome = location.pathname === "/";
   const [headerData, setHeaderData] = useState(null);
   const [footerData, setFooterData] = useState(null);
+  const className = location.pathname.slice(1).replace("/", "-");
 
   useEffect(() => {
     const fetchHeaderData = async () => {
@@ -53,8 +55,9 @@ function Root() {
         </title>
       </Helmet>
       <Header banner={isHome} data={headerData} />
-      <main>
+      <main className={className}>
         <NavigationProgress />
+        <Feedback />
         <Outlet />
       </main>
       <Footer data={footerData} />

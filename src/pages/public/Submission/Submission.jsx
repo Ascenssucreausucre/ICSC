@@ -13,7 +13,7 @@ export default function Submission() {
   }, [data]);
   return (
     <>
-      <h1 className="title secondary">Submission</h1>
+      <h1 className="title primary">Submission</h1>
       <>
         {fees && dates ? (
           <section>
