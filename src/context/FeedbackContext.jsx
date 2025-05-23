@@ -20,7 +20,7 @@ export const FeedbackProvider = ({ children }) => {
     const timeoutId = setTimeout(() => {
       setFeedbackList((prev) => prev.filter((f) => f.id !== id));
       delete timeoutMap.current[id];
-    }, 3000);
+    }, 30000);
 
     timeoutMap.current[id] = timeoutId;
   };

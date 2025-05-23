@@ -17,6 +17,9 @@
   width: 100%;
   overflow: hidden;
 }
+.status-feedback svg {
+  min-width: 24px;
+}
 .status-feedback.success {
   color: #1ea97c;
   backdrop-filter: blur(5px);

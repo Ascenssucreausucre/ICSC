@@ -35,8 +35,6 @@
     grid-template-columns: 1fr;
   }
 }
-.articles-container .article-card .grouped-title {
-}
 .profile .article-card.pending {
   background: var(--pending-gradient);
 }
