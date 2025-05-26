@@ -6,6 +6,7 @@ import { Feedback } from "../components/Feedback/Feedback";
 import { Helmet } from "react-helmet";
 import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
 import NavigationProgress from "../components/NavigationProgress/NavigationProgress";
+import ChatRoom from "../components/ChatRoom/ChatRoom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -58,6 +59,7 @@ function Root() {
       <main className={className}>
         <NavigationProgress />
         <Feedback />
+        <ChatRoom />
         <Outlet />
       </main>
       <Footer data={footerData} />

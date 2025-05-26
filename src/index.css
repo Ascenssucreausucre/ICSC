@@ -200,6 +200,18 @@ a.link:not(.card-title) {
   text-decoration: underline;
   cursor: pointer;
 }
+.button-icon {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 5px;
+  border-radius: 60px;
+  color: white;
+}
+.button-icon.close-button {
+  background-color: unset;
+  color: black;
+  transition: color 0.1s ease-out;
+}
 /* Fond sombre du modal */
 .modal-overlay {
   position: fixed;
@@ -239,15 +251,15 @@ a.link:not(.card-title) {
   text-decoration: underline;
 }
 
-.button-svg {
+.button-svg,
+.button-icon {
+  display: inline-block;
   background-color: unset;
   border: unset;
   color: black;
   cursor: pointer;
+  line-height: 0;
   transition: color 0.2s ease;
-}
-.button-svg:hover {
-  color: red;
 }
 
 .card-title {

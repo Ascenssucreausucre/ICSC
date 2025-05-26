@@ -17,18 +17,18 @@
   transition: outline 0.2s ease-out, box-shadow 0.2s ease-out,
     color 0.2s ease-out, border 0.2s ease-out;
 }
-input[type="tel"] {
+.form-input input[type="tel"] {
   width: 60px;
   padding-inline: 5px;
 }
-input:disabled {
+.form-input input:disabled {
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
   cursor: text;
 }
-input:hover {
+.form-input input:hover {
   border: solid var(--primary-color) 1px;
 }
-input:focus-visible {
+.form-input input:focus-visible {
   border: solid var(--primary-color) 1px;
   outline: solid var(--primary-color-50) 2px;
 }

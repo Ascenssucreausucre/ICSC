@@ -67,7 +67,7 @@ export default function LocalInformationsManager({
       <div className="local-info-container">
         {data && data.length > 0 ? (
           data.map((localInfo) => (
-            <div className="card row">
+            <div className="card row" key={localInfo.id}>
               <div className="flex-1">
                 <h2 className="card-title secondary">{localInfo.title}</h2>
                 <p className="limited-height-content">{localInfo.text}</p>

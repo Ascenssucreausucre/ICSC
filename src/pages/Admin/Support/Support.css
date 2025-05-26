@@ -1,0 +1,60 @@
+.conversations-container {
+  border-radius: var(--border-radius);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem clamp(5px, 10% - 1rem, 200px);
+  margin-block: 1rem;
+}
+.conversation {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--border-radius);
+  margin-block: 0.2rem;
+  padding: 0.4rem 0.6rem;
+  background-color: white;
+  transition: background-color 0.2s ease-out;
+}
+.conversation:hover {
+  background-color: rgba(228, 212, 212, 0.95);
+  cursor: pointer;
+}
+.div-icon {
+  position: relative;
+  display: block;
+  aspect-ratio: 1/1;
+  background-color: orange;
+  border-radius: 50%;
+  color: white;
+  padding: clamp(0.2rem, 2vw, 1rem);
+  font-weight: 900;
+  font-size: var(--font-size);
+}
+.conversation.unread .div-icon::after {
+  position: absolute;
+  content: "";
+  width: 30%;
+  aspect-ratio: 1/1;
+  background-color: lightblue;
+  border: solid 3px white;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+}
+.conversation-content {
+  flex: 1;
+}
+.conversation-content p.message-content {
+  margin-block: 0.2rem;
+  color: gray;
+  font-style: italic;
+}
+.conversation.unread .conversation-content > p.message-content {
+  color: black;
+  font-weight: 700;
+  font-style: normal;
+}
+.conversation-date {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}

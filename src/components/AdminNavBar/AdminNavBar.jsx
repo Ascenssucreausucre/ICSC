@@ -22,6 +22,7 @@ export default function AdminNavBar() {
     { link: "/admin/conferences", name: "Conferences" },
     { link: "/admin/authors", name: "Authors" },
     { link: "/admin/notifications", name: "Notifications" },
+    { link: "/admin/support", name: "Support" },
   ];
 
   if (adminRole === "superadmin") {

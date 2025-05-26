@@ -57,7 +57,7 @@ export default function PlenarySessionManager({
       <div className="plenary-session-container">
         {data && data.length > 0 ? (
           data.map((session) => (
-            <div className="card">
+            <div className="card" key={session.id}>
               <div className="card-content">
                 <div className="image-container">
                   <img

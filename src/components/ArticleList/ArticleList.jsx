@@ -270,6 +270,7 @@ export default function ArticleList({
               isStatusUpToDate={isStatusUpToDate}
               handleUpdateArticle={handleUpdateArticle}
               handleSetStatus={handleSetStatus}
+              key={article.id}
             />
           ))
         ) : (

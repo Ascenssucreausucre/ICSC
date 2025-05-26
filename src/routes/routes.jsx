@@ -25,6 +25,8 @@ import { UserAuthProvider } from "../context/UserAuthContext";
 import Login from "../pages/public/Login/Login";
 import SignUp from "../pages/public/SignUp/SignUp";
 import Profile from "../pages/public/Profile/Profile";
+import Support from "../pages/Admin/Support/Support";
+import Conversation from "../pages/Admin/Conversation/Conversation";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -150,6 +152,16 @@ const router = createBrowserRouter([
             element: <Admins />,
           },
           { path: "notifications", element: <Notifications /> },
+          {
+            path: "support",
+            element: <Support />,
+            children: [
+              {
+                path: ":id",
+                element: <Conversation />,
+              },
+            ],
+          },
         ],
       },
     ],

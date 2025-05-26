@@ -83,7 +83,7 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
       {data && data.length > 0 ? (
         <div className="workshops-container">
           {data.map((workshop) => (
-            <div className="card row">
+            <div className="card row" key={workshop.id}>
               <div className="flex-1">
                 <h2 className="card-title secondary">{workshop.title}</h2>
                 <p className="data-detail">{`Presented by ${workshop.presenters}`}</p>
