@@ -44,7 +44,7 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
 
   // Gestion des notifications push
   const handleAskPermission = async () => {
-    if (!isAuthentified) {
+    if (!isAuthenticated) {
       return navigate("/login");
     }
     if (isAppleDevice() && !isRunningAsPWA()) {
