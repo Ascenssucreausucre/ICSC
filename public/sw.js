@@ -98,6 +98,7 @@ self.addEventListener("push", (event) => {
     renotify,
     actions,
     data,
+    url = "/",
     ...others
   } = payload;
 
@@ -109,6 +110,7 @@ self.addEventListener("push", (event) => {
     ...(image && { image }),
     ...(vibrate && { vibrate }),
     ...(tag && { tag }),
+    ...(url && { url }),
     ...(renotify === true || renotify === false ? { renotify } : {}),
     ...(Array.isArray(actions) && actions.length ? { actions } : {}),
     data: data || {}, // tu récupères tout ce que tu as passé côté API
