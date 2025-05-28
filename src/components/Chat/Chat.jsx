@@ -76,7 +76,11 @@ export default function Chat({
       );
       setFormMessage("");
     } catch (error) {
-      const errorMessage = error.response.data.message || error.response.data;
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data ||
+        error.message ||
+        "Une erreur inattendue s’est produite.";
       console.error("[Message Error]", errorMessage);
       showErrorMessage(errorMessage);
     } finally {
