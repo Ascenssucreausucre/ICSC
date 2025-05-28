@@ -4,7 +4,7 @@ import "./DisplayNews.css";
 import Linkify from "linkify-react";
 import { motion } from "framer-motion";
 import { LinkIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   subscribeUserToPush,
   getNotificationPermissionStatus,
@@ -15,6 +15,7 @@ import {
 import { Bell } from "lucide-react";
 import { Smartphone } from "lucide-react";
 import { usePWAInstall } from "../../context/InstallPWAContext";
+import { useUserAuth } from "../../context/UserAuthContext";
 
 export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,6 +26,9 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const [pushSubscription, setPushSubscription] = useState(null);
   const totalNews = news.length;
   const { deferredPrompt, isInstalled, handleInstallClick } = usePWAInstall();
+
+  const { isAuthenticated } = useUserAuth();
+  const navigate = useNavigate;
 
   const showInstallButton = !isInstalled && deferredPrompt;
 
@@ -40,6 +44,9 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
 
   // Gestion des notifications push
   const handleAskPermission = async () => {
+    if (!isAuthentified) {
+      return navigate("/login");
+    }
     if (isAppleDevice() && !isRunningAsPWA()) {
       alert(
         "Push notifications are only available on iOS when the app is installed on your home screen."

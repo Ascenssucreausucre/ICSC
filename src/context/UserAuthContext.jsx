@@ -13,6 +13,7 @@ export const UserAuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loggingIn, setLoggingIn] = useState(false);
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
   const { showFeedback } = useFeedback();
 
@@ -26,10 +27,12 @@ export const UserAuthProvider = ({ children }) => {
         });
         // showFeedback("sucess", response.data.message);
         setIsAuthenticated(true);
+        setUserData(response.data.id);
       } catch (error) {
         // console.error(error.response.data.error);
         // showFeedback("error", error.response.data.error);
         setIsAuthenticated(false);
+        setUserData({});
       } finally {
         setIsLoading(false);
       }
@@ -47,6 +50,7 @@ export const UserAuthProvider = ({ children }) => {
         { withCredentials: true }
       );
       setIsAuthenticated(true);
+      setUserData(response.data.id);
       showFeedback("success", response.data?.message || "Login successful");
       navigate("/");
     } catch (error) {
@@ -67,6 +71,7 @@ export const UserAuthProvider = ({ children }) => {
         withCredentials: true,
       });
       setIsAuthenticated(false);
+      setUserData({});
       showFeedback("success", response.data?.message || "Logout successful");
       navigate("/");
     } catch (error) {

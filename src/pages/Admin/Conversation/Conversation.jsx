@@ -1,17 +1,18 @@
 import axios from "axios";
 import { Send, X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import "./Conversation.css";
+import Chat from "../../../components/Chat/Chat";
+import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function Conversation() {
   const { id: conversationId } = useParams();
 
-  const [messages, setMessages] = useState([]);
-  const [formMessage, setFormMessage] = useState("");
-  const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
+  const [conversation, setConversation] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,8 +22,7 @@ export default function Conversation() {
           { withCredentials: true }
         );
         console.log(res);
-        setMessages(res.data.messages);
-        setUser(res.data.user.name + " " + res.data.user.surname);
+        setConversation(res.data);
       } catch (error) {
         console.error(error.response.data);
       } finally {
@@ -48,32 +48,17 @@ export default function Conversation() {
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="conversation-modal-header">
-          <h2>Discussion with {user}</h2>
-          <button className="button-icon">
-            <X />
-          </button>
-        </div>
-        <div className="conversation-modal-messages">
-          {messages.length > 0 ? (
-            messages.map((message) => (
-              <div>
-                <p>{message.content}</p>
-              </div>
-            ))
-          ) : (
-            <p>No message found in this conversation.</p>
-          )}
-        </div>
-        <form>
-          <input
-            type="text"
-            value={formMessage}
-            onChange={(e) => setFormMessage(e.target.value)}
-            placeholder="Your message..."
+        {!loading ? (
+          <Chat
+            close={() => navigate("../")}
+            conversation={conversation}
+            userType="admin"
+            isAuthenticated={true}
+            title={`Conversation with ${conversation?.user.name} ${conversation?.user.surname}`}
           />
-          <Send />
-        </form>
+        ) : (
+          <LoadingScreen />
+        )}
       </motion.div>
     </motion.div>
   );

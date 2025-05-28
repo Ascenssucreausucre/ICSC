@@ -1,21 +1,75 @@
+.support-section .filters {
+  display: flex;
+  gap: 1rem;
+}
+.support-section .filters .form-input {
+  margin-block: 0.5rem;
+}
 .conversations-container {
   border-radius: var(--border-radius);
   background-color: rgba(0, 0, 0, 0.05);
   padding: 1rem clamp(5px, 10% - 1rem, 200px);
   margin-block: 1rem;
 }
+.conversation-wrapper {
+  display: flex;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  outline: 2px solid transparent;
+  overflow: hidden;
+  margin-block: 0.5rem;
+  transition: outline 0.2s ease-out;
+}
+.conversation-wrapper .conversation-actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  max-width: 0;
+  padding: 2px 0;
+  color: white;
+  position: relative;
+  transition: max-width 0.2s ease, padding 0.1s;
+}
+
+.conversation-wrapper:hover .conversation-actions {
+  max-width: 200px; /* Set to whatever fits your content */
+  padding: 2px;
+}
+
+.conversation-actions .action-details {
+  position: absolute;
+  display: none;
+  opacity: 1;
+  background-color: gray;
+  color: white;
+  @starting-style {
+    opacity: 0;
+  }
+}
+.conversation-actions button:hover .action-details {
+  display: inline-block;
+}
+
+.conversation-actions .button-icon {
+  color: rgb(216, 216, 216);
+  transition: color 0.2s ease-out;
+}
+.conversation-actions .button-icon:hover {
+  color: white;
+}
+
 .conversation {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: var(--border-radius);
-  margin-block: 0.2rem;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
   padding: 0.4rem 0.6rem;
   background-color: white;
-  transition: background-color 0.2s ease-out;
+  overflow: hidden;
+  flex: 1;
 }
-.conversation:hover {
-  background-color: rgba(228, 212, 212, 0.95);
+.conversation-wrapper:hover {
+  outline: 2px solid var(--primary-color);
   cursor: pointer;
 }
 .div-icon {
@@ -40,13 +94,23 @@
   top: 0;
   left: 0;
 }
+.conversation:not(.unread) .conversation-date {
+  color: gray;
+}
+.conversation:not(.unread) .card-title {
+  font-weight: 500;
+}
 .conversation-content {
   flex: 1;
+  overflow: hidden;
 }
 .conversation-content p.message-content {
   margin-block: 0.2rem;
   color: gray;
   font-style: italic;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .conversation.unread .conversation-content > p.message-content {
   color: black;

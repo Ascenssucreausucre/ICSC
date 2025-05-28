@@ -1,17 +1,7 @@
 .conversation-modal {
-  background-color: white;
-  padding: var(--text-padding);
+  background-color: rgb(247, 240, 240);
   border-radius: var(--border-radius);
   position: relative;
   margin-inline: 1rem;
-}
-.conversation-modal .conversation-modal-header {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-}
-.conversation-modal .conversation-modal-header .button-icon {
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
+  width: clamp(200px, 50vw + 5rem, 600px);
 }
