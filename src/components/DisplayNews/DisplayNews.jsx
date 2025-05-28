@@ -28,7 +28,7 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const { deferredPrompt, isInstalled, handleInstallClick } = usePWAInstall();
 
   const { isAuthenticated } = useUserAuth();
-  const navigate = useNavigate;
+  const navigate = useNavigate();
 
   const showInstallButton = !isInstalled && deferredPrompt;
 
