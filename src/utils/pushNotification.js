@@ -88,6 +88,7 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
         method: "POST",
         body: JSON.stringify(subscription),
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
 
       if (!res.ok) {
