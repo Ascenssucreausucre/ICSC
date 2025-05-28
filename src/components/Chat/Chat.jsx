@@ -14,6 +14,7 @@ export default function Chat({
   conversation,
   userType = "user",
   title = "Conversation",
+  update,
   isAuthenticated = false,
 }) {
   const [messages, setMessages] = useState([]);
@@ -39,6 +40,7 @@ export default function Chat({
 
   useEffect(() => {
     if (!conversation) return;
+    console.log("Updating conversation...");
     const { messages, id, ...status } = conversation;
     setMessages(messages || []);
     setConversationId(id);
@@ -47,6 +49,9 @@ export default function Chat({
 
   useEffect(() => {
     if (!conversationId) return;
+    if (conversation?.length < 1 || !conversation) {
+      update();
+    }
 
     socket.emit("joinRoom", conversationId);
     socket.on("newMessage", (message) => {
@@ -69,12 +74,16 @@ export default function Chat({
 
     setIsLoading(true);
     try {
-      await axios.post(
+      const res = await axios.post(
         `${API_URL}/conversation/send-message/${conversationId}`,
         { content: formMessage.trim() },
         { withCredentials: true }
       );
       setFormMessage("");
+      if (!conversationId) {
+        console.log("Setting up conversation...");
+        setConversationId(res.data.conversationId);
+      }
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||

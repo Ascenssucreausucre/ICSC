@@ -8,31 +8,31 @@ import Chat from "../Chat/Chat";
 
 export default function ChatRoom() {
   const [isOpen, setIsOpen] = useState(false);
-  const [conversation, setConversation] = useState({});
+  const [conversation, setConversation] = useState(null);
 
   const { isAuthenticated } = useUserAuth();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(
-        "[API] Tentative de récupération de la conversation utilisateur..."
+  const fetchData = async () => {
+    console.log(
+      "[API] Tentative de récupération de la conversation utilisateur..."
+    );
+    try {
+      const res = await axios.get(`${API_URL}/user/conversation`, {
+        withCredentials: true,
+      });
+      console.log("[API] Conversation récupérée :", res.data);
+      setConversation(res.data);
+    } catch (error) {
+      console.error(
+        "[API] Erreur lors de la récupération de la conversation :",
+        error.response?.data || error.message
       );
-      try {
-        const res = await axios.get(`${API_URL}/user/conversation`, {
-          withCredentials: true,
-        });
-        console.log("[API] Conversation récupérée :", res.data);
-        setConversation(res.data);
-      } catch (error) {
-        console.error(
-          "[API] Erreur lors de la récupération de la conversation :",
-          error.response?.data || error.message
-        );
-      }
-    };
+    }
+  };
 
+  useEffect(() => {
     if (isAuthenticated) {
       console.log(
         "[Auth] Utilisateur connecté, récupération de la conversation..."
@@ -55,6 +55,7 @@ export default function ChatRoom() {
           userType="user"
           title="Conversation with the support"
           isAuthenticated={isAuthenticated}
+          update={fetchData}
         />
       ) : (
         <button onClick={() => setIsOpen(true)} className="button-icon">
