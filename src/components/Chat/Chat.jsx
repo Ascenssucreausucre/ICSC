@@ -3,11 +3,10 @@ import { Send, X, MessageCircleMore } from "lucide-react";
 import socket from "../../utils/socket";
 import axios from "axios";
 import "./Chat.css";
-import { useFeedback } from "../../context/FeedbackContext";
-import { status } from "nprogress";
-import { CheckCheck } from "lucide-react";
 import { useRef } from "react";
 import { CircleUserRound } from "lucide-react";
+import { Input } from "../Input/Input";
+import { Ban } from "lucide-react";
 
 export default function Chat({
   close,
@@ -45,16 +44,23 @@ export default function Chat({
     setMessages(messages || []);
     setConversationId(id);
     setConversationStatus(status);
+    console.log(status);
   }, [conversation]);
 
   useEffect(() => {
     if (!conversationId) return;
     if (conversation?.length < 1 || !conversation) {
-      update();
+      update && update();
     }
 
     socket.emit("joinRoom", conversationId);
     socket.on("newMessage", (message) => {
+      setMessages((prev) => [message, ...prev]);
+    });
+    socket.on("throttlingToggled", ({ throttling }) => {
+      const message = throttling
+        ? "Throttling enabled, you can no longer send multiple messages within a minute."
+        : "Throttling disabled, the limit of 1 message per minute has been thrown.";
       setMessages((prev) => [message, ...prev]);
     });
     socket.on("read", (status) => {
@@ -65,6 +71,7 @@ export default function Chat({
       socket.emit("leaveRoom", conversationId);
       socket.off("newMessage");
       socket.off("read");
+      socket.off("throttlingToggled");
     };
   }, [conversationId]);
 
@@ -110,10 +117,53 @@ export default function Chat({
     return acc;
   }, []);
 
+  const toggleThrottling = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(
+        `${API_URL}/conversation/toggle-throttling/${conversationId}`,
+        {},
+        { withCredentials: true }
+      );
+      setConversationStatus((prev) => ({
+        ...prev,
+        throttling: res.data.throttling,
+      }));
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data ||
+        error.message ||
+        "Une erreur inattendue s'est produite.";
+      console.error("[Message Error]", errorMessage);
+      showErrorMessage(errorMessage);
+    }
+  };
+
   return (
     <>
       <div className="chat-room-header">
-        <h2 className="card-title secondary">{title}</h2>
+        <div className="chat-room-header-text">
+          <h2 className="card-title secondary">{title}</h2>
+          {userType !== "user" && (
+            <div className="toggle-throttling">
+              {" "}
+              <Ban
+                className={conversationStatus?.throttling ? "enabled" : ""}
+              />
+              <Input
+                name="throttling"
+                label="Toggle throttling (anti-spam) for this user."
+                value={conversationStatus?.throttling}
+                checked={conversationStatus?.throttling}
+                onChange={toggleThrottling}
+                type="checkbox"
+              />{" "}
+            </div>
+          )}
+        </div>
+
         {close && (
           <button className="button-icon close-button" onClick={close}>
             <X />
@@ -125,45 +175,46 @@ export default function Chat({
         {groupedMessages.length > 0 ? (
           groupedMessages.map((group, index) => (
             <React.Fragment key={index}>
-              <div
-                className={`messages-group${
-                  group[0].senderType === userType ? " current-user" : ""
-                }`}
-              >
-                {group[0].senderType !== userType && (
-                  <div className="div-icon">
-                    {user?.name ? (
-                      user?.name?.charAt(0) + user?.surname?.charAt(0)
-                    ) : (
-                      <CircleUserRound />
-                    )}
-                  </div>
-                )}
-                <div className="messages">
-                  {group.map((message) => {
-                    const msgDate = new Date(message.createdAt);
-                    const padZero = (num) => (num < 10 ? "0" + num : num);
-                    const hourValue =
-                      padZero(msgDate.getHours()) +
-                      ":" +
-                      padZero(msgDate.getMinutes());
-
-                    return (
-                      <div key={message.id} className="message">
-                        <p>{message.content}</p>
-                        <p className="message-time">{hourValue}</p>
-                      </div>
-                    );
-                  })}
+              {!group[0]?.id ? (
+                <div className="message-info">
+                  {group.map((info, index) => (
+                    <p key={index}>{info}</p>
+                  ))}
                 </div>
-              </div>
-              {/* {index === 0 && group[0].senderType === userType && (
-                <CheckCheck />
-              )} */}
-              {/* {console.log(groupedMessages.length === index + 1, {
-                senderType: group[0].senderType,
-                userType,
-              })} */}
+              ) : (
+                <div
+                  className={`messages-group${
+                    group[0].senderType === userType ? " current-user" : ""
+                  }`}
+                >
+                  {group[0].senderType !== userType && (
+                    <div className="div-icon">
+                      {user?.name ? (
+                        user?.name?.charAt(0) + user?.surname?.charAt(0)
+                      ) : (
+                        <CircleUserRound />
+                      )}
+                    </div>
+                  )}
+                  <div className="messages">
+                    {group.map((message) => {
+                      const msgDate = new Date(message.createdAt);
+                      const padZero = (num) => (num < 10 ? "0" + num : num);
+                      const hourValue =
+                        padZero(msgDate.getHours()) +
+                        ":" +
+                        padZero(msgDate.getMinutes());
+
+                      return (
+                        <div key={message.id} className="message">
+                          <p>{message.content}</p>
+                          <p className="message-time">{hourValue}</p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </React.Fragment>
           ))
         ) : isAuthenticated ? (

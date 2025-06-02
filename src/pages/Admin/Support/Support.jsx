@@ -55,6 +55,8 @@ export default function Support() {
     []
   );
 
+  console.log("[Component] render");
+
   useEffect(() => {
     console.log("[Socket.IO] Join adminRoom");
     socket.emit("joinRoom", "adminRoom");

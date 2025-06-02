@@ -7,6 +7,21 @@
   background-color: white;
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
+.toggle-throttling {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.toggle-throttling > .lucide {
+  color: gray;
+  transition: color 0.2s ease;
+}
+.toggle-throttling > .lucide.enabled {
+  color: red;
+}
+.toggle-throttling > .form-input {
+  margin-block: 0.2rem;
+}
 
 .chat-room-messages {
   padding: 0.8rem 1.2rem;
@@ -59,6 +74,16 @@
   color: white;
   background-color: var(--secondary-color);
   position: relative;
+}
+.chat-room-messages .message-info {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.chat-room-messages .message-info > p {
+  font-size: clamp(8px, var(--font-size) * 0.8, 1rem);
+  color: gray;
+  margin: 0.6rem;
+  text-align: center;
 }
 
 .chat-room-messages .messages-group.current-user .message {
