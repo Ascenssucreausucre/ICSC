@@ -1,5 +1,4 @@
 import {
-  CardElement,
   useStripe,
   useElements,
   CardNumberElement,
@@ -23,9 +22,11 @@ export default function CheckoutForm({ clientSecret, formData }) {
 
     setLoading(true);
 
+    const cardNumber = elements.getElement(CardNumberElement);
+
     const result = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
-        card: elements.getElement(CardElement),
+        card: cardNumber,
         billing_details: {
           name: `${formData.name} ${formData.surname}`,
           email: formData.email,
@@ -49,14 +50,29 @@ export default function CheckoutForm({ clientSecret, formData }) {
 
   return (
     <form onSubmit={handleSubmit} className="checkout-form">
-      <label>Card Number</label>
-      <CardNumberElement />
+      <div className="form-group">
+        <label>Card Number</label>
+        <div className="stripe-element-wrapper">
+          <CardNumberElement />
+        </div>
+      </div>
 
-      <label>Expiration Date</label>
-      <CardExpiryElement />
+      <div className="form-row">
+        <div className="form-group half">
+          <label>Expiration Date</label>
+          <div className="stripe-element-wrapper">
+            <CardExpiryElement />
+          </div>
+        </div>
 
-      <label>CVC</label>
-      <CardCvcElement />
+        <div className="form-group half">
+          <label>CVC</label>
+          <div className="stripe-element-wrapper">
+            <CardCvcElement />
+          </div>
+        </div>
+      </div>
+
       <button
         type="submit"
         disabled={!stripe || loading}
