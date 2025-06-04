@@ -135,16 +135,6 @@ export default function Registration() {
 
         setClientSecret(res.data.clientSecret);
 
-        if (res.error) {
-          console.error(res.error.message);
-        } else {
-          if (res.paymentIntent.status === "succeeded") {
-            showFeedback("success", "Payment success!");
-            setShowForm(false);
-            setConfirm(false);
-            setFormData(defaultFormData);
-          }
-        }
         return true;
       } catch (error) {
         console.log(error);
@@ -695,14 +685,22 @@ export default function Registration() {
               €
             </span>
           </h3>
-
+        </>
+      ),
+      onNext: handleSubmit,
+      next: "Proceed to payment",
+      disableNext: stepperLoading,
+    },
+    {
+      title: "Step 6",
+      description: "Enter your card informations.",
+      content: (
+        <>
           <Elements stripe={stripePromise}>
             <CheckoutForm clientSecret={clientSecret} />
           </Elements>
         </>
       ),
-      next: "Proceed to payment",
-      disableNext: stepperLoading,
     },
   ];
 
