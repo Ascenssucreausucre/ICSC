@@ -135,10 +135,10 @@ export default function Registration() {
 
         setClientSecret(res.data.clientSecret);
 
-        if (result.error) {
-          console.error(result.error.message);
+        if (res.error) {
+          console.error(res.error.message);
         } else {
-          if (result.paymentIntent.status === "succeeded") {
+          if (res.paymentIntent.status === "succeeded") {
             showFeedback("success", "Payment success!");
             setShowForm(false);
             setConfirm(false);
