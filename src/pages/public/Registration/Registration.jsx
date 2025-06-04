@@ -113,6 +113,7 @@ export default function Registration() {
 
   const handleSubmit = async () => {
     setStepperLoading(true);
+    let dataToSend = formData;
     if (formData.isAuthor) {
       const articlesToSend = articles.filter(
         (article) => article.submit !== false
@@ -127,25 +128,25 @@ export default function Registration() {
         console.error(`Articles can't have negative extra pages.`);
         return;
       }
-      const dataToSend = { ...formData, articles: articlesToSend };
+      dataToSend = { ...formData, articles: articlesToSend };
+    }
 
-      try {
-        const res = await axios.post(
-          import.meta.env.VITE_API_URL + "/front-routes/payment",
-          dataToSend,
-          { withCredentials: true }
-        );
+    try {
+      const res = await axios.post(
+        import.meta.env.VITE_API_URL + "/front-routes/payment",
+        dataToSend,
+        { withCredentials: true }
+      );
 
-        setClientSecret(res.data.clientSecret);
+      setClientSecret(res.data.clientSecret);
 
-        return true;
-      } catch (error) {
-        console.log(error);
-        showFeedback("error", error.message);
-        return;
-      } finally {
-        setStepperLoading(false);
-      }
+      return true;
+    } catch (error) {
+      console.log(error);
+      showFeedback("error", error.message);
+      return;
+    } finally {
+      setStepperLoading(false);
     }
   };
 
