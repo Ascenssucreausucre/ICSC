@@ -66,7 +66,7 @@ export default function Authors() {
     const fetchFilters = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/Authors/filters`
+          `${import.meta.env.VITE_API_URL}/authors/filters`
         );
         setAvailableCountries(mapCountryNamesToCodes(data.countries));
         setAvailableAffiliations(data.affiliations);

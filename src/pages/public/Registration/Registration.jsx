@@ -13,11 +13,14 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useFeedback } from "../../../context/FeedbackContext";
 import CheckoutForm from "../../../components/CheckoutForm/CheckoutForm";
+import { Dropdown } from "primereact/dropdown";
+import availableCountriesList from "../../../assets/json/flag-countries.json";
 
 export default function Registration() {
   const { registrationFees, importantDates, additionalFees } = useLoaderData();
   const { showFeedback } = useFeedback();
   const publicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+  const availableCountries = availableCountriesList;
 
   const stripePromise = loadStripe(publicKey);
 
@@ -29,7 +32,7 @@ export default function Registration() {
   const defaultFormData = {
     isAuthor: false,
     email: "",
-    creditCardCountry: "",
+    // creditCardCountry: { name: "" },
     pin: "",
     attendanceMode: "Face to face",
   };
@@ -66,7 +69,7 @@ export default function Registration() {
       setFormData({
         email: formData.email,
         attendanceMode: formData.attendanceMode,
-        creditCardCountry: formData.creditCardCountry,
+        // creditCardCountry: formData.creditCardCountry,
         isAuthor: formData.isAuthor,
         pin: formData.pin,
         student: false,
@@ -179,14 +182,64 @@ export default function Registration() {
               name="email"
               required
             />
-            <Input
-              value={formData.creditCardCountry}
+            {/* <Input
+              value={formData.creditCardCountry.name}
               onChange={handleChange}
               name="creditCardCountry"
               label="Credit-card country"
               placeholder="Chose your credit card country"
+              disabled
               required
-            />
+            /> */}
+            {/* <div style={{ display: "flex", flexDirection: "column" }}>
+              <label
+                htmlFor="creditCardCountry"
+                style={{ marginBottom: "0.5rem" }}
+              >
+                Credit-card country <span className="required-symbol">*</span>
+              </label>
+              <Dropdown
+                value={formData.creditCardCountry}
+                options={availableCountries}
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    creditCardCountry: e.value,
+                  }));
+                }}
+                placeholder="Select Country"
+                optionLabel="name"
+                name="creditCardCountry"
+                id="creditCardCountry"
+                filter
+                showClear
+                valueTemplate={(option) => (
+                  <div className="country-option">
+                    {option ? (
+                      <>
+                        <span
+                          className={`flag-icon flag-icon-${option?.code.toLowerCase()}`}
+                          style={{ marginRight: "8px" }}
+                        />
+                        {option.name}
+                      </>
+                    ) : (
+                      "Select Country"
+                    )}
+                  </div>
+                )}
+                itemTemplate={(option) => (
+                  <div className="country-option">
+                    <span
+                      className={`flag-icon flag-icon-${option.code.toLowerCase()}`}
+                      style={{ marginRight: "8px" }}
+                    />
+                    {option.name}
+                  </div>
+                )}
+                style={{ minWidth: "200px" }}
+              />
+            </div> */}
             <Input
               type="checkbox"
               label="I am an author"
@@ -253,7 +306,7 @@ export default function Registration() {
             email: formData.email,
             country: "",
             attendanceMode: formData.attendanceMode,
-            creditCardCountry: formData.creditCardCountry,
+            // creditCardCountry: formData.creditCardCountry,
             isAuthor: formData.isAuthor,
             pin: null,
             student: false,
@@ -306,13 +359,13 @@ export default function Registration() {
                   name="country"
                   required
                 />
-                <Input
+                {/* <Input
                   label="Credit-card country"
-                  value={formData.creditCardCountry}
+                  value={formData.creditCardCountry?.name || ""}
                   onChange={handleChange}
                   name="creditCardCountry"
                   required
-                />
+                /> */}
                 <Input
                   label="Attendance mode"
                   value={formData.attendanceMode}

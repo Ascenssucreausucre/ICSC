@@ -30,9 +30,6 @@ export default function CheckoutForm({ clientSecret, formData }) {
         billing_details: {
           name: `${formData.name} ${formData.surname}`,
           email: formData.email,
-          address: {
-            country: formData.creditCardCountry,
-          },
         },
       },
     });
