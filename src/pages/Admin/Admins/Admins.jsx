@@ -7,10 +7,7 @@ import ConfirmationModal from "../../../components/ConfirmationModal/Confirmatio
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function Admins() {
-  const { data, loading, refetch } = useFetch(`/admin-auth/`, {
-    method: "GET",
-    credentials: "include",
-  });
+  const { data, loading, refetch } = useFetch(`/admin-auth/`);
   const { submit } = useSubmit();
   const { openModal } = useAdminModal();
 
@@ -53,6 +50,7 @@ export default function Admins() {
             <div
               className="card row"
               style={{ justifyContent: "space-between", alignItems: "center" }}
+              key={admin.id}
             >
               <div>
                 <p>

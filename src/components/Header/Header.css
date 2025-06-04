@@ -9,6 +9,7 @@
   justify-content: center;
   align-items: center;
   color: white;
+  /* clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 70%); */
 }
 .page-title > * {
   /* filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.2)); */

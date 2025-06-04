@@ -1,6 +1,12 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 
-const useFetch = (url, options = {}) => {
+const useFetch = (
+  url,
+  options = {
+    withCredentials: true,
+  }
+) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [reLoading, setReLoading] = useState(true);
@@ -15,17 +21,15 @@ const useFetch = (url, options = {}) => {
 
     const fetchData = async () => {
       try {
-        const response = await fetch(baseUrl + url, options);
-        if (!response.ok) {
-          throw new Error(`Erreur: ${response.statusText}`);
-        }
-        const result = await response.json();
+        const response = await axios.get(baseUrl + url, options);
+        const result = response.data;
         if (isMounted) {
           setData(result);
         }
       } catch (err) {
         if (isMounted) {
           setError(err.message);
+          console.error(err);
         }
       } finally {
         if (isMounted) {

@@ -9,14 +9,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./Registration.css";
 import axios from "axios";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { useFeedback } from "../../../context/FeedbackContext";
+import CheckoutForm from "../../../components/CheckoutForm/CheckoutForm";
 
 export default function Registration() {
   const { registrationFees, importantDates, additionalFees } = useLoaderData();
+  const { showFeedback } = useFeedback();
+  const publicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+
+  const stripePromise = loadStripe(publicKey);
 
   const iconSize = 12;
 
   const maxArticles = additionalFees.max_articles;
-  const freeArticle = additionalFees.given_articles_with_registration;
+  const freeArticle = additionalFees.given_articles_per_registration;
 
   const defaultFormData = {
     isAuthor: false,
@@ -37,6 +45,8 @@ export default function Registration() {
     extraPages: 0,
     extraPagesPrice: 0,
   });
+  const [clientSecret, setClientSecret] = useState("");
+  const [stepperLoading, setStepperLoading] = useState(false);
 
   useEffect(() => {
     const articlesLength = articles.filter(
@@ -99,6 +109,7 @@ export default function Registration() {
   };
 
   const handleSubmit = async () => {
+    setStepperLoading(true);
     if (formData.isAuthor) {
       const articlesToSend = articles.filter(
         (article) => article.submit !== false
@@ -114,29 +125,48 @@ export default function Registration() {
         return;
       }
       const dataToSend = { ...formData, articles: articlesToSend };
-      console.log({
-        message: "Success!",
-        data: dataToSend,
-      });
 
-      console.log({
-        dataToSend,
-        additionalFees,
-        registrationFees,
-      });
+      try {
+        const res = await axios.post(
+          import.meta.env.VITE_API_URL + "/front-routes/payment",
+          dataToSend,
+          { withCredentials: true }
+        );
 
-      setShowForm(false);
-      setConfirm(false);
-      setFormData(defaultFormData);
-      return;
+        setClientSecret(res.data.clientSecret);
+
+        if (result.error) {
+          console.error(result.error.message);
+        } else {
+          if (result.paymentIntent.status === "succeeded") {
+            showFeedback("success", "Payment success!");
+            setShowForm(false);
+            setConfirm(false);
+            setFormData(defaultFormData);
+          }
+        }
+        return true;
+      } catch (error) {
+        console.log(error);
+        showFeedback("error", error.message);
+        return;
+      } finally {
+        setStepperLoading(false);
+      }
     }
-    setShowForm(false);
-    setConfirm(false);
-    setFormData(defaultFormData);
   };
 
   const formatLabel = (key) =>
     key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+  // console.log({
+  //   selectedArticles,
+  //   freeArticle,
+  //   additional_paper_fee: additionalFees.additional_paper_fee,
+  //   total:
+  //     (selectedArticles.length - freeArticle) *
+  //     additionalFees.additional_paper_fee,
+  // });
 
   const form = [
     {
@@ -548,7 +578,7 @@ export default function Registration() {
         if (formData.attendanceMode === "Online") {
           baseFee = parseFloat(feeCategory.virtual_attendance);
         } else {
-          baseFee = formData.IeeeMember
+          baseFee = formData.ieeeMember
             ? parseFloat(feeCategory.ieee_member)
             : parseFloat(feeCategory.non_ieee_member);
         }
@@ -667,7 +697,20 @@ export default function Registration() {
           </h3>
         </>
       ),
+      onNext: handleSubmit,
       next: "Proceed to payment",
+      disableNext: stepperLoading,
+    },
+    {
+      title: "Step 6",
+      description: "Enter your card informations.",
+      content: (
+        <>
+          <Elements stripe={stripePromise}>
+            <CheckoutForm clientSecret={clientSecret} />
+          </Elements>
+        </>
+      ),
     },
   ];
 

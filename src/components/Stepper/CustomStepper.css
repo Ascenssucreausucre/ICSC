@@ -181,7 +181,7 @@ button:disabled {
   transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-.btn-next-disabled {
+.btn-next:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }

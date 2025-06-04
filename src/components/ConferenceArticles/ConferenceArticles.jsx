@@ -125,6 +125,9 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
         </FloatLabel>
         <p className={`input-infos${articleIds.length > 0 ? " active" : ""}`}>
           Articles to update: {articleIds.length}
+          {!submitLoading && articleIds.length > 0 && (
+            <button onClick={() => setArticleIds([])}>Reset</button>
+          )}
         </p>
         <div className="button-container">
           <Dropdown
@@ -142,7 +145,7 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
           <button
             className="button"
             onClick={handleSubmit}
-            disabled={submitLoading}
+            disabled={submitLoading || articleIds.length === 0}
           >
             {submitLoading ? "Submitting..." : "Set status"}
           </button>

@@ -150,6 +150,19 @@
   margin-block: 0.2rem;
   transition: color 0.2s ease;
 }
+.grouped-actions-container .input-infos button {
+  color: transparent;
+  background-color: transparent;
+  border: none;
+  margin-left: 0.5rem;
+  transition: color 0.2s ease;
+}
 .grouped-actions-container .input-infos.active {
   color: var(--primary-color-75);
+}
+.grouped-actions-container .input-infos.active button {
+  color: var(--tertiary-color);
+}
+.grouped-actions-container .input-infos.active button:hover {
+  text-decoration: underline;
 }

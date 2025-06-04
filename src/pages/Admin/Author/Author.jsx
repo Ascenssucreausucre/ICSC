@@ -28,6 +28,8 @@ export default function Author() {
     });
   };
 
+  console.log(author);
+
   return (
     <div className="single-author admin-section">
       {loading ? (
@@ -56,6 +58,16 @@ export default function Author() {
             }{" "}
             {author.country}
           </h2>
+          <h3>
+            Linked account:{" "}
+            {author?.userAccount ? (
+              <Link to={`/admin/users/${author.userAccount.id}`}>
+                {author.userAccount.email}
+              </Link>
+            ) : (
+              "None"
+            )}
+          </h3>
           <ArticleList
             data={author.articles}
             refetch={refetch}

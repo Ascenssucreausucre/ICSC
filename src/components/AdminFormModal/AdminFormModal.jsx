@@ -18,7 +18,8 @@ export default function AdminFormModal() {
 
   useEffect(() => {
     if (modalData?.initialData) {
-      const { conference_id, id, ...initialData } = modalData.initialData;
+      const { conference_id, conferenceId, id, ...initialData } =
+        modalData.initialData;
 
       const processedInitialData = {};
       for (const key in initialData) {
@@ -36,7 +37,7 @@ export default function AdminFormModal() {
       }
 
       setFormData(processedInitialData);
-      setConferenceId(conference_id);
+      setConferenceId(conference_id || conferenceId);
     }
   }, [modalData]);
 
@@ -159,6 +160,7 @@ export default function AdminFormModal() {
         transition={{ duration: 0.3 }}
       >
         <h2 className="title secondary">{modalData.title}</h2>
+        {modalData.subtitle && <p className="subtitle">{modalData.subtitle}</p>}
         <form onSubmit={handleSubmit}>
           {Object.keys(formData).map((key) => {
             let value = formData[key] || "";

@@ -56,7 +56,7 @@ export default function SpecialSessionManager({
       <div className="session-container">
         {data && data.length > 0 ? (
           data.map((session) => (
-            <div className="card row">
+            <div className="card row" key={session.id}>
               <div className="flex-1">
                 <h2 className="card-title">{session.title}</h2>
                 <p className="data-detail">

@@ -23,6 +23,7 @@ export default function AdminNavBar() {
     { link: "/admin/authors", name: "Authors" },
     { link: "/admin/notifications", name: "Notifications" },
     { link: "/admin/support", name: "Support" },
+    { link: "/admin/users", name: "Users" },
   ];
 
   if (adminRole === "superadmin") {

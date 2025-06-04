@@ -62,10 +62,6 @@ export default function Article({
             </div>
           )}
         </div>
-        <p>
-          <strong>Affiliation: </strong>
-          {article.affiliation}
-        </p>
       </div>
       {onChange && (
         <div className="button-container card-button-container">

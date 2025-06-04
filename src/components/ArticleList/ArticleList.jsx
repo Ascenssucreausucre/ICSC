@@ -131,7 +131,7 @@ export default function ArticleList({
 
   const handleSetStatus = async (id, status) => {
     const response = await submit({
-      url: `/Articles/${id}/update-status`,
+      url: `/articles/${id}/update-status`,
       method: "PUT",
       data: { status: status },
     });
@@ -146,7 +146,7 @@ export default function ArticleList({
 
   const handleAddNonExistantAuthor = () => {
     openModal({
-      url: "/Authors/",
+      url: "/authors/",
       method: "POST",
       initialData: {
         name: "",
@@ -171,7 +171,7 @@ export default function ArticleList({
     openModal({
       initialData: articleTemplate,
       method: "POST",
-      url: `/Articles`,
+      url: `/articles`,
       title: "New article",
       memberUrl: "/Authors",
       refreshFunction: refetch,
@@ -182,7 +182,7 @@ export default function ArticleList({
   const handleUpdateArticle = (article) => {
     const { status, ...articleRows } = article;
     openModal({
-      url: `/Articles/update/${article.id}`,
+      url: `/articles/update/${article.id}`,
       method: "PUT",
       initialData: articleRows,
       title: "Update article " + article.title,
@@ -204,6 +204,45 @@ export default function ArticleList({
       a.id === article.id ? { ...a, status: e.value } : a
     );
     setArticles(updatedArticles);
+  };
+
+  const handleAddArticleByFile = async () => {
+    openModal({
+      url: "/articles/add-by-file",
+      method: "POST",
+      initialData: { file: "", conferenceId: conference_id },
+      title: "Add bulk articles (.xlsx, .xls)",
+      subtitle: (
+        <>
+          Make sure to only have the newest articles in your file, the process
+          might be longer in the other case. The excel file must contain at
+          least (with this exact synthax):
+          <ul>
+            <li style={{ paddingInlineStart: "1rem" }}>
+              - for Authors: Author, Affiliation, Country, PIN
+            </li>
+            <li style={{ paddingInlineStart: "1rem" }}>
+              - for Articles: Title, Type, Nr, Status
+            </li>
+            <li style={{ paddingInlineStart: "1rem" }}>
+              - Status has to be: Accepted or Rejected, other statuses will
+              result on "Pending"
+            </li>
+            <li style={{ paddingInlineStart: "1rem" }}>
+              - Type has to be: "Contributed Paper" in order to result on
+              "Contributed", anything else will result on "Invited"
+            </li>
+            <li style={{ paddingInlineStart: "1rem" }}>
+              - Each row has to be related to only one article and author
+            </li>
+          </ul>
+          <a href="/files/excel-template.xlsx" className="link">
+            Example template
+          </a>
+        </>
+      ),
+      refreshFunction: refetch,
+    });
   };
 
   return (
@@ -288,6 +327,9 @@ export default function ArticleList({
       <div className="button-container">
         <button className="button" onClick={handleAddArticle}>
           Add an article
+        </button>
+        <button className="button" onClick={handleAddArticleByFile}>
+          Add by file
         </button>
       </div>
     </div>

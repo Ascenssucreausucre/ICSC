@@ -182,6 +182,11 @@ export default function CustomStepper({
           onClick={handleNext}
           className={`btn-next${activeStep + 1 < steps.length ? "" : " last"}`}
           style={{ backgroundColor: stepperColor }}
+          disabled={
+            steps[activeStep].disabledNext
+              ? steps[activeStep].disabledNext
+              : false
+          }
         >
           {steps[activeStep].next ? steps[activeStep].next : "Next"}
         </button>

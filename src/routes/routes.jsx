@@ -27,6 +27,8 @@ import SignUp from "../pages/public/SignUp/SignUp";
 import Profile from "../pages/public/Profile/Profile";
 import Support from "../pages/Admin/Support/Support";
 import Conversation from "../pages/Admin/Conversation/Conversation";
+import Users from "../pages/Admin/Users/Users";
+import User from "../pages/Admin/User/User";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -161,6 +163,14 @@ const router = createBrowserRouter([
                 element: <Conversation />,
               },
             ],
+          },
+          {
+            path: "users",
+            element: <Users />,
+          },
+          {
+            path: "users/:id",
+            element: <User />,
           },
         ],
       },
