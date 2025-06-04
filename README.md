@@ -1,6 +1,6 @@
 # 🌐 Projet Web Full Stack – React, Express, Sequelize & Stripe
 
-## 👤 Réalisé par : [Florian Amiot]
+## 👤 Réalisé par : Florian Amiot
 Diplômé BUT MMI (3e année) | Développeur Full Stack Junior+
 
 ---
