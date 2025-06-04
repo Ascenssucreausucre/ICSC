@@ -80,15 +80,7 @@ Application web full stack développée **entièrement from scratch** :
 
 ---
 
-## 📦 Idées d'intégration
-- `README.md` GitHub
-- Portfolio personnel (section “Projet Professionnel”)
-- Support technique en entretien
-- Article LinkedIn / Dev.to
-
----
-
 ## 🔗 Liens utiles (à personnaliser)
-- 🌍 [Lien vers la démo live](https://...)
-- 💻 [Dépôt GitHub frontend](https://github.com/...)
-- 💻 [Dépôt GitHub backend](https://github.com/...)
+- 🌍 [Lien vers la démo live](https://icsc.up.railway.app/)
+- 💻 [Dépôt GitHub frontend](https://github.com/Ascenssucreausucre/ICSC)
+- 💻 [Dépôt GitHub backend](https://github.com/Ascenssucreausucre/ICSC-API)
