@@ -695,22 +695,14 @@ export default function Registration() {
               €
             </span>
           </h3>
-        </>
-      ),
-      onNext: handleSubmit,
-      next: "Proceed to payment",
-      disableNext: stepperLoading,
-    },
-    {
-      title: "Step 6",
-      description: "Enter your card informations.",
-      content: (
-        <>
+
           <Elements stripe={stripePromise}>
             <CheckoutForm clientSecret={clientSecret} />
           </Elements>
         </>
       ),
+      next: "Proceed to payment",
+      disableNext: stepperLoading,
     },
   ];
 
