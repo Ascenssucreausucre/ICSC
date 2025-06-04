@@ -697,7 +697,7 @@ export default function Registration() {
       content: (
         <>
           <Elements stripe={stripePromise}>
-            <CheckoutForm clientSecret={clientSecret} />
+            <CheckoutForm clientSecret={clientSecret} formData={formData} />
           </Elements>
         </>
       ),
