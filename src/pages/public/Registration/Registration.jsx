@@ -137,7 +137,10 @@ export default function Registration() {
         dataToSend,
         { withCredentials: true }
       );
-
+      setPaymentDetails((prev) => ({
+        ...prev,
+        total: res.data.totalFees.total,
+      }));
       setClientSecret(res.data.clientSecret);
 
       return true;
@@ -751,7 +754,11 @@ export default function Registration() {
       content: (
         <>
           <Elements stripe={stripePromise}>
-            <CheckoutForm clientSecret={clientSecret} formData={formData} />
+            <CheckoutForm
+              clientSecret={clientSecret}
+              formData={formData}
+              totalFees={paymentDetails}
+            />
           </Elements>
         </>
       ),

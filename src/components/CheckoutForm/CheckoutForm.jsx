@@ -9,7 +9,7 @@ import { useState } from "react";
 import "./CheckoutForm.css";
 import { useFeedback } from "../../context/FeedbackContext";
 
-export default function CheckoutForm({ clientSecret, formData }) {
+export default function CheckoutForm({ clientSecret, formData, totalFees }) {
   const stripe = useStripe();
   const elements = useElements();
   const { showFeedback } = useFeedback();
@@ -47,6 +47,7 @@ export default function CheckoutForm({ clientSecret, formData }) {
 
   return (
     <form onSubmit={handleSubmit} className="checkout-form">
+      <h2 className="card-title primary">{totalFees.total}</h2>
       <div className="form-group">
         <label>Card Number</label>
         <div className="stripe-element-wrapper">
