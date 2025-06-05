@@ -47,7 +47,9 @@ export default function CheckoutForm({ clientSecret, formData, totalFees }) {
 
   return (
     <form onSubmit={handleSubmit} className="checkout-form">
-      <h2 className="card-title primary">{totalFees.total}</h2>
+      <h2 className="card-title">
+        Total due: <strong className="primary">{totalFees.total}€</strong>
+      </h2>
       <div className="form-group">
         <label>Card Number</label>
         <div className="stripe-element-wrapper">
