@@ -95,9 +95,8 @@ export default function NavBar({ data }) {
               to={page.link}
               className="nav-link"
               variants={linkVariants}
-              // initial="closed"
-              // animate={isOpen ? "open" : "closed"}
               onClick={() => setIsOpen(false)}
+              end={false}
             >
               {page.name}
             </MotionNavLink>

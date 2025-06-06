@@ -133,7 +133,7 @@ export default function Registration() {
 
     try {
       const res = await axios.post(
-        import.meta.env.VITE_API_URL + "/front-routes/payment",
+        import.meta.env.VITE_API_URL + "/front/payment",
         dataToSend,
         { withCredentials: true }
       );
@@ -529,50 +529,53 @@ export default function Registration() {
           </p>
           <div className="articles-container">
             {articles ? (
-              articles.map((article) => (
-                <div key={article.id} className="form-article">
-                  <Input
-                    type="checkbox"
-                    label={article.title}
-                    name={article.id}
-                    checked={article.submit === true}
-                    onChange={() =>
-                      handleArticleChange({
-                        ...article,
-                        submit: !article.submit,
-                      })
-                    }
-                    disabled={
-                      selectedArticles.length >= maxArticles &&
-                      article.submit === false
-                    }
-                  />
-                  {article.submit && (
-                    <div className="form-extra-pages-container">
+              articles.map(
+                (article) =>
+                  article.status.toLowerCase() === "accepted" && (
+                    <div key={article.id} className="form-article">
                       <Input
-                        label="Extra pages"
-                        value={article.extraPages}
-                        type="number"
-                        name={`extra-pages-${article.id}`}
-                        onChange={(e) =>
+                        type="checkbox"
+                        label={article.title}
+                        name={article.id}
+                        checked={article.submit === true}
+                        onChange={() =>
                           handleArticleChange({
                             ...article,
-                            extraPages: e.target.value,
+                            submit: !article.submit,
                           })
                         }
+                        disabled={
+                          selectedArticles.length >= maxArticles &&
+                          article.submit === false
+                        }
                       />
-                      {article.extraPages > 0 && (
-                        <p>
-                          +
-                          {article.extraPages *
-                            additionalFees.additional_page_fee}
-                          €
-                        </p>
+                      {article.submit && (
+                        <div className="form-extra-pages-container">
+                          <Input
+                            label="Extra pages"
+                            value={article.extraPages}
+                            type="number"
+                            name={`extra-pages-${article.id}`}
+                            onChange={(e) =>
+                              handleArticleChange({
+                                ...article,
+                                extraPages: e.target.value,
+                              })
+                            }
+                          />
+                          {article.extraPages > 0 && (
+                            <p>
+                              +
+                              {article.extraPages *
+                                additionalFees.additional_page_fee}
+                              €
+                            </p>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-              ))
+                  )
+              )
             ) : (
               <p>Error retreiving articles.</p>
             )}
@@ -611,18 +614,22 @@ export default function Registration() {
       ),
       next: !formData.isAuthor && "Confirm",
       onNext: () => {
-        const category = formData.isStudent ? "Student" : "Academics";
+        const category = formData.student ? "Students" : "Academics";
 
-        const registration = registrationFees.find(
-          (r) => r.description === "Other Countries"
-        );
+        const registration =
+          registrationFees.find((r) => r.description === formData.country) ||
+          registrationFees.find(
+            (r) => r.description.toLowerCase() === "other countries"
+          );
 
         const feeCategory = registration.feecategories.find(
           (fc) => fc.type === category
         );
 
+        console.log({ formData, feeCategory });
+
         let baseFee = 0;
-        if (formData.attendanceMode === "Online") {
+        if (formData.attendanceMode.toLowerCase() === "online") {
           baseFee = parseFloat(feeCategory.virtual_attendance);
         } else {
           baseFee = formData.ieeeMember

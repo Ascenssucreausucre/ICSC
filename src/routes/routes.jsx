@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
-        loader: () => fetch(`${API_URL}/front-routes/homepage-data`),
+        loader: () => fetch(`${API_URL}/front/homepage-data`),
       },
       {
         path: "committees",
@@ -57,18 +57,17 @@ const router = createBrowserRouter([
       {
         path: "registration",
         element: <Registration />,
-        loader: () =>
-          fetch(`${API_URL}/front-routes/registration-fees/current`),
+        loader: () => fetch(`${API_URL}/front/registration-fees/current`),
       },
       {
         path: "submission",
         element: <Submission />,
-        loader: () => fetch(`${API_URL}/front-routes/submission`),
+        loader: () => fetch(`${API_URL}/front/submission`),
       },
       {
         path: "program",
         element: <Program />,
-        loader: () => fetch(`${API_URL}/front-routes/program`),
+        loader: () => fetch(`${API_URL}/front/program`),
       },
       {
         path: "local-informations",
@@ -123,7 +122,7 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <AdminMainPage />,
-            loader: () => fetch(`${API_URL}/Conferences/current`),
+            loader: () => fetch(`${API_URL}/conferences/current`),
           },
           {
             path: "conferences",

@@ -100,7 +100,7 @@ export default function AdminNavBar() {
               }`}
               variants={linkVariants}
               onClick={() => setIsOpen(false)}
-              end
+              end={page.name === "Home" ? true : false}
             >
               {page.name}
             </MotionNavLink>

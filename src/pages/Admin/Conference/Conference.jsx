@@ -22,7 +22,7 @@ export default function Conference() {
   const { id } = useParams();
   const [conferenceData, setConferenceData] = useState();
   const { data: conference, refetch } = useFetch(
-    `/front-routes/get-everything-by-conference/${id}`
+    `/front/get-everything-by-conference/${id}`
   );
 
   useEffect(() => {
@@ -129,6 +129,7 @@ export default function Conference() {
                 <FeesManager
                   registrationFeesData={conferenceData.registrationFees}
                   additionalFeesData={conferenceData.additionalFees}
+                  paymentOptions={conferenceData.paymentOptions}
                   conference_id={conferenceData.conference.id}
                   refetch={refetch}
                 />

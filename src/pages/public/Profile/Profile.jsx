@@ -6,14 +6,37 @@ import Article from "../../../components/Article/Article";
 import { useEffect } from "react";
 import { useFeedback } from "../../../context/FeedbackContext";
 import axios from "axios";
+import { useUserAuth } from "../../../context/UserAuthContext";
 
 export default function Profile() {
   const userData = useLoaderData();
+  const [user, setUser] = useState(userData);
   const navigate = useNavigate();
+  console.log(userData);
+  const { isAuthenticated } = useUserAuth();
+
+  useEffect(() => {
+    if (userData.error) {
+      console.log("error");
+      return navigate("/");
+    }
+  }, [userData]);
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <h1 className="title secondary">
+          Error: You can't access to your profile while being disconnected.
+        </h1>
+      </>
+    );
+  }
+
   const { showFeedback } = useFeedback();
   const initialData = {
     name: userData.name,
     surname: userData.surname,
+    pin: userData?.author_id || "",
   };
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -21,18 +44,17 @@ export default function Profile() {
   const [formData, setFormData] = useState(initialData);
   const [loading, setLoading] = useState(false);
 
-  const isAuthor = userData?.author_id;
-
   useEffect(() => {
     if (userData.error) {
-      navigate("/login");
+      return navigate("/login");
     }
-  }, []);
+  }, [userData]);
 
   const handleDisableButton = () => {
     return (
-      formData.name.trim() === currentData.name &&
-      formData.surname.trim() === currentData.surname
+      formData.name?.trim() === currentData.name &&
+      formData.surname?.trim() === currentData.surname &&
+      formData.pin === currentData.pin
     );
   };
 
@@ -47,8 +69,12 @@ export default function Profile() {
   const handleUpdateUser = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const { name, surname } = formData;
-    const dataToSend = { name: name.trim(), surname: surname.trim() };
+    const { name, surname, pin } = formData;
+    const dataToSend = {
+      name: name.trim(),
+      surname: surname.trim(),
+      pin: pin,
+    };
     try {
       const response = await axios.put(`${API_URL}/user/update`, dataToSend, {
         withCredentials: true,
@@ -56,8 +82,12 @@ export default function Profile() {
       showFeedback("success", response.data.message);
       setCurrentData(dataToSend);
       setFormData(dataToSend);
+      const newData = await axios.get(`${API_URL}/user/profile`, {
+        withCredentials: true,
+      });
+      setUser(newData.data);
     } catch (error) {
-      const message = error.data.response.error;
+      const message = error.response.data.error;
       console.error(message);
       showFeedback("error", message);
     } finally {
@@ -67,7 +97,7 @@ export default function Profile() {
 
   return (
     <>
-      <h1 className="title primary">{userData.name}'s profile</h1>
+      <h1 className="title primary">{user.name}'s profile</h1>
       <div className="profile-content">
         <form className="update-profile-form" onSubmit={handleUpdateUser}>
           <h2>User informations</h2>
@@ -84,6 +114,14 @@ export default function Profile() {
             placeholder="Enter your surname"
             label="Surname"
             onChange={handleChange}
+          />
+          <Input
+            value={formData.pin}
+            name="pin"
+            placeholder="No author pin"
+            label="Author's PIN"
+            onChange={handleChange}
+            type="number"
           />
           <div className="button-container">
             <button
@@ -102,12 +140,12 @@ export default function Profile() {
             </button>
           </div>
         </form>
-        {isAuthor && (
+        {user?.author_id && (
           <>
             <hr />
             <h2 className="title secondary">Your current articles</h2>
             <div className="articles-container">
-              {userData.author.articles.map((article) => (
+              {user.author.articles.map((article) => (
                 <Article article={article} key={article.id} />
               ))}
             </div>

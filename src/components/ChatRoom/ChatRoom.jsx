@@ -19,7 +19,7 @@ export default function ChatRoom() {
       "[API] Tentative de récupération de la conversation utilisateur..."
     );
     try {
-      const res = await axios.get(`${API_URL}/user/conversation`, {
+      const res = await axios.get(`${API_URL}/conversations/user`, {
         withCredentials: true,
       });
       console.log("[API] Conversation récupérée :", res.data);

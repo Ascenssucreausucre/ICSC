@@ -1,0 +1,30 @@
+.users-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.users-container .user {
+  display: flex;
+  flex-direction: column;
+}
+.users-container .user .user-data {
+  flex: 1;
+}
+.users-container .user .button {
+  font-weight: 600;
+  padding: 0.4rem 0.8;
+  border-radius: 10px;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .users-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .users-container {
+    grid-template-columns: 1fr;
+  }
+}

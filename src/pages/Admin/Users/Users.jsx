@@ -5,14 +5,21 @@ import useFetch from "../../../hooks/useFetch";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../../../components/Pagination/Pagination";
-
+import "./Users.css";
+import { UnlinkIcon } from "lucide-react";
+import useSubmit from "../../../hooks/useSubmit";
+import ConfirmationModal from "../../../components/ConfirmationModal/ConfirmationModal";
 export default function Users({}) {
   const [filters, setFilters] = useState({
     search: "",
-    limit: 12,
+    limit: 9,
     page: 1,
   });
   const [users, setUsers] = useState([]);
+  const [reloading, setReloading] = useState(false);
+  const [confirmation, setConfirmation] = useState(null);
+
+  const { submit } = useSubmit();
 
   const {
     data: usersData,
@@ -28,13 +35,41 @@ export default function Users({}) {
   }, [usersData]);
 
   useEffect(() => {
-    setTimeout(() => {
+    setReloading(true);
+    const timeOutId = setTimeout(() => {
+      console.log("Reloading...");
       refetch();
-    }, 200);
-  }, [filters]);
+      setReloading(false);
+    }, 500);
+
+    return () => clearTimeout(timeOutId);
+  }, [filters.limit, filters.page, filters.search]);
+
+  const handleUnlinkAuthor = async (id) => {
+    await submit({
+      url: `/user/reset-author/${id}`,
+      method: "PUT",
+    });
+    refetch();
+  };
+
+  const handleDeleteUser = async (id) => {
+    await submit({
+      url: `/user/delete/${id}`,
+      method: "DELETE",
+    });
+    refetch();
+  };
 
   return (
     <section className="admin-section">
+      {confirmation && (
+        <ConfirmationModal
+          handleAction={() => handleDeleteUser(confirmation)}
+          text="Deleting this user can't be undone. Are you sure you want to delete this account ?"
+          unShow={() => setConfirmation(null)}
+        />
+      )}
       {loading ? (
         <LoadingScreen />
       ) : error ? (
@@ -42,7 +77,14 @@ export default function Users({}) {
       ) : (
         <>
           <h1 className="title secondary">Users</h1>
-          <SearchBar />
+          <SearchBar
+            value={filters.search}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, search: e.target.value }))
+            }
+            placeholder="User names or author's PIN"
+            loading={reloading}
+          />
           <div className="filters"></div>
           <div className="users-container">
             {users.length > 0 ? (
@@ -52,16 +94,41 @@ export default function Users({}) {
                     to={`./${user.id}`}
                     className="card-title link"
                   >{`${user.name} ${user.surname}`}</Link>
-                  <p>
-                    <strong>E-mail: </strong>
-                    {user.email}
-                  </p>
-                  <p>
-                    <strong>Linked author: </strong>
-                    {user?.author
-                      ? `${user.author.name} ${user.author.surname}`
-                      : "None"}
-                  </p>
+                  <div className="user-data">
+                    <p>
+                      <strong>E-mail: </strong>
+                      {user.email}
+                    </p>
+                    <p
+                      className={`linked-author${
+                        user?.author ? " linked" : ""
+                      }`}
+                    >
+                      <strong>Linked author: </strong>
+                      {user?.author ? (
+                        <Link to={`/admin/authors/${user.author.id}`}>
+                          {user.author.name} {user.author.surname}
+                        </Link>
+                      ) : (
+                        "None"
+                      )}
+                    </p>
+                  </div>
+                  <div className="button-container">
+                    <button
+                      className="button small"
+                      disabled={!user?.author}
+                      onClick={() => handleUnlinkAuthor(user.id)}
+                    >
+                      Unlink Author
+                    </button>
+                    <button
+                      className="button small"
+                      onClick={() => setConfirmation(user.id)}
+                    >
+                      Delete User
+                    </button>
+                  </div>
                 </div>
               ))
             ) : (

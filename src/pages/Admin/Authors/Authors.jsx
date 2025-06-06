@@ -284,6 +284,7 @@ export default function Authors() {
               <div title={option}>{option}</div>
             </>
           )}
+          virtualScrollerOptions={{ itemSize: 40 }}
         />
 
         <button

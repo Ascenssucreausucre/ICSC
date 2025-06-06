@@ -152,7 +152,7 @@ export default function Support() {
       console.log(`🔄 Archiving conversation ${id}...`);
 
       const res = await submit({
-        url: `/conversation/archive/${id}`,
+        url: `/conversations/archive/${id}`,
         method: "PUT",
       });
 

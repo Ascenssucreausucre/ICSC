@@ -88,6 +88,7 @@ export default function AuthorDropdown({
       loading={loading}
       onFilter={handleFilter}
       emptyMessage={loading ? "Loading authors..." : "No authors found"}
+      virtualScrollerOptions={{ itemSize: 40 }}
     />
   );
 }

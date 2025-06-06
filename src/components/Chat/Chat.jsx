@@ -82,7 +82,7 @@ export default function Chat({
     setIsLoading(true);
     try {
       const res = await axios.post(
-        `${API_URL}/conversation/send-message/${conversationId}`,
+        `${API_URL}/conversations/send-message/${conversationId}`,
         { content: formMessage.trim() },
         { withCredentials: true }
       );
@@ -121,7 +121,7 @@ export default function Chat({
     e.preventDefault();
     try {
       const res = await axios.put(
-        `${API_URL}/conversation/toggle-throttling/${conversationId}`,
+        `${API_URL}/conversations/toggle-throttling/${conversationId}`,
         {},
         { withCredentials: true }
       );

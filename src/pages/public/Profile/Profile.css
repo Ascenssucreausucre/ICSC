@@ -1,11 +1,11 @@
 .update-profile-form {
   max-width: 400px;
-  margin-inline: auto;
+  margin: 1rem auto;
   padding: 1rem;
   color: white;
   background-color: var(--primary-color);
   border-radius: var(--border-radius);
-  filter: var(--drop-shadow);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 .update-profile-form .button {
   color: var(--secondary-color);

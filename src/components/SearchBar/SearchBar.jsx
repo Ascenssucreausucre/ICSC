@@ -1,8 +1,9 @@
 // components/SearchBar.js
 import { Search } from "lucide-react";
 import "./SearchBar.css";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 
-export default function SearchBar({ value, onChange, placeholder }) {
+export default function SearchBar({ value, onChange, placeholder, loading }) {
   return (
     <div className="searchbar">
       <Search />
@@ -12,6 +13,7 @@ export default function SearchBar({ value, onChange, placeholder }) {
         value={value}
         onChange={onChange}
       />
+      {loading && <LoadingScreen />}
     </div>
   );
 }

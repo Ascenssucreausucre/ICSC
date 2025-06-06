@@ -55,7 +55,7 @@ export default function ImportantDatesManager({ data, conference_id }) {
     openModal({
       initialData: importantDates,
       method: "PUT",
-      url: `/ImportantDates/update/${importantDates.conference_id}`,
+      url: `/important-dates/update/${importantDates.conference_id}`,
       title: `Edit important dates`,
       arg: true,
       refreshFunction: refresh,
@@ -66,7 +66,7 @@ export default function ImportantDatesManager({ data, conference_id }) {
     openModal({
       initialData: importantDatesTemplate,
       method: "POST",
-      url: `/ImportantDates/`,
+      url: `/important-dates/`,
       title: `Create important dates`,
       arg: true,
       refreshFunction: refresh,
@@ -75,7 +75,7 @@ export default function ImportantDatesManager({ data, conference_id }) {
 
   const handleDeleteDates = () => {
     submit({
-      url: `/ImportantDates/delete/${importantDates.conference_id}`,
+      url: `/important-dates/delete/${importantDates.conference_id}`,
       method: "DELETE",
     });
     setImportantDates(null);

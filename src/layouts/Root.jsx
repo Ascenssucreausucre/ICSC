@@ -20,7 +20,7 @@ function Root() {
   useEffect(() => {
     const fetchHeaderData = async () => {
       try {
-        const response = await fetch(`${API_URL}/front-routes/navbar-data`);
+        const response = await fetch(`${API_URL}/front/navbar-data`);
         const data = await response.json();
         setHeaderData(data);
       } catch (error) {
@@ -30,7 +30,7 @@ function Root() {
 
     const fetchFooterData = async () => {
       try {
-        const response = await fetch(`${API_URL}/front-routes/footer-data`);
+        const response = await fetch(`${API_URL}/front/footer-data`);
         const data = await response.json();
         setFooterData(data);
       } catch (error) {

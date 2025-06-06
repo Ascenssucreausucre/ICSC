@@ -23,3 +23,9 @@
 .searchbar input:focus {
   outline: none;
 }
+.searchbar .loading-container {
+  max-height: var(--font-size);
+}
+.searchbar .loading-container svg {
+  height: calc(var(--font-size) * 2);
+}
