@@ -4,7 +4,6 @@ import { Spin } from "hamburger-react";
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useUserAuth } from "../../context/UserAuthContext";
-const MotionNavLink = motion.create(NavLink);
 
 export default function NavBar({ data }) {
   const navigate = useNavigate();
@@ -42,40 +41,6 @@ export default function NavBar({ data }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const containerVariants = {
-    open: {
-      transition: {
-        delayChildren: 0.1,
-        staggerChildren: 0.1,
-      },
-    },
-    closed: {
-      transition: {
-        staggerChildren: 0.1,
-        staggerDirection: -1,
-      },
-    },
-  };
-
-  const linkVariants = {
-    open: {
-      // opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.3,
-        ease: "circOut",
-      },
-    },
-    closed: {
-      // opacity: 0,
-      x: "-150%",
-      transition: {
-        duration: 0.3,
-        ease: "easeIn",
-      },
-    },
-  };
-
   return (
     <nav>
       <h2 className="nav-title" onClick={() => navigate("/")}>
@@ -85,21 +50,19 @@ export default function NavBar({ data }) {
       <motion.div
         ref={navLinksRef}
         className={`nav-links ${isOpen ? "active" : ""}`}
-        variants={containerVariants}
         animate={isOpen ? "open" : "closed"}
         initial="closed"
       >
         {pages.map((page) => (
           <div key={page.name} className="nav-link-container">
-            <MotionNavLink
+            <NavLink
               to={page.link}
               className="nav-link"
-              variants={linkVariants}
               onClick={() => setIsOpen(false)}
               end={false}
             >
               {page.name}
-            </MotionNavLink>
+            </NavLink>
           </div>
         ))}
         <div className="button-container">

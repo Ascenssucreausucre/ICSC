@@ -17,7 +17,8 @@ import { Dropdown } from "primereact/dropdown";
 import availableCountriesList from "../../../assets/json/flag-countries.json";
 
 export default function Registration() {
-  const { registrationFees, importantDates, additionalFees } = useLoaderData();
+  const { registrationFees, importantDates, additionalFees, paymentOptions } =
+    useLoaderData();
   const { showFeedback } = useFeedback();
   const publicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
   const availableCountries = availableCountriesList;
@@ -32,9 +33,13 @@ export default function Registration() {
   const defaultFormData = {
     isAuthor: false,
     email: "",
-    // creditCardCountry: { name: "" },
+    creditCardCountry: { name: "", code: "" },
     pin: "",
+    ieeeMember: false,
+    student: false,
+    paypal: false,
     attendanceMode: "Face to face",
+    options: paymentOptions.filter((option) => option.price === 0),
   };
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(defaultFormData);
@@ -47,6 +52,7 @@ export default function Registration() {
     articlesPrice: 0,
     extraPages: 0,
     extraPagesPrice: 0,
+    optionsPrice: 0,
   });
   const [clientSecret, setClientSecret] = useState("");
   const [stepperLoading, setStepperLoading] = useState(false);
@@ -66,19 +72,15 @@ export default function Registration() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/authors/${id}`
       );
-      setFormData({
-        email: formData.email,
-        attendanceMode: formData.attendanceMode,
-        // creditCardCountry: formData.creditCardCountry,
-        isAuthor: formData.isAuthor,
-        pin: formData.pin,
-        student: false,
-        ieeeMember: false,
-        paypal: false,
+      setFormData((prev) => ({
+        ...prev,
         ...response.data,
-      });
+      }));
+      return true;
     } catch (error) {
-      return console.error("Erreur :", error);
+      console.error("Erreur :", error);
+      showFeedback("error", error.response.data.error);
+      return false;
     }
   };
 
@@ -128,10 +130,15 @@ export default function Registration() {
         console.error(`Articles can't have negative extra pages.`);
         return;
       }
-      dataToSend = { ...formData, articles: articlesToSend };
+      dataToSend = {
+        ...formData,
+        articles: articlesToSend,
+        creditCardCountry: formData.creditCardCountry.code,
+      };
     }
 
     try {
+      console.log(dataToSend);
       const res = await axios.post(
         import.meta.env.VITE_API_URL + "/front/payment",
         dataToSend,
@@ -195,7 +202,7 @@ export default function Registration() {
               disabled
               required
             /> */}
-            {/* <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <label
                 htmlFor="creditCardCountry"
                 style={{ marginBottom: "0.5rem" }}
@@ -242,8 +249,9 @@ export default function Registration() {
                   </div>
                 )}
                 style={{ minWidth: "200px" }}
+                virtualScrollerOptions={{ itemSize: 20 }}
               />
-            </div> */}
+            </div>
             <Input
               type="checkbox"
               label="I am an author"
@@ -302,21 +310,18 @@ export default function Registration() {
         }
 
         if (formData.isAuthor === true) {
-          fetchData(formData.pin);
+          const success = await fetchData(formData.pin);
+          if (!success) {
+            return false;
+          }
         } else {
-          setFormData({
+          setFormData((prev) => ({
+            ...prev,
             name: "",
             surname: "",
-            email: formData.email,
             country: "",
-            attendanceMode: formData.attendanceMode,
-            // creditCardCountry: formData.creditCardCountry,
-            isAuthor: formData.isAuthor,
             pin: null,
-            student: false,
-            ieeeMember: false,
-            paypal: false,
-          });
+          }));
         }
 
         formElement.requestSubmit(); // Ceci déclenche `onSubmit`
@@ -509,8 +514,8 @@ export default function Registration() {
     {
       title: "Step 4",
       description: formData.isAuthor
-        ? "Select the articles you want to submit."
-        : "Confirm your informations.",
+        ? "Select the articles you want to submit, and your options:"
+        : "Select your options:",
       content: formData.isAuthor ? (
         <>
           <p>
@@ -581,18 +586,62 @@ export default function Registration() {
             )}
           </div>
 
-          <h3>
-            Additional article price:{" "}
-            {selectedArticles.length <= freeArticle ? (
-              "-"
-            ) : (
-              <strong className="important-info">
-                {(selectedArticles.length - freeArticle) *
-                  additionalFees.additional_paper_fee}
-                €
-              </strong>
-            )}
-          </h3>
+          <div>
+            <p>Options :</p>
+            {paymentOptions.map((option) => (
+              <>
+                <Input
+                  type="checkbox"
+                  label={`${option.name} - ${
+                    option.price === 0 ? "Offered" : option.price + "€"
+                  }`}
+                  checked={formData.options.some((o) => o.id === option.id)}
+                  name={option.name}
+                  disabled={option.price === 0}
+                  onChange={(e) => {
+                    const isChecked = e.target.checked;
+
+                    setFormData((prev) => {
+                      const updatedOptions = isChecked
+                        ? [...prev.options, option]
+                        : prev.options.filter((o) => o.id !== option.id);
+
+                      console.log(updatedOptions);
+
+                      return {
+                        ...prev,
+                        options: updatedOptions,
+                      };
+                    });
+                  }}
+                />
+              </>
+            ))}
+          </div>
+
+          {(() => {
+            const additionalPrice =
+              Math.max(selectedArticles.length - freeArticle, 0) *
+                additionalFees.additional_paper_fee +
+              selectedArticles.reduce(
+                (sum, article) => sum + (Number(article.extraPages) || 0),
+                0
+              ) *
+                additionalFees.additional_page_fee +
+              formData.options.reduce(
+                (sum, option) => sum + (Number(option.price) || 0),
+                0
+              );
+
+            return (
+              <h3>
+                Additional price:{" "}
+                <strong className="important-info">
+                  {additionalPrice === 0 ? "-" : `${additionalPrice}€`}
+                </strong>
+              </h3>
+            );
+          })()}
         </>
       ) : (
         <>
@@ -655,6 +704,10 @@ export default function Registration() {
               : 0,
           extraPages: extraPages,
           extraPagesPrice: extraPages * additionalFees.additional_page_fee,
+          optionsPrice: formData.options.reduce(
+            (sum, option) => sum + (Number(option.price) || 0),
+            0
+          ),
         });
         console.log(formData);
         return true;
@@ -740,12 +793,35 @@ export default function Registration() {
               </table>
             </div>
           )}
+
+          <p>
+            <strong>Options: </strong>
+          </p>
+          {formData.options.map((option) => (
+            <p style={{ paddingLeft: "1rem" }}>
+              {option.name} -{" "}
+              <strong>
+                {option.price === 0 ? "Offered" : option.price + "€"}
+              </strong>
+            </p>
+          ))}
+          <p>
+            <strong>
+              TOTAL:{" "}
+              <span className="primary">
+                {paymentDetails.optionsPrice === 0
+                  ? "-"
+                  : paymentDetails.optionsPrice + "€"}
+              </span>
+            </strong>
+          </p>
           <h3 className="payment-details-total">
             TOTAL:{" "}
             <span className="important-info">
               {paymentDetails.price +
                 paymentDetails.articlesPrice +
-                paymentDetails.extraPagesPrice}
+                paymentDetails.extraPagesPrice +
+                paymentDetails.optionsPrice}
               €
             </span>
           </h3>

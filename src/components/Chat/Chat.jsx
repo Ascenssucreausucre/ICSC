@@ -93,9 +93,9 @@ export default function Chat({
       }
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message ||
+        error.response?.data?.error ||
         error.response?.data ||
-        error.message ||
+        error.error ||
         "Une erreur inattendue s’est produite.";
       console.error("[Message Error]", errorMessage);
       showErrorMessage(errorMessage);
