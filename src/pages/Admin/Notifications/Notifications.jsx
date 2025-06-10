@@ -52,10 +52,7 @@ export default function Notifications() {
       url: "/notifications/notify-all",
       data: {
         ...formData,
-        image:
-          formData.image.length > 0
-            ? formData.image
-            : "/images/template128.png",
+        image: formData.image.length > 0 ? formData.image : null,
         actions: actionsToSend,
       },
     });
