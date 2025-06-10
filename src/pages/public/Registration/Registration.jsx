@@ -978,7 +978,7 @@ export default function Registration() {
               <thead>
                 <tr>
                   <th>Option</th>
-                  <th>Included</th>
+                  <th>Description</th>
                   <th>Price</th>
                 </tr>
               </thead>
