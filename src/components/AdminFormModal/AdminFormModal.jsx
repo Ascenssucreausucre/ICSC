@@ -35,7 +35,6 @@ export default function AdminFormModal() {
           processedInitialData[key] = value;
         }
       }
-
       setFormData(processedInitialData);
       setConferenceId(conference_id || conferenceId);
     }
@@ -163,8 +162,7 @@ export default function AdminFormModal() {
         {modalData.subtitle && <p className="subtitle">{modalData.subtitle}</p>}
         <form onSubmit={handleSubmit}>
           {Object.keys(formData).map((key) => {
-            let value = formData[key] || "";
-
+            let value = formData[key] !== undefined ? formData[key] : "";
             if (Array.isArray(value)) {
               return (
                 <div key={key}>
@@ -245,7 +243,11 @@ export default function AdminFormModal() {
               key === "additional_file"
             ) {
               inputType = "file";
-            } else if (key === "content" || key === "text") {
+            } else if (
+              key === "content" ||
+              key === "text" ||
+              key === "description"
+            ) {
               inputType = "textarea";
             } else if (/color/i.test(key)) {
               inputType = "color";

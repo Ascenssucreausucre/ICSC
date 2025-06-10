@@ -12,6 +12,7 @@ export default function Notifications() {
     icon: "",
     badge: "",
     image: "",
+    userType: "",
   });
   const [loading, setLoading] = useState(false);
   const [actions, setActions] = useState([{ title: "", action: "", icon: "" }]);
@@ -65,6 +66,7 @@ export default function Notifications() {
     <section className="admin-section notification-section">
       <h1 className="title secondary">Notification sender</h1>
       <form className="notification-form" onSubmit={handleSubmit}>
+        <h3>Body</h3>
         <Input
           label="Title"
           placeholder="The notification's title"
@@ -105,7 +107,7 @@ export default function Notifications() {
           onChange={handleChange}
           type="url"
         />
-        <h3>Actions de notification</h3>
+        <h3>Actions</h3>
         <div className="actions-container">
           {actions.map((act, index) => (
             <div key={index} className="action-row">
@@ -146,6 +148,9 @@ export default function Notifications() {
         <button type="button" onClick={addAction} className="button small">
           + Ajouter une action
         </button>
+        <div>
+          <h3>Send to :</h3>
+        </div>
         <div className="button-container">
           <button className="button" formAction="submit" disabled={loading}>
             {loading ? "Submitting..." : "Send the notification"}

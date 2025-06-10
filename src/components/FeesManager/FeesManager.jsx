@@ -86,12 +86,12 @@ export default function FeesManager({
     refetch();
   };
 
-  const handleDeleteFees = (id) => {
-    setFeesData((prev) => prev.filter((fee) => fee.id !== id));
-    submit({
+  const handleDeleteFees = async (id) => {
+    await submit({
       url: `/Registration-fees/delete/${id}`,
       method: "DELETE",
     });
+    setFeesData((prev) => prev.filter((fee) => fee.id !== id));
   };
 
   const handleAddOption = async () => {
@@ -102,10 +102,35 @@ export default function FeesManager({
       initialData: {
         name: "",
         price: 0,
+        description: "",
         conference_id,
       },
       refreshFunction: refetch,
     });
+  };
+
+  const handleEditOption = async (data) => {
+    console.log(data);
+    openModal({
+      url: `/payment-options/${data.id}`,
+      method: "PUT",
+      title: "Edit this option",
+      initialData: {
+        name: data.name,
+        price: data.price,
+        description: data.description || "",
+        conference_id,
+      },
+      refreshFunction: refetch,
+    });
+  };
+
+  const handleDeleteOption = async (id) => {
+    await submit({
+      url: `/payment-options/${id}`,
+      method: "DELETE",
+    });
+    refetch();
   };
 
   return (
@@ -202,14 +227,30 @@ export default function FeesManager({
       <div className="payment-options-container">
         {paymentOptions.map((option) => (
           <div className="card payment-option" key={option.id}>
-            <h3 className="card-title secondary">{option.name}</h3>
-            <h3 className="card-title primary">
-              {option.price === 0
-                ? "Offered with registration"
-                : option.price + "€"}
-            </h3>
+            <div className="card-header">
+              <h3 className="card-title secondary">{option.name}</h3>
+              <span
+                className={`tag${
+                  option.price === 0 ? " free-option" : " chargeable-option"
+                }`}
+              >
+                {option.price === 0
+                  ? "Offered with registration"
+                  : option.price + "€"}
+              </span>
+            </div>
+            {option.description ? (
+              <p>{option.description}</p>
+            ) : (
+              <p className="data-detail">No description for this option.</p>
+            )}
             <div className="button-container">
-              <button className="button small">Edit</button>
+              <button
+                className="button small"
+                onClick={() => handleEditOption(option)}
+              >
+                Edit
+              </button>
               <button className="button small">Delete</button>
             </div>
           </div>

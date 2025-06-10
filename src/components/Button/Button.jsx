@@ -13,6 +13,7 @@ export default function Button({
       className={`button ${className} p-ripple`}
       onClick={onClick}
       disabled={disabled}
+      style={{ marginBlock: "1rem" }}
       {...props}
     >
       {text}

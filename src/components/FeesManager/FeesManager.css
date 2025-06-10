@@ -6,3 +6,20 @@
   filter: var(--card-drop-shadow);
   padding-inline: 5px;
 }
+.tag.chargeable-option {
+  background-color: #1c7e24;
+  color: white;
+  margin: 0;
+  font-weight: 900;
+}
+.tag.free-option {
+  background-color: rgb(255, 255, 255);
+  color: var(--primary-color);
+  margin: 0;
+  outline: solid 1px var(--primary-color);
+}
+.card.payment-option .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

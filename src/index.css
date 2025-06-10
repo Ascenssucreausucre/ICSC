@@ -269,7 +269,6 @@ a.link:not(.card-title) {
   font-size: var(--card-title-font-size);
 }
 .data-detail {
-  font-size: 0.8rem;
   font-style: italic;
   color: gray;
 }

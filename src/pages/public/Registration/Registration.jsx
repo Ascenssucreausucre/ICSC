@@ -115,7 +115,10 @@ export default function Registration() {
 
   const handleSubmit = async () => {
     setStepperLoading(true);
-    let dataToSend = formData;
+    let dataToSend = {
+      ...formData,
+      creditCardCountry: formData.creditCardCountry.code,
+    };
     if (formData.isAuthor) {
       const articlesToSend = articles.filter(
         (article) => article.submit !== false
@@ -516,75 +519,79 @@ export default function Registration() {
       description: formData.isAuthor
         ? "Select the articles you want to submit, and your options:"
         : "Select your options:",
-      content: formData.isAuthor ? (
+      content: (
         <>
-          <p>
-            You can submit a maximum of{" "}
-            <strong className="important-info">{maxArticles}</strong> articles
-            of which you are an author or a co-author. Each additional article
-            will be factured{" "}
-            <strong className="important-info">
-              {additionalFees.additional_paper_fee}€
-            </strong>
-            , and each extra page will be factured{" "}
-            <strong className="important-info">
-              {additionalFees.additional_page_fee}€
-            </strong>
-            .
-          </p>
-          <div className="articles-container">
-            {articles ? (
-              articles.map(
-                (article) =>
-                  article.status.toLowerCase() === "accepted" && (
-                    <div key={article.id} className="form-article">
-                      <Input
-                        type="checkbox"
-                        label={article.title}
-                        name={article.id}
-                        checked={article.submit === true}
-                        onChange={() =>
-                          handleArticleChange({
-                            ...article,
-                            submit: !article.submit,
-                          })
-                        }
-                        disabled={
-                          selectedArticles.length >= maxArticles &&
-                          article.submit === false
-                        }
-                      />
-                      {article.submit && (
-                        <div className="form-extra-pages-container">
+          {formData.isAuthor && (
+            <>
+              <p>
+                You can submit a maximum of{" "}
+                <strong className="important-info">{maxArticles}</strong>{" "}
+                articles of which you are an author or a co-author. Each
+                additional article will be factured{" "}
+                <strong className="important-info">
+                  {additionalFees.additional_paper_fee}€
+                </strong>
+                , and each extra page will be factured{" "}
+                <strong className="important-info">
+                  {additionalFees.additional_page_fee}€
+                </strong>
+                .
+              </p>
+              <div className="articles-container">
+                {articles ? (
+                  articles.map(
+                    (article) =>
+                      article.status.toLowerCase() === "accepted" && (
+                        <div key={article.id} className="form-article">
                           <Input
-                            label="Extra pages"
-                            value={article.extraPages}
-                            type="number"
-                            name={`extra-pages-${article.id}`}
-                            onChange={(e) =>
+                            type="checkbox"
+                            label={article.title}
+                            name={article.id}
+                            checked={article.submit === true}
+                            onChange={() =>
                               handleArticleChange({
                                 ...article,
-                                extraPages: e.target.value,
+                                submit: !article.submit,
                               })
                             }
+                            disabled={
+                              selectedArticles.length >= maxArticles &&
+                              article.submit === false
+                            }
                           />
-                          {article.extraPages > 0 && (
-                            <p>
-                              +
-                              {article.extraPages *
-                                additionalFees.additional_page_fee}
-                              €
-                            </p>
+                          {article.submit && (
+                            <div className="form-extra-pages-container">
+                              <Input
+                                label="Extra pages"
+                                value={article.extraPages}
+                                type="number"
+                                name={`extra-pages-${article.id}`}
+                                onChange={(e) =>
+                                  handleArticleChange({
+                                    ...article,
+                                    extraPages: e.target.value,
+                                  })
+                                }
+                              />
+                              {article.extraPages > 0 && (
+                                <p>
+                                  +
+                                  {article.extraPages *
+                                    additionalFees.additional_page_fee}
+                                  €
+                                </p>
+                              )}
+                            </div>
                           )}
                         </div>
-                      )}
-                    </div>
+                      )
                   )
-              )
-            ) : (
-              <p>Error retreiving articles.</p>
-            )}
-          </div>
+                ) : (
+                  <p>Error retreiving articles.</p>
+                )}
+              </div>
+            </>
+          )}
 
           <div>
             <p>Options :</p>
@@ -642,23 +649,6 @@ export default function Registration() {
               </h3>
             );
           })()}
-        </>
-      ) : (
-        <>
-          {Object.keys(formData).map((key) => {
-            let value = formData[key];
-            if (typeof value === "boolean") {
-              value = value ? "Yes" : "No";
-            }
-            return (
-              value &&
-              key !== "isAuthor" && (
-                <p key={key}>
-                  <strong>{formatLabel(key)}</strong>: {value}
-                </p>
-              )
-            );
-          })}
         </>
       ),
       next: !formData.isAuthor && "Confirm",
@@ -917,7 +907,7 @@ export default function Registration() {
           <p>
             In order to register, you will have some registration fees to pay.
           </p>
-          <h2 className="secondary">Good to know :</h2>
+          <h3 className="secondary">Good to know :</h3>
           <ul>
             <li>
               <ArrowRight size={iconSize} color="var(--primary-color)" />
@@ -971,12 +961,55 @@ export default function Registration() {
             coming later.
           </p>
         )}
+      </section>
+      {paymentOptions.length > 0 && (
+        <section>
+          <div className="text-container">
+            <h3 className="secondary">
+              You can also chose up to{" "}
+              <span className="important-info">{paymentOptions.length}</span>{" "}
+              option(s) :
+            </h3>
+            <p>
+              Options can be at your charge, but some can be included in a
+              registration.
+            </p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Option</th>
+                  <th>Included</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paymentOptions.map((option) => {
+                  const isIncluded = option.price === 0;
+                  return (
+                    <tr>
+                      <td>{option.name}</td>
+                      <td>{option?.description ? option.description : "-"}</td>
+                      <td style={{ color: isIncluded ? "gray" : "black" }}>
+                        {isIncluded ? "Included" : `${option.price}€`}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+      <div
+        className="button-container"
+        style={{ justifyContent: "space-around" }}
+      >
         <Button
           text="Register to the conference"
           onClick={setShowForm}
           disabled={!additionalFees || !registrationFees}
         />
-      </section>
+      </div>
     </>
   );
 }
