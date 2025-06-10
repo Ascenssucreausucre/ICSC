@@ -1,4 +1,3 @@
-// Nom du cache et ressources à mettre en cache initialement
 const CACHE_NAME = "icsc-cache-v2";
 const urlsToCache = [
   "/",
@@ -7,7 +6,7 @@ const urlsToCache = [
   "/manifest.json",
 ];
 
-// Installation du service worker et mise en cache des ressources
+// SW's installation
 self.addEventListener("install", (event) => {
   console.log("Service Worker: Installing...");
   event.waitUntil(
@@ -17,11 +16,11 @@ self.addEventListener("install", (event) => {
         console.log("Service Worker: Caching files...");
         return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting()) // Force l'activation sans attendre la fermeture des onglets
+      .then(() => self.skipWaiting())
   );
 });
 
-// Activation du service worker et suppression des anciens caches
+// SW's activation and deletion of the old versions
 self.addEventListener("activate", (event) => {
   console.log("Service Worker: Activating...");
   const cacheWhitelist = [CACHE_NAME];
@@ -43,14 +42,13 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Stratégie de récupération des ressources : Cache First, puis réseau
+// Caching fetch request
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
         const cloned = response.clone();
 
-        // Cache seulement les requêtes GET réussies
         if (event.request.method === "GET" && response.status === 200) {
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, cloned);
@@ -67,22 +65,13 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Optionnel : fonction de fallback
-function fetchFallbackPage(request) {
-  if (request.destination === "document") {
-    return caches.match("/offline.html"); // si tu en as une
-  }
-  return Response.error(); // ou rien
-}
-
-// Gestion des push notifications
+// Push notifications
 self.addEventListener("push", (event) => {
   let payload = {};
   if (event.data) {
     try {
       payload = event.data.json();
     } catch (err) {
-      // Si ce n'est pas du JSON, le traiter comme du texte simple
       payload = { title: "Notification", body: event.data.text() };
     }
   }
@@ -91,7 +80,7 @@ self.addEventListener("push", (event) => {
     title = "Notification",
     body = "",
     icon = "./images/template128.png",
-    badge = "./images/template128.png",
+    badge = "./images/default-badge.svg",
     image,
     vibrate,
     tag,
@@ -113,14 +102,14 @@ self.addEventListener("push", (event) => {
     ...(url && { url }),
     ...(renotify === true || renotify === false ? { renotify } : {}),
     ...(Array.isArray(actions) && actions.length ? { actions } : {}),
-    data: data || {}, // tu récupères tout ce que tu as passé côté API
-    ...others, // propagation de tout nouveau champ non listé
+    data: data || {},
+    ...others,
   };
 
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Action au clic sur la notification
+// On notification clic
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
@@ -128,13 +117,13 @@ self.addEventListener("notificationclick", (event) => {
   const { url, ...rest } = clickData;
 
   // Exemples de traitement possible :
-  // – Ouvrir une URL
-  // – Envoyer un fetch vers ton API pour tracker le clic
-  // – Brancher un BroadcastChannel…
+  // – open an URL
+  // – Send a request to API to track clics
+  // – Plug-in BroadcastChannel…
 
   const promiseChain = (async () => {
     if (rest.clickTrackUrl) {
-      // si tu passes un endpoint pour le tracking dans data.clickTrackUrl
+      // if there's an endpoint for tracking with data.clickTrackUrl
       await fetch(rest.clickTrackUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -150,7 +139,6 @@ self.addEventListener("notificationclick", (event) => {
   event.waitUntil(promiseChain);
 });
 
-// Gestion des synchronisations en arrière-plan (existant)
 self.addEventListener("sync", (event) => {
   if (event.tag === "sync-data") {
     event.waitUntil(syncData());
