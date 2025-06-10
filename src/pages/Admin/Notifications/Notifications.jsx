@@ -52,6 +52,8 @@ export default function Notifications() {
       url: "/notifications/notify-all",
       data: {
         ...formData,
+        badge: formData.badge.length > 0 ? formData.badge : null,
+        icon: formData.icon.length > 0 ? formData.icon : null,
         image: formData.image.length > 0 ? formData.image : null,
         actions: actionsToSend,
       },

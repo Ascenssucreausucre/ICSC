@@ -94,9 +94,9 @@ self.addEventListener("push", (event) => {
   const options = {
     body,
     // Only include if defined
-    ...(icon && { icon }),
-    ...(badge && { badge }),
-    ...(image && { image }),
+    ...(icon.length > 0 && { icon }),
+    ...(badge.length > 0 && { badge }),
+    ...(image.length > 0 && { image }),
     ...(vibrate && { vibrate }),
     ...(tag && { tag }),
     ...(url && { url }),
