@@ -201,7 +201,7 @@ export default function FeesManager({
       <h2 className="title secondary">Options</h2>
       <div className="payment-options-container">
         {paymentOptions.map((option) => (
-          <div className="card payment-option">
+          <div className="card payment-option" key={option.id}>
             <h3 className="card-title secondary">{option.name}</h3>
             <h3 className="card-title primary">
               {option.price === 0
