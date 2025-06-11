@@ -1,0 +1,4 @@
+.contact-card svg {
+  height: var(--font-size);
+  color: var(--secondary-color);
+}

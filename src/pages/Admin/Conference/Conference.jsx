@@ -17,6 +17,7 @@ import VerticalMenu from "../../../components/VerticalMenu/VerticalMenu";
 
 import "./Conference.css";
 import LocalInformationsManager from "../../../components/LocalInformationsManager/LocalInformationsManager";
+import ContactManager from "../../../components/ContactManager/ContactManager";
 
 export default function Conference() {
   const { id } = useParams();
@@ -113,6 +114,12 @@ export default function Conference() {
                   conference_id={conferenceData.conference.id}
                 />
               </div>
+
+              <ContactManager
+                contacts={conferenceData.contacts}
+                conference_id={conferenceData.conference.id}
+                refetch={refetch}
+              />
 
               <div ref={newsRef}>
                 <NewsManager news={conferenceData.news} />

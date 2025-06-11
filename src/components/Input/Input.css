@@ -2,12 +2,12 @@
 .input-group {
   margin-block: 20px;
 }
-.form-input input,
+.form-input .form-control,
 .form-input textarea {
   border: solid rgba(128, 128, 128, 0.37) 1px;
   margin-block-start: 5px;
   font-size: var(--font-size);
-  padding: 10px 20px;
+  padding: clamp(2px, 2vw, 10px) clamp(4px, 4vw, 20px);
   background-color: white;
   width: 100%;
   max-width: 100%;
@@ -17,15 +17,11 @@
   transition: outline 0.2s ease-out, box-shadow 0.2s ease-out,
     color 0.2s ease-out, border 0.2s ease-out;
 }
-.form-input input[type="tel"] {
-  width: 60px;
-  padding-inline: 5px;
-}
 .form-input input:disabled {
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
   cursor: text;
 }
-.form-input input:hover {
+.form-input .form-control:hover {
   border: solid var(--primary-color) 1px;
 }
 .form-input input:focus-visible {
@@ -60,4 +56,34 @@ label {
 
 .form-input.checkbox label {
   font-weight: bold;
+}
+.form-input .form-control.PhoneInput {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: unset;
+}
+.form-input .PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  padding: clamp(2px, 2vw, 10px) clamp(4px, 4vw, 20px);
+  border-right: solid rgba(128, 128, 128, 0.507) 2px;
+}
+.form-input .PhoneInputCountry select {
+  font-size: var(--font-size);
+  background-color: unset;
+  border: none;
+  max-width: 100px;
+}
+.form-input .PhoneInputCountry svg {
+  display: none;
+}
+.form-input .PhoneInput input {
+  width: unset;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: clamp(2px, 2vw, 10px) clamp(4px, 4vw, 20px);
+  border-radius: inherit;
+  flex: 1;
 }

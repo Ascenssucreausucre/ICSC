@@ -13,6 +13,7 @@
  * @param {number} [caractereMax] - Nombre maximum de caractères pour l'input
  */
 import "./Input.css";
+import PhoneInputWithCountrySelect from "react-phone-number-input";
 export function Input({
   placeholder = "",
   value,
@@ -81,6 +82,23 @@ export function Input({
           className="form-control"
           rows={5} // Nombre de lignes visibles par défaut
         ></textarea>
+      ) : type === "tel" ? (
+        <PhoneInputWithCountrySelect
+          {...props}
+          international
+          id={inputId ? inputId : name}
+          type={type}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          style={style}
+          required={required}
+          disabled={disabled}
+          {...numberProps}
+          pattern={pattern}
+          className="form-control"
+        />
       ) : (
         <input
           {...props}

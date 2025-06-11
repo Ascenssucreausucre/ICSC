@@ -40,6 +40,8 @@ export default function AdminFormModal() {
     }
   }, [modalData]);
 
+  console.log(formData);
+
   useEffect(() => {
     if (!modalData?.initialData) return;
 
@@ -59,14 +61,28 @@ export default function AdminFormModal() {
 
   if (!modalData) return null;
 
-  const handleChange = (e) => {
-    const { name, type, files, value } = e.target;
+  const handleChange = (eOrValue, maybeName) => {
+    if (eOrValue && eOrValue.target) {
+      const { name, type, files, value } = eOrValue.target;
+      if (!name) return;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]:
-        type === "file" ? files[0] : type === "number" ? Number(value) : value,
-    }));
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]:
+          type === "file"
+            ? files[0]
+            : type === "number"
+            ? Number(value)
+            : value,
+      }));
+    } else if (maybeName) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [maybeName]: eOrValue,
+      }));
+    } else {
+      console.warn("handleChange was called without a valid name.");
+    }
   };
 
   const handleObjectArrayChange = (key, index, field, value) => {
@@ -163,6 +179,7 @@ export default function AdminFormModal() {
         <form onSubmit={handleSubmit}>
           {Object.keys(formData).map((key) => {
             let value = formData[key] !== undefined ? formData[key] : "";
+
             if (Array.isArray(value)) {
               return (
                 <div key={key}>
@@ -249,6 +266,10 @@ export default function AdminFormModal() {
               key === "description"
             ) {
               inputType = "textarea";
+            } else if (key === "tel") {
+              inputType = "tel";
+            } else if (key === "email") {
+              inputType = "email";
             } else if (/color/i.test(key)) {
               inputType = "color";
             }
@@ -257,8 +278,8 @@ export default function AdminFormModal() {
               <Input
                 key={key}
                 name={key}
-                onChange={handleChange}
-                value={inputType === "file" ? undefined : value}
+                onChange={(val) => handleChange(val, key)}
+                value={inputType === "file" ? undefined : formData[key] || ""}
                 placeholder={formatLabel(key)}
                 label={formatLabel(key)}
                 type={inputType}
