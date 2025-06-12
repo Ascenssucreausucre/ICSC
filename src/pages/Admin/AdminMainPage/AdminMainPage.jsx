@@ -1,10 +1,16 @@
 import { Link, useLoaderData } from "react-router-dom";
 import ConferenceCard from "../../../components/ConferenceCard/ConferenceCard";
 import "./AdminMainPage.css";
+import useFetch from "../../../hooks/useFetch";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function AdminMainPage() {
-  const currentConference = useLoaderData();
+  // const currentConference = useLoaderData();
+  const { data: currentConference, loading } = useFetch("/conferences/current");
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <section className="admin-dashboard admin-section">

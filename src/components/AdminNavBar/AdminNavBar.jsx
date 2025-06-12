@@ -51,7 +51,7 @@ export default function AdminNavBar() {
   }, [isOpen]);
 
   return (
-    <nav className="admin-nav">
+    <nav className="admin-nav nav-bar">
       <h2 className="nav-title" onClick={() => navigate("/admin")}>
         ICSC Dashboard
       </h2>

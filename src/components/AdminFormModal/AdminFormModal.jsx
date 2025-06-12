@@ -40,8 +40,6 @@ export default function AdminFormModal() {
     }
   }, [modalData]);
 
-  console.log(formData);
-
   useEffect(() => {
     if (!modalData?.initialData) return;
 
