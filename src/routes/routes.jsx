@@ -29,6 +29,9 @@ import Support from "../pages/Admin/Support/Support";
 import Conversation from "../pages/Admin/Conversation/Conversation";
 import Users from "../pages/Admin/Users/Users";
 import User from "../pages/Admin/User/User";
+import Terms from "../pages/public/GTU/Terms";
+import Cookies from "../pages/public/GTU/Cookies";
+import Privacy from "../pages/public/GTU/Privacy";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -42,6 +45,7 @@ const router = createBrowserRouter([
         </UserAuthProvider>
       </FeedbackProvider>
     ),
+    loader: () => fetch(`${API_URL}/front/public-data`),
     errorElement: <CustomErrorPage />,
     children: [
       {
@@ -89,6 +93,18 @@ const router = createBrowserRouter([
       {
         path: "sign-up",
         element: <SignUp />,
+      },
+      {
+        path: "terms",
+        element: <Terms />,
+      },
+      {
+        path: "cookies",
+        element: <Cookies />,
+      },
+      {
+        path: "privacy",
+        element: <Privacy />,
       },
     ],
   },

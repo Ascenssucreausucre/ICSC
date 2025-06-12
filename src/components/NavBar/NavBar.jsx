@@ -42,7 +42,7 @@ export default function NavBar({ data }) {
   }, [isOpen]);
 
   return (
-    <nav>
+    <nav className="nav-bar">
       <h2 className="nav-title" onClick={() => navigate("/")}>
         {data.acronym + " " + data.year}
       </h2>

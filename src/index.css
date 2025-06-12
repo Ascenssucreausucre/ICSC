@@ -533,3 +533,6 @@ a {
   text-overflow: ellipsis;
   width: 100%;
 }
+.markdown-body {
+  padding-block: 2rem;
+}

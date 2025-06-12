@@ -1,4 +1,4 @@
-nav {
+nav.nav-bar {
   height: var(--nav-bar-height);
   width: 100vw;
   padding-inline: clamp(20px, 10% - 5rem, 200px);

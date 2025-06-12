@@ -119,6 +119,9 @@ export default function AdminFormModal() {
       ) {
         processedData[key] = new Date(processedData[key]).toISOString();
       }
+      if (!processedData[key]) {
+        processedData[key] = undefined;
+      }
     }
 
     let dataToSend;
