@@ -1,10 +1,12 @@
 import "./RegistrationFeesTable.css";
 
 export default function RegistrationFeesTable({ data }) {
+  const formatText = (text) =>
+    String(text).charAt(0).toUpperCase() + String(text).slice(1);
   return (
     <div className="fees-table">
       <div key={data.id} className="region">
-        <h2>{data.description}</h2>
+        <h2>{formatText(data.description)}</h2>
         <table>
           <thead>
             <tr>

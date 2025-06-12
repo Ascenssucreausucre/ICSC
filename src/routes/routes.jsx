@@ -138,7 +138,6 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <AdminMainPage />,
-            loader: () => fetch(`${API_URL}/conferences/current`),
           },
           {
             path: "conferences",
