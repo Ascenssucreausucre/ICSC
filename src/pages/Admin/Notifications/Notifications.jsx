@@ -92,7 +92,7 @@ export default function Notifications() {
         />
         <Input
           label="Badge URL"
-          placeholder="The url of a transparent svg"
+          placeholder="The url of a transparent svg, which will be displayed in the mobile phone's taskbar."
           name="badge"
           value={formData.badge}
           onChange={handleChange}
