@@ -108,6 +108,14 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
     return null;
   }
 
+  console.log({
+    subscribeUserToPush,
+    getNotificationPermissionStatus,
+    syncPushSubscriptionWithServer,
+    isAppleDevice,
+    isRunningAsPWA,
+  });
+
   const showNotificationButton =
     permission === "default" && !pushSubscription && isRunningAsPWA();
   const showActions = showNotificationButton || showInstallButton;
