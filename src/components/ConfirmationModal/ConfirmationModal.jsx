@@ -1,20 +1,18 @@
+import { useAdminModal } from "../../context/AdminModalContext";
 import "./ConfirmationModal.css";
 
 import { motion } from "framer-motion";
 
-export default function ConfirmationModal({
-  handleAction,
-  text,
-  textAction = "Delete",
-  unShow,
-}) {
-  const handleUnShow = () => {
-    unShow(false);
-  };
+export default function ConfirmationModal() {
+  const { confirmationModalData, closeConfirmationModal } = useAdminModal();
+
   const handleActionUnShow = () => {
-    handleAction();
-    unShow(false);
+    confirmationModalData.handleAction();
+    closeConfirmationModal();
   };
+  if (!confirmationModalData) {
+    return null;
+  }
   return (
     <motion.div
       className="modal-overlay"
@@ -30,12 +28,12 @@ export default function ConfirmationModal({
         exit={{ y: 100, opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h2>{text}</h2>
+        <h2>{confirmationModalData.text}</h2>
         <div className="button-container">
           <button className="button" onClick={handleActionUnShow}>
-            {textAction}
+            {confirmationModalData.textAction || "Delete"}
           </button>
-          <button onClick={handleUnShow} className="cancel-button">
+          <button onClick={closeConfirmationModal} className="cancel-button">
             Cancel
           </button>
         </div>

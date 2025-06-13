@@ -1,13 +1,10 @@
 import { FileCheck2, LucideUnlink, LinkIcon, FileX2 } from "lucide-react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminModal } from "../../context/AdminModalContext";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
 
 export default function WorkshopManager({ data, conference_id, refetch }) {
-  const [confirmation, setConfirmation] = useState();
-  const { openModal } = useAdminModal();
+  const { openModal, openConfirmationModal } = useAdminModal();
   const { submit } = useSubmit();
 
   const formatDate = (date, country = "en-US", props) => {
@@ -72,13 +69,6 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
 
   return (
     <section className="admin-section">
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => handleDelete(confirmation.id)}
-          text={`Are you sure to delete workshop ${confirmation.title} ?`}
-          unShow={() => setConfirmation(null)}
-        />
-      )}
       <h2 className="title secondary">Workshops</h2>
       {data && data.length > 0 ? (
         <div className="workshops-container">
@@ -140,7 +130,12 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
                 </button>
                 <button
                   className="button small"
-                  onClick={() => setConfirmation(workshop)}
+                  onClick={() =>
+                    openConfirmationModal({
+                      text: "Are you sure to delete this workshop ?",
+                      handleAction: () => handleDelete(workshop.id),
+                    })
+                  }
                 >
                   Delete
                 </button>

@@ -1,6 +1,5 @@
 // utils/pushNotifications.js
 
-// Vérifie si les push notifications sont supportées par le navigateur
 export const isPushNotificationSupported = () => {
   return (
     "serviceWorker" in navigator &&
@@ -9,7 +8,6 @@ export const isPushNotificationSupported = () => {
   );
 };
 
-// Vérifie si l'appareil est un appareil Apple (iOS ou macOS avec écran tactile)
 export const isAppleDevice = () => {
   return (
     /iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -17,7 +15,6 @@ export const isAppleDevice = () => {
   );
 };
 
-// Conversion de la clé VAPID
 function urlBase64ToUint8Array(base64String) {
   try {
     const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -31,47 +28,27 @@ function urlBase64ToUint8Array(base64String) {
     return new Uint8Array();
   }
 }
-
-// Demande la permission de notifications et retourne le statut
-export const requestNotificationPermission = async () => {
-  try {
-    const permission = await Notification.requestPermission();
-    return permission;
-  } catch (err) {
-    console.error("Erreur lors de la demande de permission:", err);
-    return "denied";
-  }
-};
-
-// Vérifie l'état actuel des permissions de notification
-export const getNotificationPermissionStatus = () => {
-  return typeof Notification !== "undefined"
-    ? Notification.permission
-    : "unsupported";
-};
-
-// S'abonne aux notifications push
 export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
   if (!vapidPublicKey) {
-    console.error("Clé VAPID manquante");
+    console.error("No VAPID key.");
     return null;
   }
 
   if (!isPushNotificationSupported()) {
-    console.warn("Notifications push non supportées par ce navigateur.");
+    console.warn("Push notifications are not supported by this browser.");
     return null;
   }
 
   if (isAppleDevice() && !isRunningAsPWA()) {
     console.warn(
-      "Les notifications push ne sont disponibles sur iOS que pour les PWA installées."
+      "Push notifications on iOS are only available for installed PWAs."
     );
     return null;
   }
 
   const permission = await requestNotificationPermission();
   if (permission !== "granted") {
-    console.warn("Permission de notification refusée");
+    console.warn("Notification permission denied.");
     return null;
   }
 
@@ -83,32 +60,54 @@ export const subscribeUserToPush = async (vapidPublicKey, apiUrl) => {
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
     });
 
+    // Try to register on the server
     if (apiUrl) {
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        body: JSON.stringify(subscription),
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      try {
+        const res = await fetch(apiUrl, {
+          method: "POST",
+          body: JSON.stringify(subscription),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
 
-      if (!res.ok) {
-        console.error(
-          "Échec de l'enregistrement de la subscription sur le serveur."
-        );
+        if (!res.ok) {
+          console.error("Failed to register subscription on the server.");
+          await subscription.unsubscribe(); // Cleanup
+          return null;
+        }
+      } catch (err) {
+        console.error("Network error while registering subscription:", err);
+        await subscription.unsubscribe(); // Cleanup
+        return null;
       }
     }
 
     return subscription;
   } catch (error) {
-    console.error("Erreur lors de l'abonnement aux notifications:", error);
+    console.error("Error during push subscription:", error);
     return null;
   }
 };
 
-// Vérifie si l'utilisateur est déjà abonné aux notifications push
+export const requestNotificationPermission = async () => {
+  try {
+    const permission = await Notification.requestPermission();
+    return permission;
+  } catch (err) {
+    console.error("Erreur lors de la demande de permission:", err);
+    return "denied";
+  }
+};
+
+export const getNotificationPermissionStatus = () => {
+  return typeof Notification !== "undefined"
+    ? Notification.permission
+    : "unsupported";
+};
+
 export const checkPushSubscription = async () => {
   if (!isPushNotificationSupported()) {
-    console.warn("Push non supporté.");
+    console.warn("Push are unsupported for your device.");
     return null;
   }
 
@@ -122,6 +121,32 @@ export const checkPushSubscription = async () => {
   }
 };
 
+export const syncPushSubscriptionWithServer = async () => {
+  const localSub = await checkPushSubscription();
+
+  if (!localSub) return null;
+
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/notifications/status`,
+      {
+        credentials: "include",
+      }
+    );
+    const data = await res.json();
+
+    if (!data.subscribed) {
+      await localSub.unsubscribe();
+      return null;
+    }
+
+    return localSub;
+  } catch (err) {
+    console.error("Failed to sync subscription with server:", err);
+    return localSub; // Fallback to local if server fails
+  }
+};
+
 export const isRunningAsPWA = () => {
   return (
     window.matchMedia("(display-mode: standalone)").matches ||
@@ -129,7 +154,6 @@ export const isRunningAsPWA = () => {
   );
 };
 
-// Exporte les fonctions principales et l'utilitaire
 export default {
   subscribeUserToPush,
   requestNotificationPermission,

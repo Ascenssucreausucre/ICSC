@@ -5,6 +5,7 @@ import AdminFormModal from "../components/AdminFormModal/AdminFormModal";
 import "./admin.css";
 import { Helmet } from "react-helmet";
 import NavigationProgress from "../components/NavigationProgress/NavigationProgress";
+import ConfirmationModal from "../components/ConfirmationModal/ConfirmationModal";
 
 function AdminRoot() {
   return (
@@ -18,6 +19,7 @@ function AdminRoot() {
           <NavigationProgress />
           <Feedback />
           <AdminFormModal />
+          <ConfirmationModal />
           <Outlet />
         </main>
       </div>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import "./Article.css";
 import { Clock, CheckCircle, XCircle } from "lucide-react";
+import { useAdminModal } from "../../context/AdminModalContext";
 
 export default function Article({
   article,
@@ -12,6 +13,7 @@ export default function Article({
   selectedStatusTemplate,
   isStatusUpToDate,
   handleUpdateArticle,
+  handleDeleteArticle,
   handleSetStatus,
 }) {
   const statusIcons = {
@@ -19,7 +21,7 @@ export default function Article({
     accepted: { Icon: CheckCircle, className: "icon-accepted" },
     rejected: { Icon: XCircle, className: "icon-rejected" },
   };
-
+  const { openConfirmationModal } = useAdminModal();
   const { Icon, className } = statusIcons[article.status.toLowerCase()] || {};
   const formatText = (text) =>
     String(text).charAt(0).toUpperCase() + String(text).slice(1);
@@ -94,7 +96,12 @@ export default function Article({
           </button>
           <button
             className="button small"
-            onClick={() => setConfirmation({ confirm: true, id: article.id })}
+            onClick={() =>
+              openConfirmationModal({
+                text: "Are you sure to delete this article ?",
+                handleAction: () => handleDeleteArticle(article.id),
+              })
+            }
           >
             Delete
           </button>

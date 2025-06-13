@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SpecialSessionModal from "../SpecialSessionModal/SpecialSessionModal";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
+import { useAdminModal } from "../../context/AdminModalContext";
 
 export default function SpecialSessionManager({
   conference_id,
@@ -10,9 +10,9 @@ export default function SpecialSessionManager({
 }) {
   const [formData, setFormData] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
-  const [confirmation, setConfirmation] = useState();
 
   const { submit } = useSubmit();
+  const { openConfirmationModal } = useAdminModal();
 
   const handleCreateSession = (e) => {
     e.preventDefault;
@@ -45,13 +45,6 @@ export default function SpecialSessionManager({
           refetch={refetch}
         />
       )}
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => confirmation()}
-          unShow={() => setConfirmation(null)}
-          text="Are you sure to delete this Special Session ?"
-        />
-      )}
       <h2 className="secondary title">Special Session</h2>
       <div className="session-container">
         {data && data.length > 0 ? (
@@ -79,7 +72,10 @@ export default function SpecialSessionManager({
                 <button
                   className="button small"
                   onClick={() =>
-                    setConfirmation(() => () => handleDeleteSession(session.id))
+                    openConfirmationModal({
+                      text: "Are you sure to delete this special session ?",
+                      handleAction: () => handleDeleteSession(session.id),
+                    })
                   }
                 >
                   Delete

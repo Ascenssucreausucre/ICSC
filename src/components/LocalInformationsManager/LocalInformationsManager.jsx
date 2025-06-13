@@ -2,7 +2,6 @@ import { useAdminModal } from "../../context/AdminModalContext";
 import { FileCheck2, LucideUnlink, LinkIcon, FileX2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
 
 export default function LocalInformationsManager({
@@ -10,8 +9,7 @@ export default function LocalInformationsManager({
   refetch,
   conference_id,
 }) {
-  const [confirmation, setConfirmation] = useState(null);
-  const { openModal } = useAdminModal();
+  const { openModal, openConfirmationModal } = useAdminModal();
   const { submit } = useSubmit();
 
   const handleCreate = async () => {
@@ -56,13 +54,6 @@ export default function LocalInformationsManager({
 
   return (
     <section className="admin-section">
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => handleDelete(confirmation.id)}
-          text={`Are you sure to delete local information ${confirmation.title} ?`}
-          unShow={() => setConfirmation(null)}
-        />
-      )}
       <h2 className="title secondary">Local Informations</h2>
       <div className="local-info-container">
         {data && data.length > 0 ? (
@@ -118,7 +109,12 @@ export default function LocalInformationsManager({
                 </button>
                 <button
                   className="button small"
-                  onClick={() => setConfirmation(localInfo)}
+                  onClick={() =>
+                    openConfirmationModal({
+                      text: "Are you sure to delete this local information ?",
+                      handleAction: () => handleDelete(localInfo.id),
+                    })
+                  }
                 >
                   Delete
                 </button>

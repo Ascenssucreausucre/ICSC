@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   subscribeUserToPush,
   getNotificationPermissionStatus,
-  checkPushSubscription,
+  syncPushSubscriptionWithServer,
   isAppleDevice,
   isRunningAsPWA,
 } from "../../utils/pushNotification";
@@ -16,6 +16,7 @@ import { Bell } from "lucide-react";
 import { Smartphone } from "lucide-react";
 import { usePWAInstall } from "../../context/InstallPWAContext";
 import { useUserAuth } from "../../context/UserAuthContext";
+import { useFeedback } from "../../context/FeedbackContext";
 
 export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,23 +27,22 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
   const [pushSubscription, setPushSubscription] = useState(null);
   const totalNews = news.length;
   const { deferredPrompt, isInstalled, handleInstallClick } = usePWAInstall();
+  const { showFeedback } = useFeedback();
 
   const { isAuthenticated } = useUserAuth();
   const navigate = useNavigate();
 
   const showInstallButton = !isInstalled && deferredPrompt;
 
-  // Vérification de l'abonnement aux notifications
   useEffect(() => {
-    const checkExistingSubscription = async () => {
-      const subscription = await checkPushSubscription();
+    const syncSubscription = async () => {
+      const subscription = await syncPushSubscriptionWithServer();
       setPushSubscription(subscription);
     };
 
-    checkExistingSubscription();
+    syncSubscription();
   }, []);
 
-  // Gestion des notifications push
   const handleAskPermission = async () => {
     if (!isAuthenticated) {
       return navigate("/login");
@@ -59,22 +59,20 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
         `${import.meta.env.VITE_API_URL}/notifications/subscribe`
       );
 
-      // Mise à jour de l'état des permissions et de l'abonnement
       setPermission(getNotificationPermissionStatus());
       setPushSubscription(subscription);
     } catch (error) {
-      console.error("Erreur lors de l'activation des notifications:", error);
+      showFeedback("error", "Error while activating notifications:" + error);
+      console.error("Error while activating notifications:", error);
     }
   };
 
-  // Countdown pour l'affichage initial
   useEffect(() => {
     setTimeout(() => {
       setCountDown(false);
     }, 2000);
   }, []);
 
-  // Navigation dans les actualités
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? news.length - 1 : prevIndex - 1
@@ -106,12 +104,10 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
     />
   );
 
-  // Si pas d'actualités, ne rien afficher
   if (!news.length) {
     return null;
   }
 
-  // Vérifie si nous devons afficher des CTA pour PWA ou notifications
   const showNotificationButton =
     permission === "default" && !pushSubscription && isRunningAsPWA();
   const showActions = showNotificationButton || showInstallButton;
@@ -132,7 +128,6 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
           ease: "backOut",
         }}
       >
-        {/* Barre de navigation supérieure */}
         <div className="news-navigation">
           <div className="navigation-arrows">
             <button onClick={handlePrevious} className="nav-button prev-button">
@@ -143,33 +138,27 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
             </button>
           </div>
 
-          {/* Indicateurs de pagination */}
           <div className="pagination-dots">
             {news.map((_, index) => {
-              // Cas 1 : on est dans les 3 premiers éléments
               if (currentIndex <= 2) {
                 return index < 5 ? renderDot(index) : null;
               }
 
-              // Cas 2 : on est dans les 3 derniers éléments
               if (currentIndex >= totalNews - 3) {
                 return index >= totalNews - 5 ? renderDot(index) : null;
               }
 
-              // Cas 3 : au milieu → afficher 2 avant et 2 après
               return Math.abs(index - currentIndex) <= 2
                 ? renderDot(index)
                 : null;
             })}
           </div>
 
-          {/* Bouton de fermeture */}
           <button onClick={close} className="close-button nav-button">
             <Cross size={20} />
           </button>
         </div>
 
-        {/* Contenu de l'actualité actuelle */}
         <div className="news-content">
           {news[currentIndex] && (
             <div className="news-item">
@@ -204,7 +193,6 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
           )}
         </div>
 
-        {/* Boutons d'action pour PWA et notifications */}
         {showActions && (
           <>
             <hr />

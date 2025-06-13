@@ -6,9 +6,9 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../../../components/Pagination/Pagination";
 import "./Users.css";
-import { UnlinkIcon } from "lucide-react";
 import useSubmit from "../../../hooks/useSubmit";
-import ConfirmationModal from "../../../components/ConfirmationModal/ConfirmationModal";
+import { useAdminModal } from "../../../context/AdminModalContext";
+
 export default function Users({}) {
   const [filters, setFilters] = useState({
     search: "",
@@ -17,9 +17,9 @@ export default function Users({}) {
   });
   const [users, setUsers] = useState([]);
   const [reloading, setReloading] = useState(false);
-  const [confirmation, setConfirmation] = useState(null);
 
   const { submit } = useSubmit();
+  const { openConfirmationModal } = useAdminModal();
 
   const {
     data: usersData,
@@ -63,13 +63,6 @@ export default function Users({}) {
 
   return (
     <section className="admin-section">
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => handleDeleteUser(confirmation)}
-          text="Deleting this user can't be undone. Are you sure you want to delete this account ?"
-          unShow={() => setConfirmation(null)}
-        />
-      )}
       {loading ? (
         <LoadingScreen />
       ) : error ? (
@@ -124,7 +117,12 @@ export default function Users({}) {
                     </button>
                     <button
                       className="button small"
-                      onClick={() => setConfirmation(user.id)}
+                      onClick={() =>
+                        openConfirmationModal({
+                          text: "Are you sure to delete this user ? This action can't be undone.",
+                          handleAction: () => handleDeleteUser(user.id),
+                        })
+                      }
                     >
                       Delete User
                     </button>

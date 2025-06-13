@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useAdminModal } from "../../context/AdminModalContext";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
 import TopicsFormModal from "../TopicsFormModal/TopicsFormModal";
 import CountUp from "../CountUp";
@@ -8,7 +7,7 @@ import "./TopicManager.css";
 
 export default function TopicManager({ data, conference_id }) {
   const { submit } = useSubmit();
-  const [confirmation, setConfirmation] = useState(false);
+  const { openConfirmationModal } = useAdminModal();
   const [topics, setTopics] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [openTopicModal, setOpenTopicModal] = useState(false);
@@ -24,12 +23,6 @@ export default function TopicManager({ data, conference_id }) {
       setTopics((prev) => prev.filter((item) => item.id !== selectedTopic.id)); // Supprimer le topic de la liste
       setSelectedTopic(null); // Réinitialiser le topic sélectionné après suppression
     }
-  };
-
-  // Fonction pour gérer l'ouverture du modal de confirmation et sélectionner un topic à supprimer
-  const handleOpenConfirmationModal = (topic) => {
-    setSelectedTopic(topic);
-    setConfirmation(true); // Ouvrir le modal de confirmation
   };
 
   const handleManageTopic = (topic) => {
@@ -56,14 +49,6 @@ export default function TopicManager({ data, conference_id }) {
 
   return (
     <div className="topic-manager  admin-section">
-      {confirmation && selectedTopic ? (
-        <ConfirmationModal
-          handleAction={handleDeleteTopic} // Passer la fonction de suppression
-          text={`Are you sure you want to delete ${selectedTopic.title} ?`} // Utiliser les informations du topic sélectionné
-          unShow={setConfirmation} // Fermer le modal
-        />
-      ) : null}
-
       {openTopicModal ? (
         <TopicsFormModal
           data={selectedTopic}
@@ -102,7 +87,12 @@ export default function TopicManager({ data, conference_id }) {
                 </button>
                 <button
                   className="button small"
-                  onClick={() => handleOpenConfirmationModal(topic)} // Lors du clic, ouvrir le modal avec le topic
+                  onClick={() =>
+                    openConfirmationModal({
+                      text: "Are you sure to delete this topic ?",
+                      handleAction: () => handleDeleteTopic(topic.id),
+                    })
+                  }
                 >
                   Delete
                 </button>

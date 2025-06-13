@@ -3,15 +3,12 @@ import { Trash2Icon } from "lucide-react";
 import { useAdminModal } from "../../../context/AdminModalContext";
 import useSubmit from "../../../hooks/useSubmit";
 import { useState } from "react";
-import ConfirmationModal from "../../../components/ConfirmationModal/ConfirmationModal";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function Admins() {
   const { data, loading, refetch } = useFetch(`/admin-auth/`);
   const { submit } = useSubmit();
-  const { openModal } = useAdminModal();
-
-  const [confirmation, setConfirmation] = useState();
+  const { openModal, openConfirmationModal } = useAdminModal();
 
   const handleNewAdmin = async () => {
     openModal({
@@ -36,13 +33,6 @@ export default function Admins() {
 
   return (
     <section className="admin-section">
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => handleDeleteAdmin(confirmation.id)}
-          unShow={() => setConfirmation(null)}
-          text={`Are you sure to delete ${confirmation.email}`}
-        />
-      )}
       <h1 className="title secondary">Administrators</h1>
       <div className="admin-container">
         {data ? (
@@ -66,7 +56,12 @@ export default function Admins() {
               </div>
               <button
                 className="delete-button alt"
-                onClick={() => setConfirmation(admin)}
+                onClick={() =>
+                  openConfirmationModal({
+                    text: "Are you sure to delete this administrator ? This action can't be undone.",
+                    handleAction: () => handleDeleteAdmin(admin.id),
+                  })
+                }
               >
                 <Trash2Icon />
               </button>

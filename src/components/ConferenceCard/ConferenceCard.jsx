@@ -1,8 +1,6 @@
-import { useState } from "react";
 import useSubmit from "../../hooks/useSubmit";
 import "./ConferenceCard.css";
 import { Link, useNavigate } from "react-router-dom";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import { useAdminModal } from "../../context/AdminModalContext";
 
 export default function ConferenceCard({
@@ -10,9 +8,8 @@ export default function ConferenceCard({
   refreshConferences,
   isActive = false,
 }) {
-  const { submit, submitLoading } = useSubmit();
-  const [confirmation, setConfirmation] = useState(false);
-  const { openModal } = useAdminModal();
+  const { submit } = useSubmit();
+  const { openModal, openConfirmationModal } = useAdminModal();
   const filesUrl = import.meta.env.VITE_IMAGE_URL;
   const navigate = useNavigate();
   const formatLabel = (key) => {
@@ -39,9 +36,9 @@ export default function ConferenceCard({
     if (refreshConferences) return refreshConferences();
   };
 
-  const handleDeleteConference = async () => {
+  const handleDeleteConference = async (id) => {
     await submit({
-      url: `/Conferences/delete/${data.id}`,
+      url: `/Conferences/delete/${id}`,
       method: "DELETE",
     });
     if (refreshConferences) refreshConferences();
@@ -61,13 +58,6 @@ export default function ConferenceCard({
 
   return (
     <>
-      {confirmation ? (
-        <ConfirmationModal
-          text={`Are you sure you want to delete conference ${data.acronym}'${data.year} ? This action is definitive and will be irreversible.`}
-          handleAction={handleDeleteConference}
-          unShow={setConfirmation}
-        />
-      ) : null}
       <div className={`card-wrapper ${isActive ? "active" : null}`}>
         <div
           className="card conference-card"
@@ -132,7 +122,12 @@ export default function ConferenceCard({
             </button>
             <button
               className="delete-button"
-              onClick={() => setConfirmation(true)}
+              onClick={() =>
+                openConfirmationModal({
+                  text: `Are you sure you want to delete conference ${data.acronym}'${data.year} ? This action is definitive and will be irreversible.`,
+                  handleAction: () => handleDeleteConference(data.id),
+                })
+              }
             >
               Delete
             </button>

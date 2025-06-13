@@ -3,13 +3,11 @@ import { useState } from "react";
 import ImportantDates from "../ImportantDates/ImportantDates";
 import "./ImportantDatesManager.css";
 import { useAdminModal } from "../../context/AdminModalContext";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
 
 export default function ImportantDatesManager({ data, conference_id }) {
   const [importantDates, setImportantDates] = useState();
-  const [confirmation, setConfirmation] = useState(false);
-  const { openModal } = useAdminModal();
+  const { openModal, openConfirmationModal } = useAdminModal();
   const { submit } = useSubmit();
 
   const importantDatesTemplate = {
@@ -83,13 +81,6 @@ export default function ImportantDatesManager({ data, conference_id }) {
 
   return (
     <div className="important-date-manager admin-section">
-      {confirmation ? (
-        <ConfirmationModal
-          handleAction={handleDeleteDates}
-          text="Are you sure to delete important dates for this conference ?"
-          unShow={setConfirmation}
-        />
-      ) : null}
       <h2 className="title secondary">Important dates</h2>
       {importantDates ? (
         <>
@@ -100,7 +91,12 @@ export default function ImportantDatesManager({ data, conference_id }) {
             </button>
             <button
               className="button small"
-              onClick={() => setConfirmation(true)}
+              onClick={() =>
+                openConfirmationModal({
+                  text: "Are you sure to delete this conference's dates ? This action can'rt be undone.",
+                  handleAction: handleDeleteDates,
+                })
+              }
             >
               Delete
             </button>

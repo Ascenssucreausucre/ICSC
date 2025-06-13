@@ -4,9 +4,8 @@ import "./FeesManager.css";
 import FeesModal from "../FeesModal/FeesModal";
 import { useEffect } from "react";
 import useSubmit from "../../hooks/useSubmit";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import { useAdminModal } from "../../context/AdminModalContext";
-import { FeedbackProvider, useFeedback } from "../../context/FeedbackContext";
+import { useFeedback } from "../../context/FeedbackContext";
 
 export default function FeesManager({
   registrationFeesData = [],
@@ -18,14 +17,9 @@ export default function FeesManager({
   const [dataToSend, setDataToSend] = useState(null);
   const [feesData, setFeesData] = useState([]);
   const [additionalFees, setadditionalFees] = useState();
-  const [confirmation, setConfirmation] = useState({
-    id: "",
-    display: false,
-  });
 
   const { submit } = useSubmit();
-  const { openModal } = useAdminModal();
-  const { showFeedback } = useFeedback();
+  const { openModal, openConfirmationModal } = useAdminModal();
 
   useEffect(() => {
     if (registrationFeesData) {
@@ -77,8 +71,8 @@ export default function FeesManager({
     });
   };
 
-  const handleDeleteadditionalFees = async () => {
-    const response = submit({
+  const handleDeleteAditionalFees = async (id) => {
+    await submit({
       url: `/additional-fee/${additionalFeesData.id}`,
       method: "DELETE",
     });
@@ -143,13 +137,6 @@ export default function FeesManager({
           refreshFunction={refetch}
         />
       ) : null}
-      {confirmation.display ? (
-        <ConfirmationModal
-          handleAction={() => handleDeleteFees(confirmation.id)}
-          text="Are you sure to delete these registration fees ?"
-          unShow={(arg) => setConfirmation({ ...confirmation, display: arg })}
-        />
-      ) : null}
       {feesData.length === 0 ? (
         <p>This conference has no registration fees.</p>
       ) : (
@@ -162,7 +149,13 @@ export default function FeesManager({
               </button>
               <button
                 className="button"
-                onClick={() => setConfirmation({ id: fee.id, display: true })}
+                onClick={() =>
+                  openConfirmationModal({
+                    text: "Are you sure to delete this option ?",
+                    handleAction: () =>
+                      handleDeleteAditionalFees(additionalFees.id),
+                  })
+                }
               >
                 Delete Fees
               </button>
@@ -206,7 +199,13 @@ export default function FeesManager({
             </button>
             <button
               className="button small"
-              onClick={handleDeleteadditionalFees}
+              onClick={() =>
+                openConfirmationModal({
+                  text: "Are you sure to delete this option ?",
+                  handleAction: () =>
+                    handleDeleteAditionalFees(additionalFees.id),
+                })
+              }
             >
               Delete
             </button>
@@ -251,7 +250,17 @@ export default function FeesManager({
               >
                 Edit
               </button>
-              <button className="button small">Delete</button>
+              <button
+                className="button small"
+                onClick={() =>
+                  openConfirmationModal({
+                    text: "Are you sure to delete this option ?",
+                    handleAction: () => handleDeleteOption(option.id),
+                  })
+                }
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}

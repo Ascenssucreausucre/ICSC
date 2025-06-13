@@ -12,8 +12,8 @@ import Pagination from "../../../components/Pagination/Pagination";
 import { Input } from "../../../components/Input/Input";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import socket from "../../../utils/socket";
-import ConfirmationModal from "../../../components/ConfirmationModal/ConfirmationModal";
 import { Trash2Icon } from "lucide-react";
+import { useAdminModal } from "../../../context/AdminModalContext";
 
 export default function Support() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -30,7 +30,7 @@ export default function Support() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [archivingIds, setArchivingIds] = useState(new Set()); // Track archiving operations
-  const [confirmation, setConfirmation] = useState(null);
+  const { openConfirmationModal } = useAdminModal();
   const navigate = useNavigate();
 
   // Utilise useRef pour avoir toujours les filtres actuels dans les callbacks
@@ -262,13 +262,6 @@ export default function Support() {
 
   return (
     <section className="admin-section support-section">
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => handleDeleteConv(confirmation)}
-          text="Are you sure to delete this conversation ? This action is ireversible."
-          unShow={() => setConfirmation(null)}
-        />
-      )}
       <h1 className="title scondary">Support conversations</h1>
       <div className="filters">
         <Input
@@ -351,7 +344,12 @@ export default function Support() {
                   <button
                     className="button-icon"
                     aria-description="Delete conversation"
-                    onClick={() => setConfirmation(conversation.id)}
+                    onClick={() =>
+                      openConfirmationModal({
+                        text: "Are you sure to delete this conversation ? This action can't be undone.",
+                        handleAction: () => handleDeleteConv(conversation.id),
+                      })
+                    }
                   >
                     <Trash2Icon />
                   </button>

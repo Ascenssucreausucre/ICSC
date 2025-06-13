@@ -2,11 +2,9 @@ import useSubmit from "../../hooks/useSubmit";
 import { useAdminModal } from "../../context/AdminModalContext";
 import "./CommitteesBack.css";
 import { useState } from "react";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 export default function CommitteesBack({ data, setCommittees }) {
-  const [confirmation, setConfirmation] = useState(false);
-  const { openDetailedModal } = useAdminModal();
+  const { openDetailedModal, openConfirmationModal } = useAdminModal();
   const { submit } = useSubmit();
 
   const handleManageCommittee = () => {
@@ -32,23 +30,16 @@ export default function CommitteesBack({ data, setCommittees }) {
     });
   };
 
-  const handleDeleteCommittee = async () => {
+  const handleDeleteCommittee = async (id) => {
     await submit({
       method: "DELETE",
-      url: `/Committee/delete/${data.id}`,
+      url: `/Committee/delete/${id}`,
     });
     setCommittees((prev) => prev.filter((item) => item.id !== data.id));
   };
 
   return (
     <>
-      {confirmation ? (
-        <ConfirmationModal
-          handleAction={handleDeleteCommittee}
-          text={`Are you sure to delete ${data.type} ?`}
-          unShow={setConfirmation}
-        />
-      ) : null}
       <div className="committee-back-container flex-1 card">
         <div className="committee-data flex-1">
           <h2 className="secondary card-title">{data.type}</h2>
@@ -63,7 +54,12 @@ export default function CommitteesBack({ data, setCommittees }) {
           </button>
           <button
             className="button small"
-            onClick={() => setConfirmation(true)}
+            onClick={() =>
+              openConfirmationModal({
+                text: "Are you sure to delete this comittee ?",
+                handleAction: () => handleDeleteCommittee(data.id),
+              })
+            }
           >
             Delete
           </button>

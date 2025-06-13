@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PlenarySessionForm from "./PlenarySessionForm";
 import useSubmit from "../../hooks/useSubmit";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import { useAdminModal } from "../../context/AdminModalContext";
 
 export default function PlenarySessionManager({
   data,
@@ -9,10 +9,7 @@ export default function PlenarySessionManager({
   refetch,
 }) {
   const [formData, setFormData] = useState(null);
-  const [confirmation, setConfirmation] = useState({
-    confirm: false,
-    id: null,
-  });
+  const { openConfirmationModal } = useAdminModal();
 
   const { submit } = useSubmit();
 
@@ -44,13 +41,6 @@ export default function PlenarySessionManager({
           data={formData}
           close={() => setFormData(null)}
           refetch={refetch}
-        />
-      )}
-      {confirmation.confirm && (
-        <ConfirmationModal
-          handleAction={() => handleDeleteSession(confirmation.id)}
-          text="Delete this plenary session ?"
-          unShow={() => setConfirmation({ confirm: false, id: null })}
         />
       )}
       <h2 className="title secondary">Plenary Sessions</h2>
@@ -92,7 +82,10 @@ export default function PlenarySessionManager({
                 <button
                   className="button small"
                   onClick={() =>
-                    setConfirmation({ confirm: true, id: session.id })
+                    openConfirmationModal({
+                      text: "Are you sure to delete this plenary session ?",
+                      handleAction: () => handleDeleteSession(session.id),
+                    })
                   }
                 >
                   Delete

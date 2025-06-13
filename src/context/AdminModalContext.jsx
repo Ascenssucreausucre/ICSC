@@ -1,19 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-// Crée le contexte pour le modal
 const AdminModalContext = createContext();
 
-// Fournisseur du contexte
 export const AdminModalProvider = ({ children }) => {
   const [modalData, setModalData] = useState(null);
   const [detailedModalData, setDetailedModalData] = useState(null);
 
-  // Fonction pour afficher le modal avec les propriétés spécifiques
   const openModal = (data) => {
     setModalData(data);
   };
 
-  // Fonction pour fermer le modal
   const closeModal = () => {
     setModalData(null);
   };
@@ -25,6 +21,16 @@ export const AdminModalProvider = ({ children }) => {
     setDetailedModalData(null);
   };
 
+  const [confirmationModalData, setConfirmationModalData] = useState(null);
+
+  const openConfirmationModal = (data) => {
+    setConfirmationModalData(data);
+  };
+
+  const closeConfirmationModal = () => {
+    setConfirmationModalData(null);
+  };
+
   return (
     <AdminModalContext.Provider
       value={{
@@ -34,6 +40,9 @@ export const AdminModalProvider = ({ children }) => {
         closeModal,
         openDetailedModal,
         closeDetailedModal,
+        confirmationModalData,
+        openConfirmationModal,
+        closeConfirmationModal,
       }}
     >
       {children}
@@ -41,5 +50,4 @@ export const AdminModalProvider = ({ children }) => {
   );
 };
 
-// Hook pour utiliser le contexte dans n'importe quel composant
 export const useAdminModal = () => useContext(AdminModalContext);

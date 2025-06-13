@@ -3,13 +3,11 @@ import { useAdminModal } from "../../context/AdminModalContext";
 import useSubmit from "../../hooks/useSubmit";
 import { Mail } from "lucide-react";
 import { useState } from "react";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import "./ContactManager.css";
 
 export default function ContactManager({ contacts, conference_id, refetch }) {
-  const { openModal } = useAdminModal();
+  const { openModal, openConfirmationModal } = useAdminModal();
   const { submit } = useSubmit();
-  const [confirmation, setConfirmation] = useState(null);
   const initialData = {
     name: "",
     surname: "",
@@ -45,13 +43,6 @@ export default function ContactManager({ contacts, conference_id, refetch }) {
   };
   return (
     <section className="admin-section">
-      {confirmation && (
-        <ConfirmationModal
-          handleAction={() => handleDeleteContact(confirmation)}
-          text="Are you sure to delete this contact ?"
-          unShow={() => setConfirmation(null)}
-        />
-      )}
       <h2 className="secondary title">Contacts</h2>
       {contacts?.length > 0 ? (
         contacts.map((contact) => (
@@ -87,7 +78,17 @@ export default function ContactManager({ contacts, conference_id, refetch }) {
               >
                 Edit
               </button>
-              <button className="button">Delete</button>
+              <button
+                className="button"
+                onClick={() =>
+                  openConfirmationModal({
+                    text: "Are you sure to delete this contact ?",
+                    handleAction: () => handleDeleteContact(contact.id),
+                  })
+                }
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))

@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import { useAdminModal } from "../../../context/AdminModalContext";
 import useSubmit from "../../../hooks/useSubmit";
-import ConfirmationModal from "../../../components/ConfirmationModal/ConfirmationModal";
 import { Link, useParams } from "react-router-dom";
 import "./Authors.css";
 import SearchBar from "../../../components/SearchBar/SearchBar";
@@ -14,11 +13,7 @@ import InputRange from "../../../components/InputRange/InputRange";
 
 export default function Authors() {
   const { country } = useParams();
-  const { openModal } = useAdminModal();
-  const [confirmation, setConfirmation] = useState({
-    confirm: false,
-    id: null,
-  });
+  const { openModal, openConfirmationModal } = useAdminModal();
 
   const [authors, setAuthors] = useState([]);
   const [searchItem, setSearchItem] = useState("");
@@ -338,16 +333,6 @@ export default function Authors() {
             : `No authors found matching your search.`
           : `Loading...`}
       </p>
-      {confirmation.confirm ? (
-        <ConfirmationModal
-          handleAction={() => handleDeleteAuthor(confirmation.id)}
-          text="Are you sure to delete this author ?"
-          unShow={(unshow) =>
-            setConfirmation({ ...confirmation, confirm: unshow })
-          }
-        />
-      ) : null}
-
       <div
         className="authors-list-container page-list"
         ref={authorsListRef}
@@ -418,9 +403,10 @@ export default function Authors() {
                             <button
                               className="button small"
                               onClick={() =>
-                                setConfirmation({
-                                  confirm: true,
-                                  id: author.id,
+                                openConfirmationModal({
+                                  text: "Are you sure to delete this author ?",
+                                  handleAction: () =>
+                                    handleDeleteAuthor(author.id),
                                 })
                               }
                             >

@@ -6,7 +6,6 @@ import { Dropdown } from "primereact/dropdown";
 import useSubmit from "../../hooks/useSubmit";
 import { useAdminModal } from "../../context/AdminModalContext";
 import Pagination from "../Pagination/Pagination";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import Article from "../Article/Article";
 
 export default function ArticleList({
@@ -21,10 +20,6 @@ export default function ArticleList({
   const [searchItem, setSearchItem] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [confirmation, setConfirmation] = useState({
-    confirm: false,
-    id: null,
-  });
   const [profileFilter, setProfileFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
   const { submit } = useSubmit();
@@ -247,16 +242,6 @@ export default function ArticleList({
 
   return (
     <div className="article-list" ref={articleListRef}>
-      {confirmation.confirm ? (
-        <ConfirmationModal
-          handleAction={() => handleDeleteArticle(confirmation.id)}
-          text={"Are you sure to delete this article ?"}
-          textAction={"Delete"}
-          unShow={(unShow) =>
-            setConfirmation({ ...confirmation, confirm: unShow })
-          }
-        />
-      ) : null}
       <SearchBar
         value={searchItem}
         onChange={(e) => setSearchItem(e.target.value)}
@@ -309,6 +294,7 @@ export default function ArticleList({
               isStatusUpToDate={isStatusUpToDate}
               handleUpdateArticle={handleUpdateArticle}
               handleSetStatus={handleSetStatus}
+              handleDeleteArticle={handleDeleteArticle}
               key={article.id}
             />
           ))

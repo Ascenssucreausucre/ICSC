@@ -10,7 +10,7 @@ import { Ban } from "lucide-react";
 
 export default function Chat({
   close,
-  conversation,
+  conversation = [],
   userType = "user",
   title = "Conversation",
   update,
@@ -49,7 +49,7 @@ export default function Chat({
 
   useEffect(() => {
     if (!conversationId) return;
-    if (conversation?.length < 1 || !conversation) {
+    if (!conversation?.messages) {
       update && update();
     }
 

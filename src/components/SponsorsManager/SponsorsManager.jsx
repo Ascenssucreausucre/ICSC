@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import "./SponsorsManager.css";
 import { useAdminModal } from "../../context/AdminModalContext";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import useSubmit from "../../hooks/useSubmit";
 
 export default function SponsorsManager({ data, conference_id }) {
   const [sponsors, setSponsors] = useState([]);
   const [showAll, setShowAll] = useState(false);
-  const [confirmation, setConfirmation] = useState(false);
-  const [selectedSponsor, setSelectedSponsor] = useState();
-  const { openModal } = useAdminModal();
+  const { openModal, openConfirmationModal } = useAdminModal();
   const { submit } = useSubmit();
 
   const sponsorTemplate = {
@@ -79,7 +76,6 @@ export default function SponsorsManager({ data, conference_id }) {
 
   return (
     <div className="sponsors-manager admin-section">
-      {confirmation && <ConfirmationModal />}
       <h2 className="title secondary">Sponsors</h2>
       {displayedSponsors.length === 0 ? (
         <p>This conference has no sponsors.</p>
@@ -115,7 +111,12 @@ export default function SponsorsManager({ data, conference_id }) {
                 </button>
                 <button
                   className="button small"
-                  onClick={() => handleDeleteSponsor(sponsor.id)}
+                  onClick={() =>
+                    openConfirmationModal({
+                      text: "Are you sure to delete this sponsor ?",
+                      handleAction: () => handleDeleteSponsor(sponsor.id),
+                    })
+                  }
                 >
                   Delete
                 </button>
