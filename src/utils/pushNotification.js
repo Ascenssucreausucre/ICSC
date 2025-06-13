@@ -124,6 +124,8 @@ export const checkPushSubscription = async () => {
 export const syncPushSubscriptionWithServer = async () => {
   const localSub = await checkPushSubscription();
 
+  console.log("Local subscription :", localSub);
+
   if (!localSub) return null;
 
   try {
@@ -134,6 +136,7 @@ export const syncPushSubscriptionWithServer = async () => {
       }
     );
     const data = await res.json();
+    console.log("Online subscription :", data);
 
     if (!data.subscribed) {
       await localSub.unsubscribe();
