@@ -94,14 +94,14 @@ self.addEventListener("push", (event) => {
   const options = {
     body,
     // Only include if defined
-    ...(icon.length > 0 && { icon }),
-    ...(badge.length > 0 && { badge }),
-    ...(image.length > 0 && { image }),
+    ...(icon?.length > 0 && { icon }),
+    ...(badge?.length > 0 && { badge }),
+    ...(image?.length > 0 && { image }),
     ...(vibrate && { vibrate }),
     ...(tag && { tag }),
     ...(url && { url }),
     ...(renotify === true || renotify === false ? { renotify } : {}),
-    ...(Array.isArray(actions) && actions.length ? { actions } : {}),
+    ...(Array.isArray(actions) && actions?.length ? { actions } : {}),
     data: data || {},
     ...others,
   };
