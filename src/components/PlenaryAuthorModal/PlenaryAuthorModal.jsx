@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import "./PlenaryAuthorModal.css";
 import { CrossIcon } from "lucide-react";
 import { X } from "lucide-react";
+import Linkify from "linkify-react";
 
 export default function PlenaryAuthorModal({ data, image, onClose, resume }) {
   return (
@@ -35,7 +36,9 @@ export default function PlenaryAuthorModal({ data, image, onClose, resume }) {
           <img src={import.meta.env.VITE_IMAGE_URL + image} />
         </div>
         <hr />
-        <p>{resume}</p>
+        <p>
+          <Linkify options={{ target: "_blank" }}>{resume}</Linkify>
+        </p>
       </motion.div>
     </motion.div>
   );

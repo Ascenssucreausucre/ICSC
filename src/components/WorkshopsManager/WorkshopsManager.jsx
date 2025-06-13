@@ -2,6 +2,7 @@ import { FileCheck2, LucideUnlink, LinkIcon, FileX2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAdminModal } from "../../context/AdminModalContext";
 import useSubmit from "../../hooks/useSubmit";
+import Linkify from "linkify-react";
 
 export default function WorkshopManager({ data, conference_id, refetch }) {
   const { openModal, openConfirmationModal } = useAdminModal();
@@ -80,7 +81,9 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
                 <p className="data-detail">{`from ${formatDate(
                   workshop.date_from
                 )} to ${formatDate(workshop.date_to)}.`}</p>
-                <p className="limited-height-content">{workshop.text}</p>
+                <p className="limited-height-content">
+                  <Linkify>{workshop.text}</Linkify>
+                </p>
                 {workshop?.additional_file ? (
                   <Link
                     to={`${

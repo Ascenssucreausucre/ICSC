@@ -10,6 +10,7 @@ import { FileX2 } from "lucide-react";
 import { LinkIcon } from "lucide-react";
 import { LucideUnlink } from "lucide-react";
 import { FileCheck2 } from "lucide-react";
+import Linkify from "linkify-react";
 
 export default function Program() {
   const [bio, setBio] = useState(null);
@@ -75,7 +76,11 @@ export default function Program() {
                         src={import.meta.env.VITE_IMAGE_URL + session.image}
                       />
                     </div>
-                    <p>{session.session_resume}</p>
+                    <p>
+                      <Linkify options={{ target: "_blank" }}>
+                        {session.session_resume}
+                      </Linkify>
+                    </p>
                   </section>
                   {index + 1 < plenarySessions.length && <hr />}
                 </React.Fragment>
@@ -133,7 +138,9 @@ export default function Program() {
                           workshop.date_from
                         )} to ${formatDate(workshop.date_to)}.`}</p>
                       </div>
-                      <p>{workshop.text}</p>
+                      <p>
+                        <Linkify>{workshop.text}</Linkify>
+                      </p>
                       {workshop?.additional_file && (
                         <Link
                           to={`${

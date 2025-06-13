@@ -15,6 +15,7 @@ import { useFeedback } from "../../../context/FeedbackContext";
 import CheckoutForm from "../../../components/CheckoutForm/CheckoutForm";
 import { Dropdown } from "primereact/dropdown";
 import availableCountriesList from "../../../assets/json/flag-countries.json";
+import Linkify from "linkify-react";
 
 export default function Registration() {
   const { registrationFees, importantDates, additionalFees, paymentOptions } =
@@ -988,7 +989,11 @@ export default function Registration() {
                   return (
                     <tr>
                       <td>{option.name}</td>
-                      <td>{option?.description ? option.description : "-"}</td>
+                      <td>
+                        <Linkify options={{ target: "_blank" }}>
+                          {option?.description ? option.description : "-"}
+                        </Linkify>
+                      </td>
                       <td style={{ color: isIncluded ? "gray" : "black" }}>
                         {isIncluded ? "Included" : `${option.price}€`}
                       </td>

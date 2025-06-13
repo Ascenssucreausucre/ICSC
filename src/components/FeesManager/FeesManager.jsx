@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import useSubmit from "../../hooks/useSubmit";
 import { useAdminModal } from "../../context/AdminModalContext";
 import { useFeedback } from "../../context/FeedbackContext";
+import Linkify from "linkify-react";
 
 export default function FeesManager({
   registrationFeesData = [],
@@ -239,7 +240,9 @@ export default function FeesManager({
               </span>
             </div>
             {option.description ? (
-              <p>{option.description}</p>
+              <p>
+                <Linkify>{option.description}</Linkify>
+              </p>
             ) : (
               <p className="data-detail">No description for this option.</p>
             )}
