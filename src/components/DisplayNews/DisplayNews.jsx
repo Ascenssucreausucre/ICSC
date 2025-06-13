@@ -112,11 +112,6 @@ export default function DisplayNews({ close, news = [], vapidPublicKey }) {
     ["default", "granted"].includes(permission) &&
     !pushSubscription &&
     isRunningAsPWA();
-  console.log({
-    permission,
-    pushSubscription,
-    isRunningAsPWA: isRunningAsPWA(),
-  });
   const showActions = showNotificationButton || showInstallButton;
 
   return (

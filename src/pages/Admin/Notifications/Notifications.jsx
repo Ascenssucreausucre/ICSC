@@ -163,6 +163,7 @@ export default function Notifications() {
               src={
                 formData?.badge ? formData.badge : "/images/default-badge.svg"
               }
+              style={{ filter: "invert(1)" }}
               alt=""
             />
           </div>
