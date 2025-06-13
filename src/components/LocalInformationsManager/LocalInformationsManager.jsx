@@ -3,6 +3,7 @@ import { FileCheck2, LucideUnlink, LinkIcon, FileX2 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useSubmit from "../../hooks/useSubmit";
+import Linkify from "linkify-react";
 
 export default function LocalInformationsManager({
   data,
@@ -61,7 +62,9 @@ export default function LocalInformationsManager({
             <div className="card row" key={localInfo.id}>
               <div className="flex-1">
                 <h2 className="card-title secondary">{localInfo.title}</h2>
-                <p className="limited-height-content">{localInfo.text}</p>
+                <p className="limited-height-content">
+                  <Linkify>{localInfo.text}</Linkify>
+                </p>
                 {localInfo?.file ? (
                   <Link
                     to={`${import.meta.env.VITE_IMAGE_URL + localInfo.file}`}
