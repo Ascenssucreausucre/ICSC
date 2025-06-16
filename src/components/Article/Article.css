@@ -39,7 +39,6 @@
 .tag-registered {
   background-color: #fff;
   color: var(--primary-color);
-  margin: 0;
   outline: solid 1px var(--primary-color);
 }
 .card .text-card {
