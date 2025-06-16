@@ -12,12 +12,10 @@ export default function Profile() {
   const userData = useLoaderData();
   const [user, setUser] = useState(userData);
   const navigate = useNavigate();
-  console.log(userData);
   const { isAuthenticated } = useUserAuth();
 
   useEffect(() => {
     if (userData.error) {
-      console.log("error");
       return navigate("/");
     }
   }, [userData]);

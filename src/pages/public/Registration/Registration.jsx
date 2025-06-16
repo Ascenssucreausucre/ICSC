@@ -169,7 +169,7 @@ export default function Registration() {
       return true;
     } catch (error) {
       console.error(error);
-      showFeedback("error", error.message);
+      showFeedback("error", error.response.data.error);
       return;
     } finally {
       setStepperLoading(false);
@@ -871,7 +871,10 @@ export default function Registration() {
                 <CustomStepper
                   steps={form}
                   title="Register to the conference"
-                  onEnd={handleSubmit}
+                  onEnd={() => {
+                    setShowForm(false);
+                    setFormData(defaultFormData);
+                  }}
                   disableNav
                 />
               </motion.div>
