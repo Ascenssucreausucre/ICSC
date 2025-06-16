@@ -20,7 +20,8 @@ export default function ConferenceCard({
 
   const formattedData = Object.fromEntries(
     Object.entries(data).filter(
-      ([key]) => !["id", "current", "banner"].includes(key)
+      ([key]) =>
+        !["id", "current", "banner", "registrations_open"].includes(key)
     )
   );
 

@@ -11,13 +11,14 @@ footer {
 footer .footer-top {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 footer .sponsor-container {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
-  justify-content: end;
+  justify-content: space-around;
 }
 .sponsors {
   display: flex;
@@ -43,10 +44,6 @@ footer .title {
   aspect-ratio: 2/1;
   border-radius: 10px;
 }
-footer .contact-container {
-  display: flex;
-  flex-wrap: wrap;
-}
 footer .contact {
   padding: 0.5rem;
 }
@@ -65,6 +62,4 @@ footer .contact .link {
 }
 footer .contact svg {
   height: var(--font-size);
-}
-.footer-bottom {
 }

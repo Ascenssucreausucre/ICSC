@@ -28,8 +28,6 @@ export default function Author() {
     });
   };
 
-  console.log(author);
-
   return (
     <div className="single-author admin-section">
       {loading ? (

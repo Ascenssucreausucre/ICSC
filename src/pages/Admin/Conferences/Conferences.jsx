@@ -63,6 +63,13 @@ export default function Conferences() {
   return (
     <section className="admin-section">
       <h1 className="secondary title">All conferences</h1>
+      <button
+        className="button wide"
+        // style={{ marginBlock: "1rem" }}
+        onClick={handleCreateConference}
+      >
+        New Conference
+      </button>
       <AnimatePresence>
         {!loading ? (
           conferenceData && conferenceData.length > 0 ? (
@@ -89,9 +96,6 @@ export default function Conferences() {
           <SkeletonConferenceCard />
         )}
       </AnimatePresence>
-      <button className="button" onClick={handleCreateConference}>
-        New Conference
-      </button>
       <Outlet />
     </section>
   );

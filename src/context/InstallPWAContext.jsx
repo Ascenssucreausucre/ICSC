@@ -24,7 +24,7 @@ export function PWAInstallProvider({ children }) {
     };
 
     const handleAppInstalled = () => {
-      console.log("✅ PWA installée !");
+      console.log("✅ PWA installed !");
       setIsInstalled(true);
       setDeferredPrompt(null);
     };
@@ -51,9 +51,9 @@ export function PWAInstallProvider({ children }) {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
-      console.log("✅ Installation acceptée");
+      console.log("✅ Installation accepted");
     } else {
-      console.log("❌ Installation refusée");
+      console.log("❌ Installation denied");
     }
 
     setDeferredPrompt(null);

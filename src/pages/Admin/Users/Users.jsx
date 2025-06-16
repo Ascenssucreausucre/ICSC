@@ -109,14 +109,14 @@ export default function Users({}) {
                   </div>
                   <div className="button-container">
                     <button
-                      className="button small"
+                      className="button small wide"
                       disabled={!user?.author}
                       onClick={() => handleUnlinkAuthor(user.id)}
                     >
                       Unlink Author
                     </button>
                     <button
-                      className="button small"
+                      className="button small wide"
                       onClick={() =>
                         openConfirmationModal({
                           text: "Are you sure to delete this user ? This action can't be undone.",

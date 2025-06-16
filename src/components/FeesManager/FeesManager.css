@@ -1,3 +1,6 @@
+.fees-data-container {
+  padding: 1rem calc(3vw - 1rem);
+}
 .fee-manager {
   margin-block: 2rem;
   background-color: white;

@@ -3,10 +3,6 @@
   margin-inline: clamp(10px, 15vw - 2rem, 15vw);
   margin-block: 6rem 50dvh;
 }
-.login-form .button.wide {
-  width: 100%;
-  border-radius: 5px;
-}
 .login-form p {
   text-align: center;
   margin-block: 1rem;

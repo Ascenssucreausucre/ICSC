@@ -21,7 +21,6 @@ export default function Conversation() {
           `${import.meta.env.VITE_API_URL}/conversations/${conversationId}`,
           { withCredentials: true }
         );
-        console.log(res);
         setConversation(res.data);
       } catch (error) {
         console.error(error.response.data);

@@ -147,11 +147,12 @@ export default function Notifications() {
         <button type="button" onClick={addAction} className="button small">
           + Ajouter une action
         </button>
-        <div>
-          <h3>Send to :</h3>
-        </div>
         <div className="button-container">
-          <button className="button" formAction="submit" disabled={loading}>
+          <button
+            className="button wide"
+            formAction="submit"
+            disabled={loading}
+          >
             {loading ? "Submitting..." : "Send the notification"}
           </button>
         </div>

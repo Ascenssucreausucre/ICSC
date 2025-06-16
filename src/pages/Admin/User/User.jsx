@@ -24,8 +24,6 @@ export default function User({}) {
     }
   }, [userData]);
 
-  console.log(user);
-
   const handleUnlinkAuthor = async (id) => {
     await submit({
       url: `/user/reset-author/${id}`,

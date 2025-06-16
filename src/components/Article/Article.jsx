@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import "./Article.css";
 import { Clock, CheckCircle, XCircle } from "lucide-react";
-import { useAdminModal } from "../../context/AdminModalContext";
 
 export default function Article({
   article,
@@ -15,20 +14,20 @@ export default function Article({
   handleUpdateArticle,
   handleDeleteArticle,
   handleSetStatus,
+  openConfirmationModal,
 }) {
   const statusIcons = {
     pending: { Icon: Clock, className: "icon-pending" },
     accepted: { Icon: CheckCircle, className: "icon-accepted" },
     rejected: { Icon: XCircle, className: "icon-rejected" },
   };
-  const { openConfirmationModal } = useAdminModal();
   const { Icon, className } = statusIcons[article.status.toLowerCase()] || {};
   const formatText = (text) =>
     String(text).charAt(0).toUpperCase() + String(text).slice(1);
   return (
     <div className={`article-card card ${article.status}`} key={article.id}>
-      <div className="flex-1">
-        <div className="grouped-title">
+      <div className="flex-1 text-card">
+        <div className="grouped-title flex-1">
           <h2 className="card-title">{article.title}</h2>
           <p className="data-detail">
             {article.authors?.length > 0 ? (

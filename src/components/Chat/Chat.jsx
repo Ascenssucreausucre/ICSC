@@ -39,12 +39,10 @@ export default function Chat({
 
   useEffect(() => {
     if (!conversation) return;
-    console.log("Updating conversation...");
     const { messages, id, ...status } = conversation;
     setMessages(messages || []);
     setConversationId(id);
     setConversationStatus(status);
-    console.log(status);
   }, [conversation]);
 
   useEffect(() => {
@@ -88,7 +86,6 @@ export default function Chat({
       );
       setFormMessage("");
       if (!conversationId) {
-        console.log("Setting up conversation...");
         setConversationId(res.data.conversationId);
       }
     } catch (error) {
@@ -130,7 +127,7 @@ export default function Chat({
         throttling: res.data.throttling,
       }));
     } catch (error) {
-      console.log(error);
+      console.error(error);
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data ||

@@ -34,3 +34,7 @@
   display: flex;
   gap: 0.2rem;
 }
+.card .text-card {
+  display: flex;
+  flex-direction: column;
+}

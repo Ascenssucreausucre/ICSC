@@ -435,7 +435,7 @@ export default function Authors() {
         />
       )}
       <div className="button-container">
-        <button className="button" onClick={handleNewAuthor}>
+        <button className="button wide" onClick={handleNewAuthor}>
           Add author
         </button>
       </div>

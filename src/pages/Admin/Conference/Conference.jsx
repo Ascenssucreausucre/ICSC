@@ -32,57 +32,6 @@ export default function Conference() {
     }
   }, [conference]);
 
-  // Refs pour les sections
-  const importantDatesRef = useRef(null);
-  const topicsRef = useRef(null);
-  const newsRef = useRef(null);
-  const committeesRef = useRef(null);
-  const feesRef = useRef(null);
-  const plenaryRef = useRef(null);
-  const specialRef = useRef(null);
-  const workshopsRef = useRef(null);
-  const sponsorsRef = useRef(null);
-  const articlesRef = useRef(null);
-  const localInfoRef = useRef(null);
-
-  const yOffset = -65;
-
-  const scrollTo = (ref) => {
-    if (ref.current) {
-      const y =
-        ref.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
-
-  const menuItems = [
-    { name: "Important Dates", goTo: () => scrollTo(importantDatesRef) },
-    { name: "Topics", goTo: () => scrollTo(topicsRef) },
-    { name: "News", goTo: () => scrollTo(newsRef) },
-    { name: "Committees", goTo: () => scrollTo(committeesRef) },
-    { name: "Fees", goTo: () => scrollTo(feesRef) },
-    { name: "Plenary Sessions", goTo: () => scrollTo(plenaryRef) },
-    { name: "Special Sessions", goTo: () => scrollTo(specialRef) },
-    { name: "Workshops", goTo: () => scrollTo(workshopsRef) },
-    { name: "Local Informations", goTo: () => scrollTo(localInfoRef) },
-    { name: "Sponsors", goTo: () => scrollTo(sponsorsRef) },
-    { name: "Articles", goTo: () => scrollTo(articlesRef) },
-  ];
-
-  const sectionRefs = [
-    importantDatesRef,
-    topicsRef,
-    newsRef,
-    committeesRef,
-    feesRef,
-    plenaryRef,
-    specialRef,
-    workshopsRef,
-    localInfoRef,
-    sponsorsRef,
-    articlesRef,
-  ];
-
   return (
     <div className="conference-container">
       {!conferenceData ? (
@@ -101,19 +50,15 @@ export default function Conference() {
               refreshConferences={refetch}
             />
             <div className="conference-data-container">
-              <div ref={importantDatesRef}>
-                <ImportantDatesManager
-                  data={conferenceData.importantDates}
-                  conference_id={conferenceData.conference.id}
-                />
-              </div>
+              <ImportantDatesManager
+                data={conferenceData.importantDates}
+                conference_id={conferenceData.conference.id}
+              />
 
-              <div ref={topicsRef}>
-                <TopicManager
-                  data={conferenceData.topics}
-                  conference_id={conferenceData.conference.id}
-                />
-              </div>
+              <TopicManager
+                data={conferenceData.topics}
+                conference_id={conferenceData.conference.id}
+              />
 
               <ContactManager
                 contacts={conferenceData.contacts}
@@ -121,73 +66,58 @@ export default function Conference() {
                 refetch={refetch}
               />
 
-              <div ref={newsRef}>
-                <NewsManager news={conferenceData.news} />
-              </div>
+              <NewsManager news={conferenceData.news} />
 
-              <div ref={committeesRef}>
-                <CommitteesManager
-                  committees={conferenceData.committees}
-                  conference_id={conferenceData.conference.id}
-                />
-              </div>
+              <CommitteesManager
+                committees={conferenceData.committees}
+                conference_id={conferenceData.conference.id}
+              />
 
-              <div ref={feesRef}>
-                <FeesManager
-                  registrationFeesData={conferenceData.registrationFees}
-                  additionalFeesData={conferenceData.additionalFees}
-                  paymentOptions={conferenceData.paymentOptions}
-                  conference_id={conferenceData.conference.id}
-                  refetch={refetch}
-                />
-              </div>
+              <FeesManager
+                registrationFeesData={conferenceData.registrationFees}
+                additionalFeesData={conferenceData.additionalFees}
+                paymentOptions={conferenceData.paymentOptions}
+                conference_id={conferenceData.conference.id}
+                registrationsOpened={
+                  conferenceData.conference?.registrations_open
+                }
+                refetch={refetch}
+              />
 
-              <div ref={plenaryRef}>
-                <PlenarySessionManager
-                  data={conferenceData.plenarySessions}
-                  conference_id={conferenceData.conference.id}
-                  refetch={refetch}
-                />
-              </div>
+              <PlenarySessionManager
+                data={conferenceData.plenarySessions}
+                conference_id={conferenceData.conference.id}
+                refetch={refetch}
+              />
 
-              <div ref={specialRef}>
-                <SpecialSessionManager
-                  data={conferenceData.specialSessions}
-                  conference_id={conferenceData.conference.id}
-                  refetch={refetch}
-                />
-              </div>
+              <SpecialSessionManager
+                data={conferenceData.specialSessions}
+                conference_id={conferenceData.conference.id}
+                refetch={refetch}
+              />
 
-              <div ref={workshopsRef}>
-                <WorkshopManager
-                  data={conferenceData.workshops}
-                  conference_id={conferenceData.conference.id}
-                  refetch={refetch}
-                />
-              </div>
+              <WorkshopManager
+                data={conferenceData.workshops}
+                conference_id={conferenceData.conference.id}
+                refetch={refetch}
+              />
 
-              <div ref={localInfoRef}>
-                <LocalInformationsManager
-                  data={conferenceData.localInformations}
-                  conference_id={conferenceData.conference.id}
-                  refetch={refetch}
-                />
-              </div>
+              <LocalInformationsManager
+                data={conferenceData.localInformations}
+                conference_id={conferenceData.conference.id}
+                refetch={refetch}
+              />
 
-              <div ref={sponsorsRef}>
-                <SponsorsManager
-                  data={conferenceData.sponsors}
-                  conference_id={conferenceData.conference.id}
-                />
-              </div>
+              <SponsorsManager
+                data={conferenceData.sponsors}
+                conference_id={conferenceData.conference.id}
+              />
 
-              <div ref={articlesRef}>
-                <ConferenceArticles
-                  data={conferenceData.articles}
-                  conference_id={conferenceData.conference.id}
-                  refetch={refetch}
-                />
-              </div>
+              <ConferenceArticles
+                data={conferenceData.articles}
+                conference_id={conferenceData.conference.id}
+                refetch={refetch}
+              />
             </div>
           </div>
         </>

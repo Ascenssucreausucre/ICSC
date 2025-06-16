@@ -18,11 +18,24 @@ import availableCountriesList from "../../../assets/json/flag-countries.json";
 import Linkify from "linkify-react";
 
 export default function Registration() {
-  const { registrationFees, importantDates, additionalFees, paymentOptions } =
-    useLoaderData();
+  const {
+    registrationFees,
+    importantDates,
+    additionalFees,
+    paymentOptions,
+    registrations_open,
+  } = useLoaderData();
   const { showFeedback } = useFeedback();
   const publicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
   const availableCountries = availableCountriesList;
+
+  console.log({
+    registrationFees,
+    importantDates,
+    additionalFees,
+    paymentOptions,
+    registrations_open,
+  });
 
   const stripePromise = loadStripe(publicKey);
 
@@ -142,7 +155,6 @@ export default function Registration() {
     }
 
     try {
-      console.log(dataToSend);
       const res = await axios.post(
         import.meta.env.VITE_API_URL + "/front/payment",
         dataToSend,
@@ -156,7 +168,7 @@ export default function Registration() {
 
       return true;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       showFeedback("error", error.message);
       return;
     } finally {
@@ -166,15 +178,6 @@ export default function Registration() {
 
   const formatLabel = (key) =>
     key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
-
-  // console.log({
-  //   selectedArticles,
-  //   freeArticle,
-  //   additional_paper_fee: additionalFees.additional_paper_fee,
-  //   total:
-  //     (selectedArticles.length - freeArticle) *
-  //     additionalFees.additional_paper_fee,
-  // });
 
   const form = [
     {
@@ -542,7 +545,8 @@ export default function Registration() {
                 {articles ? (
                   articles.map(
                     (article) =>
-                      article.status.toLowerCase() === "accepted" && (
+                      article.status.toLowerCase() === "accepted" &&
+                      !article.registration_id && (
                         <div key={article.id} className="form-article">
                           <Input
                             type="checkbox"
@@ -614,8 +618,6 @@ export default function Registration() {
                         ? [...prev.options, option]
                         : prev.options.filter((o) => o.id !== option.id);
 
-                      console.log(updatedOptions);
-
                       return {
                         ...prev,
                         options: updatedOptions,
@@ -666,8 +668,6 @@ export default function Registration() {
           (fc) => fc.type === category
         );
 
-        console.log({ formData, feeCategory });
-
         let baseFee = 0;
         if (formData.attendanceMode.toLowerCase() === "online") {
           baseFee = parseFloat(feeCategory.virtual_attendance);
@@ -700,7 +700,6 @@ export default function Registration() {
             0
           ),
         });
-        console.log(formData);
         return true;
       },
     },
@@ -1010,9 +1009,13 @@ export default function Registration() {
         style={{ justifyContent: "space-around" }}
       >
         <Button
-          text="Register to the conference"
+          text={
+            registrations_open
+              ? "Register to the conference"
+              : "Registrations are not opened yet"
+          }
           onClick={setShowForm}
-          disabled={!additionalFees || !registrationFees}
+          disabled={!registrations_open || !additionalFees || !registrationFees}
         />
       </div>
     </>

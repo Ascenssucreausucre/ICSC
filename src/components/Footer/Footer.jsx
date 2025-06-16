@@ -1,6 +1,6 @@
 import { Mail } from "lucide-react";
 import "./Footer.css";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Phone } from "lucide-react";
 
 export default function Footer({ data }) {

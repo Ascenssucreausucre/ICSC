@@ -55,10 +55,7 @@ export default function Support() {
     []
   );
 
-  console.log("[Component] render");
-
   useEffect(() => {
-    console.log("[Socket.IO] Join adminRoom");
     socket.emit("joinRoom", "adminRoom");
 
     const handleConversationUpdate = ({
@@ -66,12 +63,6 @@ export default function Support() {
       data: updatedConversation,
       id: convId,
     }) => {
-      console.log(
-        "[Socket.IO] conversationUpdated:",
-        type,
-        updatedConversation
-      );
-
       setConversations((prev) => {
         let updatedList;
 
@@ -136,7 +127,6 @@ export default function Support() {
     socket.on("conversationUpdated", handleConversationUpdate);
 
     return () => {
-      console.log("[Socket.IO] Leave adminRoom");
       socket.emit("leaveRoom", "adminRoom");
       socket.off("conversationUpdated", handleConversationUpdate);
     };
@@ -149,33 +139,23 @@ export default function Support() {
       // Marquer comme en cours d'archivage
       setArchivingIds((prev) => new Set([...prev, id]));
 
-      console.log(`🔄 Archiving conversation ${id}...`);
-
       const res = await submit({
         url: `/conversations/archive/${id}`,
         method: "PUT",
       });
 
       if (res) {
-        console.log(`✅ Conversation ${id} archived successfully`);
-
-        // Mise à jour optimiste locale (en cas de problème WebSocket)
         setConversations((prev) => {
           return prev
             .map((conv) => {
               if (conv.id === id) {
                 const updatedConv = { ...conv, archived: !conv.archived };
-                // Si la conversation ne correspond plus aux filtres, elle sera supprimée
                 return matchesFilters(updatedConv) ? updatedConv : null;
               }
               return conv;
             })
             .filter(Boolean);
         });
-
-        // Si on affiche les conversations archivées et qu'on vient d'archiver,
-        // ou si on n'affiche pas les archivées et qu'on vient de désarchiver,
-        // on peut forcer un refresh pour être sûr
         if (
           (filters.showArchived &&
             !conversations.find((c) => c.id === id)?.archived) ||
@@ -190,7 +170,6 @@ export default function Support() {
     } catch (error) {
       console.error(`❌ Error archiving conversation ${id}:`, error);
     } finally {
-      // Retirer de la liste d'archivage
       setArchivingIds((prev) => {
         const newSet = new Set(prev);
         newSet.delete(id);

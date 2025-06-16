@@ -261,7 +261,14 @@ a.link:not(.card-title) {
   line-height: 0;
   transition: color 0.2s ease;
 }
-
+.button.wide {
+  width: 100%;
+  border-radius: 5px;
+}
+.button-container .button.wide {
+  width: auto;
+  flex: 1;
+}
 .card-title {
   text-decoration: none;
   color: var(--secondary-color);

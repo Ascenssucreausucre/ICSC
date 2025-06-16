@@ -23,7 +23,7 @@ export default function ArticleList({
   const [profileFilter, setProfileFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
   const { submit } = useSubmit();
-  const { openModal } = useAdminModal();
+  const { openModal, openConfirmationModal } = useAdminModal();
 
   const [pageListHeight, setPageListHeight] = useState(null);
   const articleListRef = useRef(null);
@@ -295,6 +295,7 @@ export default function ArticleList({
               handleUpdateArticle={handleUpdateArticle}
               handleSetStatus={handleSetStatus}
               handleDeleteArticle={handleDeleteArticle}
+              openConfirmationModal={openConfirmationModal}
               key={article.id}
             />
           ))

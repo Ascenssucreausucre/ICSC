@@ -12,6 +12,7 @@ export default function FeesManager({
   registrationFeesData = [],
   additionalFeesData = [],
   paymentOptions = [],
+  registrationsOpened,
   conference_id,
   refetch,
 }) {
@@ -105,7 +106,6 @@ export default function FeesManager({
   };
 
   const handleEditOption = async (data) => {
-    console.log(data);
     openModal({
       url: `/payment-options/${data.id}`,
       method: "PUT",
@@ -128,128 +128,88 @@ export default function FeesManager({
     refetch();
   };
 
-  return (
-    <div className="fees-manager admin-section">
-      <h2 className="title secondary">Registration fees</h2>
-      {dataToSend ? (
-        <FeesModal
-          data={dataToSend}
-          close={() => setDataToSend(null)}
-          refreshFunction={refetch}
-        />
-      ) : null}
-      {feesData.length === 0 ? (
-        <p>This conference has no registration fees.</p>
-      ) : (
-        feesData.map((fee) => (
-          <div className="fee-manager" key={fee.id}>
-            <RegistrationFeesTable data={fee} />
-            <div className="button-container" style={{ paddingInline: "25%" }}>
-              <button className="button" onClick={() => setDataToSend(fee)}>
-                Manage Fees
-              </button>
-              <button
-                className="button"
-                onClick={() =>
-                  openConfirmationModal({
-                    text: "Are you sure to delete this option ?",
-                    handleAction: () =>
-                      handleDeleteAditionalFees(additionalFees.id),
-                  })
-                }
-              >
-                Delete Fees
-              </button>
-            </div>
-          </div>
-        ))
-      )}
-      <div className="button-container">
-        <button
-          className="button"
-          onClick={() => setDataToSend(registrationFeestemplate)}
-        >
-          New registration fees
-        </button>
-      </div>
+  const enableRegistration = async () => {
+    await submit({
+      url: `/conferences/toggle-registrations`,
+      method: "PUT",
+    });
+    refetch();
+  };
 
-      <hr style={{ backgroundColor: "var(--secondary-color)" }} />
-      <h2 className="title secondary">Additional Fees</h2>
-      {!additionalFees ? (
-        <p>No additional fee found for this conference</p>
-      ) : (
-        <div className="card">
-          <p>
-            <strong>Additional paper charge: </strong>{" "}
-            {additionalFees.additional_paper_fee}
-          </p>
-          <p>
-            <strong>Additional page charge: </strong>{" "}
-            {additionalFees.additional_page_fee}
-          </p>
-          <p>
-            <strong>Max articles: </strong> {additionalFees.max_articles}
-          </p>
-          <p>
-            <strong>Given articles with registration: </strong>{" "}
-            {additionalFees.given_articles_per_registration}
-          </p>
-          <div className="button-container">
-            <button className="button small" onClick={handleEditadditionalFees}>
-              Edit
-            </button>
-            <button
-              className="button small"
-              onClick={() =>
-                openConfirmationModal({
-                  text: "Are you sure to delete this option ?",
-                  handleAction: () =>
-                    handleDeleteAditionalFees(additionalFees.id),
-                })
-              }
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      )}
-      <div className="button-container">
-        <button
-          onClick={handleAddadditionalFees}
-          className="button"
-          disabled={!!additionalFeesData}
-        >
-          Add addtionnal fees
-        </button>
-      </div>
-      <hr style={{ backgroundColor: "var(--secondary-color)" }} />
-      <h2 className="title secondary">Options</h2>
-      <div className="payment-options-container">
-        {paymentOptions.map((option) => (
-          <div className="card payment-option" key={option.id}>
-            <div className="card-header">
-              <h3 className="card-title secondary">{option.name}</h3>
-              <span
-                className={`tag${
-                  option.price === 0 ? " free-option" : " chargeable-option"
-                }`}
+  return (
+    <section className="fees-manager admin-section">
+      <div className="fees-data-container">
+        <h2 className="title secondary">Registration fees</h2>
+        {dataToSend ? (
+          <FeesModal
+            data={dataToSend}
+            close={() => setDataToSend(null)}
+            refreshFunction={refetch}
+          />
+        ) : null}
+        {feesData.length === 0 ? (
+          <p>This conference has no registration fees.</p>
+        ) : (
+          feesData.map((fee) => (
+            <div className="fee-manager" key={fee.id}>
+              <RegistrationFeesTable data={fee} />
+              <div
+                className="button-container"
+                style={{ paddingInline: "25%" }}
               >
-                {option.price === 0
-                  ? "Offered with registration"
-                  : option.price + "€"}
-              </span>
+                <button className="button" onClick={() => setDataToSend(fee)}>
+                  Manage Fees
+                </button>
+                <button
+                  className="button"
+                  onClick={() =>
+                    openConfirmationModal({
+                      text: "Are you sure to delete this option ?",
+                      handleAction: () =>
+                        handleDeleteAditionalFees(additionalFees.id),
+                    })
+                  }
+                >
+                  Delete Fees
+                </button>
+              </div>
             </div>
-            {option.description ? (
-              <p>
-                <Linkify>{option.description}</Linkify>
-              </p>
-            ) : (
-              <p className="data-detail">No description for this option.</p>
-            )}
+          ))
+        )}
+        <div className="button-container">
+          <button
+            className="button"
+            onClick={() => setDataToSend(registrationFeestemplate)}
+          >
+            New registration fees
+          </button>
+        </div>
+
+        <hr style={{ backgroundColor: "var(--secondary-color)" }} />
+        <h2 className="title secondary">Additional Fees</h2>
+        {!additionalFees ? (
+          <p>No additional fee found for this conference</p>
+        ) : (
+          <div className="card">
+            <p>
+              <strong>Additional paper charge: </strong>{" "}
+              {additionalFees.additional_paper_fee}
+            </p>
+            <p>
+              <strong>Additional page charge: </strong>{" "}
+              {additionalFees.additional_page_fee}
+            </p>
+            <p>
+              <strong>Max articles: </strong> {additionalFees.max_articles}
+            </p>
+            <p>
+              <strong>Given articles with registration: </strong>{" "}
+              {additionalFees.given_articles_per_registration}
+            </p>
             <div className="button-container">
               <button
                 className="button small"
-                onClick={() => handleEditOption(option)}
+                onClick={handleEditadditionalFees}
               >
                 Edit
               </button>
@@ -258,7 +218,8 @@ export default function FeesManager({
                 onClick={() =>
                   openConfirmationModal({
                     text: "Are you sure to delete this option ?",
-                    handleAction: () => handleDeleteOption(option.id),
+                    handleAction: () =>
+                      handleDeleteAditionalFees(additionalFees.id),
                   })
                 }
               >
@@ -266,13 +227,73 @@ export default function FeesManager({
               </button>
             </div>
           </div>
-        ))}
+        )}
+        <div className="button-container">
+          <button
+            onClick={handleAddadditionalFees}
+            className="button"
+            disabled={!!additionalFeesData}
+          >
+            Add addtionnal fees
+          </button>
+        </div>
+        <hr style={{ backgroundColor: "var(--secondary-color)" }} />
+        <h2 className="title secondary">Options</h2>
+        <div className="payment-options-container">
+          {paymentOptions.map((option) => (
+            <div className="card payment-option" key={option.id}>
+              <div className="card-header">
+                <h3 className="card-title secondary">{option.name}</h3>
+                <span
+                  className={`tag${
+                    option.price === 0 ? " free-option" : " chargeable-option"
+                  }`}
+                >
+                  {option.price === 0
+                    ? "Offered with registration"
+                    : option.price + "€"}
+                </span>
+              </div>
+              {option.description ? (
+                <p>
+                  <Linkify>{option.description}</Linkify>
+                </p>
+              ) : (
+                <p className="data-detail">No description for this option.</p>
+              )}
+              <div className="button-container">
+                <button
+                  className="button small"
+                  onClick={() => handleEditOption(option)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="button small"
+                  onClick={() =>
+                    openConfirmationModal({
+                      text: "Are you sure to delete this option ?",
+                      handleAction: () => handleDeleteOption(option.id),
+                    })
+                  }
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="button-container">
+          <button className="button" onClick={handleAddOption}>
+            Add an option
+          </button>
+        </div>
       </div>
-      <div className="button-container">
-        <button className="button" onClick={handleAddOption}>
-          Add an option
-        </button>
-      </div>
-    </div>
+      <button className="button wide" onClick={enableRegistration}>
+        {registrationsOpened
+          ? "Disabled registrations"
+          : "Enable registrations"}
+      </button>
+    </section>
   );
 }
