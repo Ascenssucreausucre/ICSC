@@ -57,13 +57,13 @@ export default function Article({
           <div className={`tag tag-${article.profile.toLowerCase()}`}>
             {article.profile}
           </div>
-          {article?.registration_id && (
-            <div className={`tag tag-registered`}>Registered</div>
-          )}
           {!onChange && (
             <div className={`tag tag-${article.status.toLowerCase()}`}>
               <p>{formatText(article.status)}</p>
             </div>
+          )}
+          {article?.registration_id && (
+            <div className={`tag tag-registered`}>Registered</div>
           )}
         </div>
       </div>
