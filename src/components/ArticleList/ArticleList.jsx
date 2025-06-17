@@ -7,6 +7,7 @@ import useSubmit from "../../hooks/useSubmit";
 import { useAdminModal } from "../../context/AdminModalContext";
 import Pagination from "../Pagination/Pagination";
 import Article from "../Article/Article";
+import { Input } from "../Input/Input";
 
 export default function ArticleList({
   data,
@@ -22,6 +23,7 @@ export default function ArticleList({
   const [currentPage, setCurrentPage] = useState(1);
   const [profileFilter, setProfileFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
+  const [registrationFilter, setRegistrationFilter] = useState(false);
   const { submit } = useSubmit();
   const { openModal, openConfirmationModal } = useAdminModal();
 
@@ -75,10 +77,14 @@ export default function ArticleList({
       );
     }
 
+    if (registrationFilter) {
+      results = results.filter((el) => el.registration_id !== null);
+    }
+
     // 3. Mettre à jour la liste filtrée et reset la pagination
     setFilteredArticles(results);
     setCurrentPage(1);
-  }, [searchItem, articles, profileFilter, statusFilter]);
+  }, [searchItem, articles, profileFilter, statusFilter, registrationFilter]);
 
   const itemsPerPage = 6;
 
@@ -263,10 +269,23 @@ export default function ArticleList({
           placeholder="Select Status"
           showClear
         />
+        <Input
+          name="registration-filter"
+          label="Registered only"
+          value={registrationFilter}
+          checked={registrationFilter}
+          onChange={(e) => {
+            setRegistrationFilter(e.target.checked);
+            console.log(e.target.checked);
+          }}
+          type="checkbox"
+        />
         <button
           className="button small"
           onClick={() => {
-            setStatusFilter(null), setProfileFilter(null);
+            setStatusFilter(null),
+              setProfileFilter(null),
+              setRegistrationFilter(false);
           }}
         >
           Clear Filters

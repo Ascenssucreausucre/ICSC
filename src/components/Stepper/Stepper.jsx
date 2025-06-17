@@ -108,15 +108,6 @@ export default function CustomStepper({
               >
                 {index + 1}
               </button>
-              <span
-                className={`step-label ${
-                  activeStep >= index
-                    ? "step-label-active"
-                    : "step-label-inactive"
-                }`}
-              >
-                {step.title}
-              </span>
             </div>
           ))}
 

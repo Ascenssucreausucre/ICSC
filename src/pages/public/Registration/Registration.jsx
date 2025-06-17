@@ -29,32 +29,23 @@ export default function Registration() {
   const publicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
   const availableCountries = availableCountriesList;
 
-  console.log({
-    registrationFees,
-    importantDates,
-    additionalFees,
-    paymentOptions,
-    registrations_open,
-  });
-
   const stripePromise = loadStripe(publicKey);
 
   const iconSize = 12;
 
-  const maxArticles = additionalFees.max_articles;
   const freeArticle = additionalFees.given_articles_per_registration;
 
   const defaultFormData = {
     isAuthor: false,
     email: "",
-    creditCardCountry: { name: "", code: "" },
+    country: null,
     pin: "",
-    ieeeMember: false,
-    student: false,
-    paypal: false,
-    attendanceMode: "Face to face",
+    feeType: "",
+    feeProfile: "",
     options: paymentOptions.filter((option) => option.price === 0),
   };
+
+  const [maxArticles, setMaxArticles] = useState(additionalFees.max_articles);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(defaultFormData);
   const [confirm, setConfirm] = useState(false);
@@ -70,6 +61,8 @@ export default function Registration() {
   });
   const [clientSecret, setClientSecret] = useState("");
   const [stepperLoading, setStepperLoading] = useState(false);
+  const [currentFee, setCurrentFee] = useState(null);
+  const [currentFeeCategory, setCurrentFeeCategory] = useState(null);
 
   useEffect(() => {
     const articlesLength = articles.filter(
@@ -77,6 +70,20 @@ export default function Registration() {
     );
     setSelectedArticles(articlesLength);
   }, [articles]);
+
+  useEffect(() => {
+    if (
+      formData.feeType.toLocaleLowerCase() === "student" ||
+      formData.feeType.toLocaleLowerCase() === "students"
+    ) {
+      console.log("Student detected");
+      setMaxArticles(1);
+    } else {
+      setMaxArticles(additionalFees.max_articles);
+    }
+    setArticles(formData.articles);
+    setSelectedArticles([]);
+  }, [formData.feeType]);
 
   const formRef = useRef(null);
   const formRef2 = useRef(null);
@@ -86,9 +93,11 @@ export default function Registration() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/authors/${id}`
       );
+      const { country, ...data } = response.data;
+      console.log(data);
       setFormData((prev) => ({
         ...prev,
-        ...response.data,
+        ...data,
       }));
       return true;
     } catch (error) {
@@ -110,7 +119,6 @@ export default function Registration() {
     } else {
       newValue = value;
     }
-
     setFormData((prev) => ({
       ...prev,
       [name]: newValue,
@@ -131,16 +139,18 @@ export default function Registration() {
     setStepperLoading(true);
     let dataToSend = {
       ...formData,
-      creditCardCountry: formData.creditCardCountry.code,
+      creditCardCountry: formData.country.code,
     };
     if (formData.isAuthor) {
       const articlesToSend = articles.filter(
         (article) => article.submit !== false
       );
-      if (articlesToSend.length > 4) {
-        console.error(
-          `You can't submit more than ${maxArticles} articles of which you either are author or co-author.`
-        );
+      if (articlesToSend.length > maxArticles) {
+        const message = `You can't submit more than ${maxArticles} articles of which you either are author or co-author${
+          maxArticles === 1 ? " as a student." : "."
+        }`;
+        console.error(message);
+        showFeedback("error", message);
         return;
       }
       if (articlesToSend.find((article) => article.extraPages < 0)) {
@@ -150,10 +160,10 @@ export default function Registration() {
       dataToSend = {
         ...formData,
         articles: articlesToSend,
-        creditCardCountry: formData.creditCardCountry.code,
+        creditCardCountry: formData.country.code,
       };
     }
-
+    console.log(dataToSend);
     try {
       const res = await axios.post(
         import.meta.env.VITE_API_URL + "/front/payment",
@@ -200,35 +210,23 @@ export default function Registration() {
               name="email"
               required
             />
-            {/* <Input
-              value={formData.creditCardCountry.name}
-              onChange={handleChange}
-              name="creditCardCountry"
-              label="Credit-card country"
-              placeholder="Chose your credit card country"
-              disabled
-              required
-            /> */}
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <label
-                htmlFor="creditCardCountry"
-                style={{ marginBottom: "0.5rem" }}
-              >
+              <label htmlFor="country" style={{ marginBottom: "0.5rem" }}>
                 Credit-card country <span className="required-symbol">*</span>
               </label>
               <Dropdown
-                value={formData.creditCardCountry}
+                value={formData.country}
                 options={availableCountries}
                 onChange={(e) => {
                   setFormData((prev) => ({
                     ...prev,
-                    creditCardCountry: e.value,
+                    country: e.value,
                   }));
                 }}
                 placeholder="Select Country"
                 optionLabel="name"
-                name="creditCardCountry"
-                id="creditCardCountry"
+                name="country"
+                id="country"
                 filter
                 showClear
                 valueTemplate={(option) => (
@@ -280,32 +278,6 @@ export default function Registration() {
                 />
               </div>
             )}
-            <fieldset className="button-container">
-              <legend>
-                Select your attendance mode:{" "}
-                <span className="required-symbol">*</span>
-              </legend>
-              <Input
-                type="radio"
-                label="Face to face"
-                value="Face to face"
-                checked={formData.attendanceMode === "Face to face"}
-                onChange={handleChange}
-                name="attendanceMode"
-                inputId="face-to-face"
-                required
-              />
-              <Input
-                type="radio"
-                label="Online"
-                value="Online"
-                checked={formData.attendanceMode === "Online"}
-                onChange={handleChange}
-                name="attendanceMode"
-                inputId="online"
-                required
-              />
-            </fieldset>
           </form>
         </>
       ),
@@ -314,6 +286,11 @@ export default function Registration() {
         if (!formElement.checkValidity()) {
           formElement.reportValidity();
           return false;
+        }
+
+        if (!formData.country) {
+          showFeedback("error", "Country is required.");
+          return;
         }
 
         if (formData.isAuthor === true) {
@@ -326,12 +303,11 @@ export default function Registration() {
             ...prev,
             name: "",
             surname: "",
-            country: "",
             pin: null,
           }));
         }
 
-        formElement.requestSubmit(); // Ceci déclenche `onSubmit`
+        formElement.requestSubmit();
         return true;
       },
     },
@@ -370,23 +346,8 @@ export default function Registration() {
                 />
                 <Input
                   label="Country"
-                  value={formData.country}
-                  onChange={handleChange}
-                  name="country"
-                  required
-                />
-                {/* <Input
-                  label="Credit-card country"
-                  value={formData.creditCardCountry?.name || ""}
-                  onChange={handleChange}
-                  name="creditCardCountry"
-                  required
-                /> */}
-                <Input
-                  label="Attendance mode"
-                  value={formData.attendanceMode}
-                  onChange={handleChange}
-                  name="attendanceMode"
+                  value={formData.country?.name}
+                  name="country-value"
                   required
                   disabled
                 />
@@ -413,12 +374,6 @@ export default function Registration() {
           formElement.reportValidity();
           return false;
         }
-        if (
-          formData.attendanceMode !== "Face to face" &&
-          formData.attendanceMode !== "Online"
-        ) {
-          return false;
-        }
         if (formData?.articles) {
           setArticles(
             formData.articles.map((article) => {
@@ -426,7 +381,17 @@ export default function Registration() {
             })
           );
         }
+        const feeToSet =
+          registrationFees.find(
+            (fee) =>
+              fee.description.toLowerCase() ===
+              formData.country.name.toLowerCase()
+          ) ||
+          registrationFees.find(
+            (fee) => fee.description.toLowerCase() === "other countries"
+          );
         setConfirm(false);
+        setCurrentFee(feeToSet);
         return true;
       },
     },
@@ -434,85 +399,45 @@ export default function Registration() {
       title: "Step 3",
       description: "Ensure your status.",
       content: (
-        <>
-          <fieldset className="button-container">
+        <form onSubmit={(e) => e.preventDefault}>
+          <fieldset style={{ paddingInline: "1rem" }}>
             <legend>
-              Are you IEEE Member ? <span className="required-symbol">*</span>
+              Are you : <span className="required-symbol">*</span>
             </legend>
-            <Input
-              type="radio"
-              label="Yes"
-              name="ieeeMember"
-              value={true}
-              inputId={`ieeeMemberTrue`}
-              onChange={handleChange}
-              checked={formData.ieeeMember === true}
-              required
-            />
-            <Input
-              type="radio"
-              label="No"
-              name="ieeeMember"
-              value={false}
-              inputId={`ieeeMemberFalse`}
-              onChange={handleChange}
-              checked={formData.ieeeMember === false}
-              required
-            />
+            {currentFee &&
+              currentFee.feecategories.map((fee) => (
+                <Input
+                  type="radio"
+                  label={fee.type}
+                  name="feeType"
+                  value={fee.type}
+                  inputId={`radio-${fee.type}`}
+                  onChange={handleChange}
+                  checked={formData.feeType === fee.type}
+                  required
+                />
+              ))}
           </fieldset>
-          <fieldset className="button-container">
-            <legend>
-              Are you a student ? <span className="required-symbol">*</span>
-            </legend>
-            <Input
-              type="radio"
-              label="Yes"
-              name="student"
-              value={true}
-              inputId={`studentTrue`}
-              onChange={handleChange}
-              checked={formData.student === true}
-              required
-            />
-            <Input
-              type="radio"
-              label="No"
-              name="student"
-              value={false}
-              inputId={`studentFalse`}
-              onChange={handleChange}
-              checked={formData.student === false}
-              required
-            />
-          </fieldset>
-          <fieldset className="button-container">
-            <legend>
-              Will you pay with paypal ?{" "}
-              <span className="required-symbol">*</span>
-            </legend>
-            <Input
-              type="radio"
-              label="Yes"
-              name="paypal"
-              value={true}
-              inputId={`paypalTrue`}
-              onChange={handleChange}
-              checked={formData.paypal === true}
-              required
-            />
-            <Input
-              type="radio"
-              label="No"
-              name="paypal"
-              value={false}
-              inputId={`paypalFalse`}
-              onChange={handleChange}
-              checked={formData.paypal === false}
-              required
-            />
-          </fieldset>
-        </>
+        </form>
       ),
+      onNext: () => {
+        const formElement = document.querySelector("form");
+        if (!formElement.checkValidity()) {
+          formElement.reportValidity();
+          return false;
+        }
+        const feeCategory = currentFee.feecategories.find(
+          (fee) => fee.type === formData.feeType
+        );
+        if (!feeCategory) {
+          return showFeedback(
+            "error",
+            "An error occured while finding the corresponding category."
+          );
+        }
+        setCurrentFeeCategory(feeCategory);
+        return true;
+      },
       onPrevious: () => {
         setArticles([]);
         return true;
@@ -520,6 +445,57 @@ export default function Registration() {
     },
     {
       title: "Step 4",
+      description: "Ensure your status.",
+      content: (
+        <form onSubmit={(e) => e.preventDefault}>
+          <fieldset
+            style={{
+              paddingInline: "1rem",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <legend>
+              Which profile suits your registration the best ?{" "}
+              <span className="required-symbol">*</span>
+            </legend>
+            {currentFeeCategory &&
+              Object.keys(currentFeeCategory).map(
+                (key) =>
+                  key !== "type" && (
+                    <Input
+                      type="radio"
+                      label={formatLabel(key)}
+                      name="feeProfile"
+                      value={key}
+                      inputId={`radio-${key}`}
+                      onChange={handleChange}
+                      checked={formData.feeProfile === key}
+                      disabled={!currentFeeCategory[key]}
+                      required
+                    />
+                  )
+              )}
+          </fieldset>
+        </form>
+      ),
+      onNext: () => {
+        const formElement = document.querySelector("form");
+        if (!formElement.checkValidity()) {
+          formElement.reportValidity();
+          return false;
+        }
+        if (!formData.feeProfile) {
+          return showFeedback(
+            "error",
+            "An error occured while selecting your profile."
+          );
+        }
+        return true;
+      },
+    },
+    {
+      title: "Step 5",
       description: formData.isAuthor
         ? "Select the articles you want to submit, and your options:"
         : "Select your options:",
@@ -531,7 +507,7 @@ export default function Registration() {
                 You can submit a maximum of{" "}
                 <strong className="important-info">{maxArticles}</strong>{" "}
                 articles of which you are an author or a co-author. Each
-                additional article will be factured{" "}
+                additional paper will be factured{" "}
                 <strong className="important-info">
                   {additionalFees.additional_paper_fee}€
                 </strong>
@@ -656,26 +632,8 @@ export default function Registration() {
       ),
       next: !formData.isAuthor && "Confirm",
       onNext: () => {
-        const category = formData.student ? "Students" : "Academics";
-
-        const registration =
-          registrationFees.find((r) => r.description === formData.country) ||
-          registrationFees.find(
-            (r) => r.description.toLowerCase() === "other countries"
-          );
-
-        const feeCategory = registration.feecategories.find(
-          (fc) => fc.type === category
-        );
-
-        let baseFee = 0;
-        if (formData.attendanceMode.toLowerCase() === "online") {
-          baseFee = parseFloat(feeCategory.virtual_attendance);
-        } else {
-          baseFee = formData.ieeeMember
-            ? parseFloat(feeCategory.ieee_member)
-            : parseFloat(feeCategory.non_ieee_member);
-        }
+        const selectedKey = formData.feeProfile;
+        const baseFee = currentFeeCategory[selectedKey];
 
         let extraPages = 0;
 
@@ -686,7 +644,7 @@ export default function Registration() {
         }
 
         setPaymentDetails({
-          price: baseFee,
+          price: parseFloat(baseFee),
           articles: selectedArticles.length,
           articlesPrice:
             selectedArticles.length > freeArticle
@@ -704,7 +662,7 @@ export default function Registration() {
       },
     },
     {
-      title: "Step 5",
+      title: "Step 6",
       description: "Payment details",
       content: (
         <>
@@ -712,13 +670,10 @@ export default function Registration() {
             {formData.name} {formData.surname}
           </h3>
           <p>
-            <strong>Attendance mode:</strong> {formData.attendanceMode}
+            <strong>Category: </strong> {formData.feeType}
           </p>
           <p>
-            <strong>IEEE member:</strong> {formData.ieeeMember ? "Yes" : "No"}
-          </p>
-          <p>
-            <strong>Student:</strong> {formData.student ? "Yes" : "No"}
+            <strong>Profile: </strong> {formatLabel(formData.feeProfile)}
           </p>
           <p>
             <strong>Registration:</strong>{" "}
@@ -822,7 +777,7 @@ export default function Registration() {
       disableNext: stepperLoading,
     },
     {
-      title: "Step 6",
+      title: "Step 7",
       description: "Enter your card informations.",
       content: (
         <>

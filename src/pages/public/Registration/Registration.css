@@ -44,8 +44,8 @@ fieldset .form-input .form-control[type="radio"] {
 fieldset .form-input .form-control[type="radio"]:checked {
   border: 5px solid var(--primary-color);
 }
-.step-content-demo .form-input.disabled {
-  margin-inline: 2rem;
+fieldset .form-input.radio.disabled {
+  color: gray;
 }
 .form-extra-pages-container,
 .author-pin {
