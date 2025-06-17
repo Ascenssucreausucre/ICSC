@@ -137,7 +137,12 @@ export default function ArticleList({
       data: { status: status },
     });
     if (response.error) return;
-    refetch();
+
+    setArticles((prev) =>
+      prev.map((article) =>
+        article.id === id ? { ...article, status } : article
+      )
+    );
   };
 
   const isStatusUpToDate = (id, status) => {
