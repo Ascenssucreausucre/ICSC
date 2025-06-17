@@ -81,14 +81,6 @@ export default function Registration() {
     } else {
       setMaxArticles(additionalFees.max_articles);
     }
-    if (formData?.articles) {
-      setArticles(
-        formData.articles.map((article) => {
-          return { ...article, submit: false, extraPages: 0 };
-        })
-      );
-    }
-    setSelectedArticles([]);
   }, [formData.feeType]);
 
   const formRef = useRef(null);
@@ -189,6 +181,16 @@ export default function Registration() {
       return;
     } finally {
       setStepperLoading(false);
+    }
+  };
+
+  const resetArticles = () => {
+    if (formData?.articles) {
+      setArticles(
+        formData.articles.map((article) => {
+          return { ...article, submit: false, extraPages: 0 };
+        })
+      );
     }
   };
 
@@ -380,13 +382,7 @@ export default function Registration() {
           formElement.reportValidity();
           return false;
         }
-        if (formData?.articles) {
-          setArticles(
-            formData.articles.map((article) => {
-              return { ...article, submit: false, extraPages: 0 };
-            })
-          );
-        }
+        resetArticles();
         const feeToSet =
           registrationFees.find(
             (fee) =>
@@ -445,7 +441,7 @@ export default function Registration() {
         return true;
       },
       onPrevious: () => {
-        setArticles([]);
+        resetArticles();
         return true;
       },
     },
@@ -664,6 +660,10 @@ export default function Registration() {
             0
           ),
         });
+        return true;
+      },
+      onPrevious: () => {
+        resetArticles();
         return true;
       },
     },
