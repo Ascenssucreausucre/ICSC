@@ -143,6 +143,9 @@ export default function ArticleList({
         article.id === id ? { ...article, status } : article
       )
     );
+    setStatusList((prev) =>
+      prev.map((item) => (item.articleId === id ? { ...item, status } : item))
+    );
   };
 
   const isStatusUpToDate = (id, status) => {
