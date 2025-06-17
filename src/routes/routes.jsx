@@ -32,6 +32,7 @@ import User from "../pages/Admin/User/User";
 import Terms from "../pages/public/GTU/Terms";
 import Cookies from "../pages/public/GTU/Cookies";
 import Privacy from "../pages/public/GTU/Privacy";
+import RegistrationList from "../pages/Admin/RegistrationList/RegistrationList";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -185,6 +186,10 @@ const router = createBrowserRouter([
           {
             path: "users/:id",
             element: <User />,
+          },
+          {
+            path: "registrations",
+            element: <RegistrationList />,
           },
         ],
       },

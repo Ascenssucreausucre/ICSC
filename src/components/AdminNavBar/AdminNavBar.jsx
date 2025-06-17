@@ -22,6 +22,7 @@ export default function AdminNavBar() {
     { link: "/admin/notifications", name: "Notifications" },
     { link: "/admin/support", name: "Support" },
     { link: "/admin/users", name: "Users" },
+    { link: "/admin/registrations", name: "Registrations" },
   ];
 
   if (adminRole === "superadmin") {
