@@ -50,7 +50,7 @@ You have the right to:
 - Withdraw consent
 - Lodge a complaint with a data protection authority
 
-Contact: [email@example.com]
+Contact: driss.mehdi@univ-poitiers.fr
 
 ## 7. Data Security
 

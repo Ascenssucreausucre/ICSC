@@ -81,7 +81,13 @@ export default function Registration() {
     } else {
       setMaxArticles(additionalFees.max_articles);
     }
-    setArticles(formData.articles);
+    if (formData?.articles) {
+      setArticles(
+        formData.articles.map((article) => {
+          return { ...article, submit: false, extraPages: 0 };
+        })
+      );
+    }
     setSelectedArticles([]);
   }, [formData.feeType]);
 

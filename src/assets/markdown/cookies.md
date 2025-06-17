@@ -30,4 +30,4 @@ You can control and delete cookies through your browser settings. Please note th
 
 ## 5. Contact
 
-If you have questions about our use of cookies, contact: [email@example.com]
+If you have questions about our use of cookies, contact: driss.mehdi@univ-poitiers.fr

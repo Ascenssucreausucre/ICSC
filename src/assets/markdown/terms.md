@@ -29,4 +29,4 @@ We reserve the right to update these Terms & Conditions at any time. Users are e
 
 ## 6. Jurisdiction
 
-These terms are governed by the laws of [Your Country, e.g. France or the EU]. Any dispute will be submitted to the competent courts of that jurisdiction.
+These terms are governed by the laws of France. Any dispute will be submitted to the competent courts of that jurisdiction.
