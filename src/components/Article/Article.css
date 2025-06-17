@@ -37,9 +37,8 @@
   gap: 0.2rem;
 }
 .tag-registered {
-  background-color: #fff;
-  color: var(--primary-color);
-  outline: solid 1px var(--primary-color);
+  background-color: var(--primary-color);
+  color: #fff;
 }
 .card .text-card {
   display: flex;
