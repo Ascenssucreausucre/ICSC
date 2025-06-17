@@ -75,7 +75,7 @@ export default function RegistrationList() {
         </div>
         <Pagination
           currentPage={filters.page}
-          totalItems={registrationList?.total}
+          totalItems={registrationList?.total || 0}
           itemsPerPage={filters.limit}
           onPageChange={(value) =>
             setFilters((prev) => ({ ...prev, page: value }))
