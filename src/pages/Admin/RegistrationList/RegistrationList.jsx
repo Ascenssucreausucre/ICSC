@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import Pagination from "../../../components/Pagination/Pagination";
 import "./RegistrationList.css";
-import RegistrationCard from "../../../components/RegistrationCard/registrationcard";
+import RegistrationCard from "../../../components/RegistrationCard/RegistrationCard";
 
 export default function RegistrationList() {
   const [urlOption, setUrlOption] = useState("current");
