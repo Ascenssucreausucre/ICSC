@@ -6,6 +6,8 @@ import SearchBar from "../../../components/SearchBar/SearchBar";
 import { useEffect } from "react";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 import Pagination from "../../../components/Pagination/Pagination";
+import "./RegistrationList.css";
+import RegistrationCard from "../../../components/RegistrationCard/registrationcard";
 
 export default function RegistrationList() {
   const [urlOption, setUrlOption] = useState("current");
@@ -29,6 +31,7 @@ export default function RegistrationList() {
 
   useEffect(() => {
     setReloading(true);
+    console.log("refetching...");
     const timeOutId = setTimeout(() => {
       refetch();
       setReloading(false);
@@ -63,11 +66,14 @@ export default function RegistrationList() {
             <LoadingScreen />
           ) : registrationList && registrationList?.registrations.length > 0 ? (
             registrationList.registrations.map((registration) => (
-              <div className="card" key={registration.id}>
-                <h3 className="card-title">
-                  {registration.name} {registration.surname}
-                </h3>
-              </div>
+              <RegistrationCard
+                key={registration.id}
+                registration={registration}
+                fees={{
+                  additionalFees: registrationList.additionalFees,
+                  registrationFees: registrationList.registrationFees,
+                }}
+              />
             ))
           ) : (
             <p>No registration found</p>

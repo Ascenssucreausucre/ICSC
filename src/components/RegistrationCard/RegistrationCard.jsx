@@ -1,0 +1,97 @@
+import "./RegistrationCard.css";
+
+export default function RegistrationCard({ registration, fees }) {
+  const { additionalFees, registrationFees } = fees;
+  const formatLabel = (key) =>
+    key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+
+  const registrationFee =
+    registrationFees.find(
+      (fee) =>
+        fee.description.toLowerCase() === registration.country.toLowerCase()
+    ) ||
+    registrationFees.find(
+      (fee) => fee.description.toLowerCase() === "other countries"
+    );
+
+  const feeCategory = registrationFee.feecategories.find(
+    (cat) => cat.type.toLowerCase() === registration.type.toLowerCase()
+  );
+
+  const baseFeePrice = parseFloat(feeCategory[registration.profile]);
+
+  const optionsPrice = registration.options.reduce((acc, option) => {
+    const price = parseInt(option.price, 10);
+    return acc + (isNaN(price) ? 0 : price);
+  }, 0);
+
+  const articlePrice = Math.max(
+    0,
+    (registration.articles.length -
+      additionalFees.given_articles_per_registration) *
+      parseFloat(additionalFees.additional_paper_fee)
+  );
+
+  const extraPagesPrice =
+    registration.extraPages * parseFloat(additionalFees.additional_page_fee);
+
+  const registrationPrices = {
+    total: registration.amount_paid,
+    baseFee: baseFeePrice,
+    optionsTotal: optionsPrice,
+    articlesTotal: articlePrice,
+    extraPagesTotal: extraPagesPrice,
+  };
+
+  return (
+    <div className="card registration" key={registration.id}>
+      <div className="card-strings">
+        <h3 className="card-title">
+          {registration.name} {registration.surname}
+        </h3>
+        <p className="data-detail">
+          for{" "}
+          {registration.conference.acronym + "'" + registration.conference.year}
+        </p>
+        <p>
+          <strong>Contact: </strong>
+          {registration.email}
+        </p>
+        <p>
+          <strong>Country: </strong>
+          {registration.country}
+        </p>
+        <p>
+          <strong>Category: </strong>
+          {formatLabel(registration.type)} {">"}{" "}
+          {formatLabel(registration.profile)}
+        </p>
+      </div>
+      <div className="card-numbers">
+        <h3 className="card-title white">{registrationPrices.total}€</h3>
+        <p>
+          <strong>Base fee: </strong>
+          {registrationPrices.baseFee}€
+        </p>
+        <p>
+          <strong>Options: </strong>
+          {registrationPrices.optionsTotal === 0
+            ? "-"
+            : registrationPrices.optionsTotal + "€"}
+        </p>
+        <p>
+          <strong>Registered articles: </strong>
+          {registrationPrices.articlesTotal === 0
+            ? "-"
+            : registrationPrices.articlesTotal + "€"}
+        </p>
+        <p>
+          <strong>Extra pages: </strong>
+          {registrationPrices.extraPagesTotal === 0
+            ? "-"
+            : registrationPrices.extraPagesTotal + "€"}
+        </p>
+      </div>
+    </div>
+  );
+}

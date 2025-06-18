@@ -1,0 +1,31 @@
+.card.registration {
+  display: flex;
+  justify-content: space-between;
+  padding: unset;
+  overflow: hidden;
+  flex-wrap: wrap;
+  position: relative;
+  transition: background-color 0.2s ease-out;
+}
+.card.registration:hover {
+  background-color: rgb(88, 88, 88);
+}
+.card.registration > * {
+  margin: unset;
+  padding: 10px 20px;
+}
+.card.registration > .card-numbers {
+  position: absolute;
+  right: -5px;
+  z-index: 10;
+  transform: translateX(90%);
+  height: 100%;
+  color: white;
+  background-color: var(--primary-color);
+  padding-inline: 2rem;
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
+  transition: transform 0.2s ease-out;
+}
+.card.registration:hover > .card-numbers {
+  transform: translateX(0);
+}
