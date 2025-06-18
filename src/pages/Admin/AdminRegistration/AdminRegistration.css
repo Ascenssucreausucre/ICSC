@@ -1,0 +1,18 @@
+.registration-modal {
+  position: relative;
+  background-color: white;
+  width: 90vw;
+  max-width: 1000px;
+  max-height: 85dvh;
+  padding: var(--text-padding);
+  border-radius: var(--border-radius);
+}
+.registration-modal > .close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.registration-modal .article-container {
+  display: flex;
+  gap: 2rem;
+}

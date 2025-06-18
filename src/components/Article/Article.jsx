@@ -15,15 +15,19 @@ export default function Article({
   handleDeleteArticle,
   handleSetStatus,
   openConfirmationModal,
+  extraPagesPrice,
 }) {
   const statusIcons = {
     pending: { Icon: Clock, className: "icon-pending" },
     accepted: { Icon: CheckCircle, className: "icon-accepted" },
     rejected: { Icon: XCircle, className: "icon-rejected" },
   };
+
   const { Icon, className } = statusIcons[article.status.toLowerCase()] || {};
+
   const formatText = (text) =>
     String(text).charAt(0).toUpperCase() + String(text).slice(1);
+
   return (
     <div className={`article-card card ${article.status}`} key={article.id}>
       <div className="flex-1 text-card">
@@ -62,10 +66,18 @@ export default function Article({
               <p>{formatText(article.status)}</p>
             </div>
           )}
-          {article?.registration_id && (
+          {(article?.registration_id || article?.extra_pages) && (
             <div className={`tag tag-registered`}>Registered</div>
           )}
         </div>
+        {extraPagesPrice && (
+          <div className="price-wrapper">
+            <strong style={{ fontWeight: "900" }} className="primary">
+              Extra pages: {article.extra_pages}x {parseFloat(extraPagesPrice)}€
+              = {article.extra_pages * parseFloat(extraPagesPrice)}€
+            </strong>
+          </div>
+        )}
       </div>
       {onChange && (
         <div className="button-container card-button-container">

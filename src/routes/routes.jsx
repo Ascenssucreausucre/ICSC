@@ -33,6 +33,8 @@ import Terms from "../pages/public/GTU/Terms";
 import Cookies from "../pages/public/GTU/Cookies";
 import Privacy from "../pages/public/GTU/Privacy";
 import RegistrationList from "../pages/Admin/RegistrationList/RegistrationList";
+import AdminRegistration from "../pages/Admin/AdminRegistration/AdminRegistration";
+import { RegistrationPriceProvider } from "../context/RegistrationPriceContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -189,7 +191,17 @@ const router = createBrowserRouter([
           },
           {
             path: "registrations",
-            element: <RegistrationList />,
+            element: (
+              <RegistrationPriceProvider>
+                <RegistrationList />
+              </RegistrationPriceProvider>
+            ),
+            children: [
+              {
+                path: ":id",
+                element: <AdminRegistration />,
+              },
+            ],
           },
         ],
       },

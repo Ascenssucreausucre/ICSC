@@ -10,7 +10,10 @@
 .card.registration:hover {
   background-color: rgb(88, 88, 88);
 }
-.card.registration > * {
+.card.registration.warning {
+  outline: solid 2px orangered;
+}
+.card.registration > div {
   margin: unset;
   padding: 10px 20px;
 }
@@ -28,4 +31,15 @@
 }
 .card.registration:hover > .card-numbers {
   transform: translateX(0);
+}
+.card.registration svg {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+  color: orangered;
+  transition: color 0.2s ease-out;
+}
+.card.registration:hover svg {
+  color: white;
 }

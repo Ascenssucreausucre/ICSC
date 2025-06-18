@@ -1,7 +1,12 @@
+import { OctagonAlert } from "lucide-react";
 import "./RegistrationCard.css";
+import { useNavigate } from "react-router-dom";
+import { useRegistrationPrice } from "../../context/RegistrationPriceContext";
 
 export default function RegistrationCard({ registration, fees }) {
   const { additionalFees, registrationFees } = fees;
+  const { setRegistrationPrices } = useRegistrationPrice();
+  const navigate = useNavigate();
   const formatLabel = (key) =>
     key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
@@ -39,12 +44,28 @@ export default function RegistrationCard({ registration, fees }) {
     total: registration.amount_paid,
     baseFee: baseFeePrice,
     optionsTotal: optionsPrice,
+    pricePerExtraArticle: additionalFees.additional_paper_fee,
     articlesTotal: articlePrice,
+    pricePerExtraPage: additionalFees.additional_page_fee,
     extraPagesTotal: extraPagesPrice,
   };
 
+  const warning =
+    registrationPrices.total !==
+    registrationPrices.baseFee +
+      registrationPrices.extraPagesTotal +
+      registrationPrices.optionsTotal +
+      registrationPrices.articlesTotal;
+
   return (
-    <div className="card registration" key={registration.id}>
+    <div
+      className={`card registration${warning ? " warning" : ""}`}
+      key={registration.id}
+      onClick={() => {
+        setRegistrationPrices(registrationPrices);
+        navigate(`./${registration.id}`);
+      }}
+    >
       <div className="card-strings">
         <h3 className="card-title">
           {registration.name} {registration.surname}
@@ -92,6 +113,7 @@ export default function RegistrationCard({ registration, fees }) {
             : registrationPrices.extraPagesTotal + "€"}
         </p>
       </div>
+      {warning && <OctagonAlert />}
     </div>
   );
 }
