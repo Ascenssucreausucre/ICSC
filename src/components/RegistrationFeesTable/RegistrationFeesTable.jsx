@@ -1,6 +1,6 @@
 import "./RegistrationFeesTable.css";
 
-export default function RegistrationFeesTable({ data }) {
+export default function RegistrationFeesTable({ data, highlight }) {
   const formatText = (text) =>
     String(text).charAt(0).toUpperCase() + String(text).slice(1);
   return (

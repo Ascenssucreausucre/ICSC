@@ -26,6 +26,7 @@ const useFetch = (
         if (isMounted) {
           setData(result);
         }
+        console.log(result);
       } catch (err) {
         if (isMounted) {
           setError(err.message);

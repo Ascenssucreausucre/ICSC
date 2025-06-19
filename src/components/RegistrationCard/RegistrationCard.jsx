@@ -37,8 +37,17 @@ export default function RegistrationCard({ registration, fees }) {
       parseFloat(additionalFees.additional_paper_fee)
   );
 
-  const extraPagesPrice =
-    registration.extraPages * parseFloat(additionalFees.additional_page_fee);
+  const extraPagesPrice = registration.articles.reduce((acc, article) => {
+    const price =
+      parseInt(article.extra_pages, 10) *
+      parseFloat(additionalFees.additional_page_fee);
+    console.log({
+      price,
+      extraPages: article.extra_pages,
+      additional_page_fee: parseFloat(additionalFees.additional_page_fee),
+    });
+    return acc + (isNaN(price) ? 0 : price);
+  }, 0);
 
   const registrationPrices = {
     total: registration.amount_paid,
@@ -48,14 +57,15 @@ export default function RegistrationCard({ registration, fees }) {
     articlesTotal: articlePrice,
     pricePerExtraPage: additionalFees.additional_page_fee,
     extraPagesTotal: extraPagesPrice,
+    calculatedTotal:
+      (baseFeePrice || 0) +
+      (optionsPrice || 0) +
+      (articlePrice || 0) +
+      (extraPagesPrice || 0),
   };
 
   const warning =
-    registrationPrices.total !==
-    registrationPrices.baseFee +
-      registrationPrices.extraPagesTotal +
-      registrationPrices.optionsTotal +
-      registrationPrices.articlesTotal;
+    registrationPrices.total !== registrationPrices.calculatedTotal;
 
   return (
     <div
@@ -89,7 +99,7 @@ export default function RegistrationCard({ registration, fees }) {
         </p>
       </div>
       <div className="card-numbers">
-        <h3 className="card-title white">{registrationPrices.total}€</h3>
+        <h3 className="card-title white">Paid: {registrationPrices.total}€</h3>
         <p>
           <strong>Base fee: </strong>
           {registrationPrices.baseFee}€

@@ -12,7 +12,20 @@
   top: 1rem;
   right: 1rem;
 }
-.registration-modal .article-container {
+.registration-modal .articles-container {
   display: flex;
   gap: 2rem;
+}
+.article-price {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.article-price .article-card {
+  width: clamp(300px, 50%, 500px);
+}
+.registration-modal .total-fees {
+  font-weight: 900;
+  outline: solid 1px var(--primary-color);
 }

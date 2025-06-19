@@ -275,6 +275,9 @@ a.link:not(.card-title) {
   font-weight: 800;
   font-size: var(--card-title-font-size);
 }
+.card-title.primary {
+  color: var(--primary-color);
+}
 .data-detail {
   font-style: italic;
   color: gray;

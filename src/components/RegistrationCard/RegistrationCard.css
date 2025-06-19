@@ -9,6 +9,7 @@
 }
 .card.registration:hover {
   background-color: rgb(88, 88, 88);
+  cursor: pointer;
 }
 .card.registration.warning {
   outline: solid 2px orangered;
