@@ -6,6 +6,8 @@
   max-height: 85dvh;
   padding: var(--text-padding);
   border-radius: var(--border-radius);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .registration-modal > .close-button {
   position: absolute;
