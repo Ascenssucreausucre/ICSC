@@ -15,7 +15,7 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
   const [inputText, setInputText] = useState("");
   const { submit, submitLoading } = useSubmit();
 
-  const inputRef = useRef(null); // ref directe vers l’input réel
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const inputEl = inputRef.current;
@@ -33,7 +33,7 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
 
   const handleChipsChange = (e) => {
     setArticleIds(e.target.value);
-    setInputText(""); // reset après ajout
+    setInputText("");
   };
 
   const handleStatusChange = (value) => {
@@ -84,6 +84,7 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
     const dataToSend = {
       ids: articleIds,
       status: action.value,
+      conferenceId: conference_id,
     };
     const response = await submit({
       url: "/articles/update-status",
@@ -114,7 +115,7 @@ export default function ConferenceArticles({ data, conference_id, refetch }) {
               articleIds.length > 0 || inputText.length > 0 ? " active" : ""
             }`}
           >
-            Enter the article-ids you want to edit
+            Enter the article-nr you want to edit
           </label>
           <Chips
             value={articleIds}
