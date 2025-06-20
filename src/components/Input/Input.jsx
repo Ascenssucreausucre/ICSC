@@ -1,18 +1,8 @@
-/**
- * @param {string} placeholder - Placeholder text
- * @param {string} value - Current input value
- * @param {(s: string) => void} onChange - Function called when the value changes
- * @param {string} [type] - Input type (text, email, password, etc.)
- * @param {string} [id] - Input ID
- * @param {string} [label] - Label text
- * @param {string} [name] - Input name
- * @param {boolean} [required] - Indicates whether the input is required
- * @param {object} [style] - Optional CSS styles
- * @param {number} [caractereMin] - Minimum number of characters for the input
- * @param {number} [caractereMax] - Maximum number of characters for the input
- */
+import { useState } from "react";
 import "./Input.css";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
+import { Eye, EyeOff } from "lucide-react";
+
 export function Input({
   placeholder = "",
   value,
@@ -32,6 +22,9 @@ export function Input({
   inputId,
   ...props
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordType = type === "password";
+
   const numberProps =
     type === "number"
       ? {
@@ -51,24 +44,12 @@ export function Input({
       ? `Maximum de ${caractereMax} caractères autorisés.`
       : "";
 
-  return (
-    <div
-      className={`form-input ${className}${" " + type}${
-        disabled ? " disabled" : ""
-      }`}
-    >
-      {label && (
-        <label htmlFor={inputId ? inputId : name}>
-          {label}
-          {required && type !== "radio" && (
-            <span className="required-symbol"> *</span>
-          )}
-        </label>
-      )}
-      {type === "textarea" ? (
+  const renderInput = () => {
+    if (type === "textarea") {
+      return (
         <textarea
           {...props}
-          id={name}
+          id={inputId ?? name}
           name={name}
           value={value}
           placeholder={placeholder}
@@ -78,12 +59,14 @@ export function Input({
           disabled={disabled}
           className="form-control"
           rows={5}
-        ></textarea>
-      ) : type === "tel" ? (
+        />
+      );
+    } else if (type === "tel") {
+      return (
         <PhoneInputWithCountrySelect
           {...props}
           international
-          id={inputId ? inputId : name}
+          id={inputId ?? name}
           type={type}
           name={name}
           value={value}
@@ -96,10 +79,40 @@ export function Input({
           pattern={pattern}
           className="form-control"
         />
-      ) : (
+      );
+    } else if (isPasswordType) {
+      return (
+        <div className="password-wrapper">
+          <input
+            {...props}
+            id={inputId ?? name}
+            type={showPassword ? "text" : "password"}
+            name={name}
+            value={value}
+            placeholder={placeholder}
+            onChange={onChange}
+            style={style}
+            required={required}
+            disabled={disabled}
+            {...numberProps}
+            pattern={pattern}
+            className="form-control"
+          />
+          <button
+            type="button"
+            className="toggle-password"
+            onClick={() => setShowPassword((prev) => !prev)}
+            tabIndex={-1}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+      );
+    } else {
+      return (
         <input
           {...props}
-          id={inputId ? inputId : name}
+          id={inputId ?? name}
           type={type}
           name={name}
           value={value}
@@ -112,7 +125,27 @@ export function Input({
           pattern={pattern}
           className="form-control"
         />
+      );
+    }
+  };
+
+  return (
+    <div
+      className={`form-input ${className}${" " + type}${
+        disabled ? " disabled" : ""
+      }`}
+    >
+      {label && (
+        <label htmlFor={inputId ?? name}>
+          {label}
+          {required && type !== "radio" && (
+            <span className="required-symbol"> *</span>
+          )}
+        </label>
       )}
+
+      {renderInput()}
+
       {(caractereMin || caractereMax) && !disabled && (
         <p style={{ color: "gray", fontSize: "0.85em" }}>
           {length}/{caractereMax} caractères

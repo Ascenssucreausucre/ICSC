@@ -5,7 +5,6 @@
 .form-input .form-control,
 .form-input textarea {
   border: solid rgba(128, 128, 128, 0.37) 1px;
-  margin-block-start: 5px;
   font-size: var(--font-size);
   padding: clamp(2px, 2vw, 10px) clamp(4px, 4vw, 20px);
   background-color: white;
@@ -27,9 +26,6 @@
 .form-input input:focus-visible {
   border: solid var(--primary-color) 1px;
   outline: solid var(--primary-color-50) 2px;
-}
-label {
-  margin-bottom: 5px;
 }
 .required-symbol {
   color: orangered;
@@ -86,4 +82,28 @@ label {
   padding: clamp(2px, 2vw, 10px) clamp(4px, 4vw, 20px);
   border-radius: inherit;
   flex: 1;
+}
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem; /* pour laisser la place à l'icône */
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #666;
 }
