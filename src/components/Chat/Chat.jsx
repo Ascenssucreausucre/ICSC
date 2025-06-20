@@ -132,7 +132,7 @@ export default function Chat({
         error.response?.data?.message ||
         error.response?.data ||
         error.message ||
-        "Une erreur inattendue s'est produite.";
+        "Unexpected error.";
       console.error("[Message Error]", errorMessage);
       showErrorMessage(errorMessage);
     }

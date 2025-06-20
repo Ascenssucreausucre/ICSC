@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import "./VerticalMenu.css";
 
@@ -39,7 +38,6 @@ export default function VerticalMenu({
         return (scrollY - start) / (end - start);
       });
 
-      // Appliquer la logique "une seule barre active"
       const filteredProgress = rawProgress.map((val, i, arr) => {
         const prev = arr[i - 1];
         const next = arr[i + 1];

@@ -6,10 +6,8 @@ import { AnimatePresence } from "framer-motion";
 import SplitText from "../SplitText";
 import BlurText from "../BlurText";
 
-// Mémoïsation de BlurText
 const MemoizedBlurText = React.memo(BlurText);
 
-// Composant séparé pour la bannière
 function HeaderBanner({ conferenceData, convertedDates, congressDatesText }) {
   return (
     <div

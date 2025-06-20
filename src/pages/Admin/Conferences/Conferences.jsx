@@ -16,7 +16,6 @@ export default function Conferences() {
 
   const navigate = useNavigate();
 
-  // Utilisation de useFetch pour récupérer les conférences
   const {
     data: conferences,
     loading,

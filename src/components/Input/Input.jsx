@@ -1,16 +1,15 @@
 /**
- * Composant Input personnalisé
- * @param {string} placeholder - Texte indicatif pour l'input
- * @param {string} value - Valeur actuelle de l'input
- * @param {(s: string) => void} onChange - Fonction appelée lors d'un changement
- * @param {string} [type] - Type d'input (text, email, password, etc.)
- * @param {string} [id] - ID de l'input
- * @param {string} [label] - Texte affiché pour le label
- * @param {string} [name] - Nom de l'input
- * @param {boolean} [required] - Indique si l'input est requis
- * @param {object} [style] - Styles CSS optionnels
- * @param {number} [caractereMin] - Nombre minimum de caractères pour l'input
- * @param {number} [caractereMax] - Nombre maximum de caractères pour l'input
+ * @param {string} placeholder - Placeholder text
+ * @param {string} value - Current input value
+ * @param {(s: string) => void} onChange - Function called when the value changes
+ * @param {string} [type] - Input type (text, email, password, etc.)
+ * @param {string} [id] - Input ID
+ * @param {string} [label] - Label text
+ * @param {string} [name] - Input name
+ * @param {boolean} [required] - Indicates whether the input is required
+ * @param {object} [style] - Optional CSS styles
+ * @param {number} [caractereMin] - Minimum number of characters for the input
+ * @param {number} [caractereMax] - Maximum number of characters for the input
  */
 import "./Input.css";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
@@ -41,10 +40,8 @@ export function Input({
         }
       : {};
 
-  // Calcul de la longueur de l'input
   const length = value ? value.length : 0;
 
-  // Message d'erreur basé sur les limites de caractères
   const minError =
     caractereMin && length < caractereMin
       ? `Minimum de ${caractereMin} caractères requis.`
@@ -80,7 +77,7 @@ export function Input({
           required={required}
           disabled={disabled}
           className="form-control"
-          rows={5} // Nombre de lignes visibles par défaut
+          rows={5}
         ></textarea>
       ) : type === "tel" ? (
         <PhoneInputWithCountrySelect
@@ -116,14 +113,12 @@ export function Input({
           className="form-control"
         />
       )}
-      {/* Affichage du nombre de caractères uniquement si caractereMin ou caractereMax est renseigné */}
       {(caractereMin || caractereMax) && !disabled && (
         <p style={{ color: "gray", fontSize: "0.85em" }}>
           {length}/{caractereMax} caractères
         </p>
       )}
 
-      {/* Affichage des messages d'erreur si nécessaire */}
       {(minError || maxError) && !disabled && (
         <p style={{ color: "red", fontSize: "0.85em" }}>
           {minError || maxError}

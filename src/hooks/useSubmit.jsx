@@ -9,11 +9,12 @@ const useSubmit = () => {
   const baseUrl = import.meta.env.VITE_API_URL;
 
   /**
-   * @param {string} url - L'URL de l'API
-   * @param {string} method - Méthode HTTP (POST, PUT, DELETE)
-   * @param {Object|FormData} [data=null] - Les données à envoyer (JSON ou FormData)
-   * @param {boolean} [isFormData=false] - Indique si on envoie du FormData (fichier)
+   * @param {string} url - The API URL
+   * @param {string} method - HTTP method (POST, PUT, DELETE)
+   * @param {Object|FormData} [data=null] - Data to send (JSON or FormData)
+   * @param {boolean} [isFormData=false] - Indicates whether FormData (e.g. file upload) is being sent
    */
+
   const submit = async ({
     url,
     method = "POST",
@@ -22,13 +23,11 @@ const useSubmit = () => {
   }) => {
     setSubmitLoading(true);
 
-    // console.log(baseUrl + url, data);
-
     try {
       const response = await fetch(baseUrl + url, {
         method,
         headers: isFormData
-          ? {} // pas de Content-Type -> le navigateur ajoute automatiquement le bon (multipart/form-data avec boundary)
+          ? {}
           : {
               "Content-Type": "application/json",
             },
@@ -47,14 +46,14 @@ const useSubmit = () => {
         const receivedError =
           responseData?.error || responseData?.errors[0].message;
         console.error(receivedError);
-        throw new Error(receivedError || "Une erreur s'est produite");
+        throw new Error(receivedError || "An error has occurred.");
       }
 
       showFeedback("success", responseData.message);
       return responseData;
     } catch (err) {
       showFeedback("error", err.message);
-      console.error("Erreur API :", err);
+      console.error("Internal server error :", err);
       return null;
     } finally {
       setSubmitLoading(false);

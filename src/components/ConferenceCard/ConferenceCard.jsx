@@ -14,8 +14,8 @@ export default function ConferenceCard({
   const navigate = useNavigate();
   const formatLabel = (key) => {
     return key
-      .replace(/_/g, " ") // Remplace les underscores par des espaces
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // Met la première lettre de chaque mot en majuscule
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   const formattedData = Object.fromEntries(
@@ -33,7 +33,6 @@ export default function ConferenceCard({
       method: "PUT",
     });
 
-    // Rafraîchir les conférences après modification
     if (refreshConferences) return refreshConferences();
   };
 

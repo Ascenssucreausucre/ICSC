@@ -13,10 +13,10 @@ const useFetch = (
   const [error, setError] = useState(null);
   const baseUrl = import.meta.env.VITE_API_URL;
 
-  const [refreshFlag, setRefreshFlag] = useState(false); // Flag pour forcer un rechargement
+  const [refreshFlag, setRefreshFlag] = useState(false);
 
   useEffect(() => {
-    let isMounted = true; // Pour éviter les erreurs si le composant est démonté
+    let isMounted = true;
     setReLoading(true);
 
     const fetchData = async () => {
@@ -44,12 +44,12 @@ const useFetch = (
 
     return () => {
       isMounted = false;
-    }; // Cleanup en cas de démontage
-  }, [url, refreshFlag]); // Le `refreshFlag` déclenche la refetch
+    };
+  }, [url, refreshFlag]);
 
-  const refetch = () => setRefreshFlag(!refreshFlag); // Toggle pour recharger les données
+  const refetch = () => setRefreshFlag(!refreshFlag);
 
-  return { data, loading, reLoading, error, refetch }; // On retourne aussi la fonction `refetch`
+  return { data, loading, reLoading, error, refetch };
 };
 
 export default useFetch;

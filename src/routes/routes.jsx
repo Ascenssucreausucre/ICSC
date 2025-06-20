@@ -6,9 +6,9 @@ import Registration from "../pages/public/Registration/Registration";
 import LocalInfo from "../pages/public/LocalInfo/LocalInfo";
 import AdminLogin from "../pages/Admin/AdminLogin/AdminLogin";
 import AdminMainPage from "../pages/Admin/AdminMainPage/AdminMainPage";
-import Root from "../layouts/Root"; // Layout pour le front
-import AdminRoot from "../layouts/AdminRoot"; // Layout pour l'admin
-import PrivateRoute from "../components/PrivateRoute"; // Import du composant PrivateRoute
+import Root from "../layouts/Root";
+import AdminRoot from "../layouts/AdminRoot";
+import PrivateRoute from "../components/PrivateRoute";
 import Conferences from "../pages/Admin/Conferences/Conferences";
 import Conference from "../pages/Admin/Conference/Conference";
 import { AuthProvider } from "../context/AuthContext";

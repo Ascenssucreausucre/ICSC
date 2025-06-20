@@ -12,7 +12,6 @@ function App() {
     if (currentConference) {
       const { primary_color, secondary_color, tertiary_color } =
         currentConference;
-      // Appliquer les couleurs dynamiquement
       document.documentElement.style.setProperty(
         "--primary-color",
         primary_color

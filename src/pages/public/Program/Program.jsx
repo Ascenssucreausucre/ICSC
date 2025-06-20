@@ -16,7 +16,7 @@ export default function Program() {
   const [bio, setBio] = useState(null);
   const { specialSessions, plenarySessions, workshops } = useLoaderData();
   const formatDate = (date, country = "en-US", props) => {
-    const options = props ?? { day: "numeric", month: "long" }; // fallback si props est null ou undefined
+    const options = props ?? { day: "numeric", month: "long" };
     const converted = new Date(date);
     return converted.toLocaleDateString(country, options);
   };

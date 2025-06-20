@@ -33,11 +33,9 @@ export default function Support() {
   const { openConfirmationModal } = useAdminModal();
   const navigate = useNavigate();
 
-  // Utilise useRef pour avoir toujours les filtres actuels dans les callbacks
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
 
-  // Fonction pour vérifier si une conversation correspond aux filtres
   const matchesFilters = useCallback(
     (conversation, currentFilters = filtersRef.current) => {
       const { showArchived, onlyUnread } = currentFilters;
@@ -67,27 +65,22 @@ export default function Support() {
         let updatedList;
 
         if (type === "newMessage") {
-          // Supprime si existe déjà
           updatedList = prev.filter(
             (conv) => conv.id !== updatedConversation.id
           );
 
-          // Vérifie si la conversation correspond aux filtres avant de l'ajouter
           if (matchesFilters(updatedConversation)) {
             updatedList.push(updatedConversation);
           }
 
-          // Trie par date
           updatedList.sort(
             (a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt)
           );
 
-          // Limite à la taille de page
           if (updatedList.length > filtersRef.current.limit) {
             updatedList = updatedList.slice(0, filtersRef.current.limit);
           }
         } else {
-          // Pour les autres types de mise à jour (comme l'archivage)
           const existingIndex = prev.findIndex((conv) => conv.id === convId);
 
           if (existingIndex !== -1) {
@@ -96,7 +89,6 @@ export default function Support() {
               ...updatedConversation,
             };
 
-            // Si la conversation correspond toujours aux filtres, la mettre à jour
             if (matchesFilters(updatedConv)) {
               updatedList = [
                 ...prev.slice(0, existingIndex),
@@ -104,11 +96,9 @@ export default function Support() {
                 ...prev.slice(existingIndex + 1),
               ];
             } else {
-              // Sinon, la retirer de la liste
               updatedList = prev.filter((conv) => conv.id !== convId);
             }
           } else {
-            // La conversation n'existe pas dans la liste actuelle
             if (matchesFilters(updatedConversation)) {
               updatedList = [...prev, updatedConversation];
               updatedList.sort(
@@ -136,7 +126,6 @@ export default function Support() {
 
   const handleArchive = async (id) => {
     try {
-      // Marquer comme en cours d'archivage
       setArchivingIds((prev) => new Set([...prev, id]));
 
       const res = await submit({

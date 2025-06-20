@@ -15,33 +15,20 @@ export default function ChatRoom() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchData = async () => {
-    console.log(
-      "[API] Tentative de récupération de la conversation utilisateur..."
-    );
     try {
       const res = await axios.get(`${API_URL}/conversations/user`, {
         withCredentials: true,
       });
-      console.log("[API] Conversation récupérée !");
       setConversation(res.data);
-    } catch (error) {
-      console.error(
-        "[API] Erreur lors de la récupération de la conversation :",
-        error.response?.data || error.message
-      );
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
     if (isAuthenticated) {
-      console.log(
-        "[Auth] Utilisateur connecté, récupération de la conversation..."
-      );
       if (isOpen) {
         fetchData();
       }
     } else {
-      console.log("[Auth] Utilisateur NON connecté, aucune récupération.");
       setConversation({});
     }
   }, [isAuthenticated, isOpen]);

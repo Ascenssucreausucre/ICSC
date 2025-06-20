@@ -5,7 +5,6 @@ import useFetch from "../../../hooks/useFetch";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen";
 
 export default function AdminMainPage() {
-  // const currentConference = useLoaderData();
   const { data: currentConference, loading } = useFetch("/conferences/current");
 
   if (loading) {

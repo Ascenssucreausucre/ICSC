@@ -54,7 +54,7 @@ export default function Authors() {
         );
         return match ? { name: match.name, code: match.code } : null;
       })
-      .filter(Boolean); // retire les nulls si aucun match trouvé
+      .filter(Boolean);
   }
 
   useEffect(() => {
@@ -73,21 +73,18 @@ export default function Authors() {
     fetchFilters();
   }, []);
 
-  // Références pour maintenir la position de défilement
   const authorsListRef = useRef(null);
   const scrollPositionRef = useRef(0);
   const [listHeight, setListHeight] = useState(null);
 
   const { submit } = useSubmit();
 
-  // Mesurer la hauteur initiale de la liste pour maintenir une taille constante
   useEffect(() => {
     if (authorsListRef.current && authors.length > 0 && !listHeight) {
       setListHeight(authorsListRef.current.clientHeight);
     }
   }, [authors, listHeight]);
 
-  // Charger les auteurs en utilisant l'API de recherche
   const fetchAuthors = async () => {
     if (loading === false) setLoading(true);
 
@@ -114,16 +111,13 @@ export default function Authors() {
       });
       setError(null);
     } catch (err) {
-      console.error("Erreur lors du chargement des auteurs:", err);
-      setError(
-        err.message || "Une erreur est survenue lors du chargement des auteurs"
-      );
+      console.error("Error while retreiving authors:", err);
+      setError(err.message || "Error while retreiving authors:");
     } finally {
       setLoading(false);
     }
   };
 
-  // Effectuer la recherche lorsque les critères changent
   useEffect(() => {
     setLoading(true);
     const timeoutId = setTimeout(() => {
@@ -185,7 +179,6 @@ export default function Authors() {
     fetchAuthors();
   };
 
-  // Gestion de la pagination
   const handlePageChange = (newPage) => {
     setPagination({
       ...pagination,
@@ -193,7 +186,6 @@ export default function Authors() {
     });
   };
 
-  // Calculer le nombre total de pages
   const totalPages = Math.ceil(pagination.total / pagination.pageSize);
 
   return (
@@ -425,7 +417,6 @@ export default function Authors() {
         )}
       </div>
 
-      {/* Pagination avec votre composant PaginationControls */}
       {pagination.total > 0 && (
         <PaginationControls
           currentPage={pagination.page}

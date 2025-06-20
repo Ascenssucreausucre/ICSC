@@ -40,7 +40,6 @@ export default function LocalInfo() {
                 </Link>
               )}
             </div>
-            {/* {index + 1 < localInformations.length && <hr />} */}
           </React.Fragment>
         ))}
       </div>

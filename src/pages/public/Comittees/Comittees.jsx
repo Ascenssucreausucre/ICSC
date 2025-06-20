@@ -43,7 +43,6 @@ export default function Comittees() {
               <h2 className="title secondary">{comittee.type}</h2>
 
               <div className="roles-container">
-                {/* Vérifier si `roles` existe et est un tableau */}
                 {Array.isArray(comittee.roles) && comittee.roles.length > 0 ? (
                   comittee.roles.map((role, roleIndex) => (
                     <div key={roleIndex} className="committee-role">
@@ -51,7 +50,6 @@ export default function Comittees() {
                         <h3 className="primary bold">{role.title}</h3>
                       )}
 
-                      {/* Vérifier si `members` existe avant de le parcourir */}
                       {Array.isArray(role.members) &&
                         role.members.map((member, memberIndex) => (
                           <p key={memberIndex}>

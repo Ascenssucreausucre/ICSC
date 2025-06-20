@@ -52,24 +52,12 @@ export default function Home() {
     ? filteredTexts.sort(() => 0.5 - Math.random())
     : null; // Mélange
 
-  const randomTexts = shuffledTexts ? shuffledTexts.slice(0, 10) : null; // Prend les 10 premiers
+  const randomTexts = shuffledTexts ? shuffledTexts.slice(0, 10) : null;
 
   return (
     <>
       <section className="home-section">
         <h2 className="title primary">Invitation</h2>
-        {/* <MagnetLines
-          containerSize="50%"
-          lineColor="var(--primary-color)"
-          lineWidth="0.2rem"
-          lineHeight="2rem"
-          style={{
-            position: "absolute",
-            right: "-25%",
-            zIndex: "-1",
-            opacity: 0.5,
-          }}
-        /> */}
         <p className="sub-title">
           It is our great pleasure to invite you to participate in the IEEE
           {" " + conferenceData.year + " "}

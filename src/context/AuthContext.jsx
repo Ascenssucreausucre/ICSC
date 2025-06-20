@@ -8,14 +8,13 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [adminRole, setAdminRole] = useState(null); // 👈 rôle ajouté ici
+  const [adminRole, setAdminRole] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loggingIn, setLoggingIn] = useState(false);
   const navigate = useNavigate();
   const { showFeedback } = useFeedback();
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // Vérifier l'authentification et récupérer le rôle
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
@@ -27,7 +26,7 @@ export const AuthProvider = ({ children }) => {
         if (response.ok) {
           const data = await response.json();
           setIsAuthenticated(true);
-          setAdminRole(data.role); // 👈 on stocke le rôle
+          setAdminRole(data.role);
         } else {
           setIsAuthenticated(false);
           setAdminRole(null);

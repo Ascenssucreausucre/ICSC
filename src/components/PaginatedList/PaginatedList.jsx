@@ -33,7 +33,6 @@ export default function PaginatedList({
       });
     }
 
-    // Filtre par texte (recherche)
     if (filterConfig.search?.keys?.length && searchTerm.trim() !== "") {
       const lowerSearch = searchTerm.toLowerCase();
       result = result.filter((item) =>
@@ -47,7 +46,6 @@ export default function PaginatedList({
       );
     }
 
-    // Tri
     if (filterConfig.sort?.key) {
       const key = filterConfig.sort.key;
       result.sort((a, b) => {
@@ -73,7 +71,6 @@ export default function PaginatedList({
 
   return (
     <>
-      {/* Barre de recherche */}
       {filterConfig.search && (
         <div className="searchbar">
           <input
@@ -85,7 +82,6 @@ export default function PaginatedList({
         </div>
       )}
 
-      {/* Filtres par date */}
       {filterConfig.dateRange && (
         <div className="filter-bar">
           <label>
@@ -107,7 +103,6 @@ export default function PaginatedList({
         </div>
       )}
 
-      {/* Bouton de tri */}
       {filterConfig.sort && (
         <button
           className="button small"
@@ -117,7 +112,6 @@ export default function PaginatedList({
         </button>
       )}
 
-      {/* Liste paginée */}
       <div className="page-list">
         {paginated.length > 0 ? (
           paginated.map((item) => renderItem(item, extraKey && extraKey(item)))
@@ -126,7 +120,6 @@ export default function PaginatedList({
         )}
       </div>
 
-      {/* Pagination */}
       <div className="pagination-controls">
         <div className="button-container">
           <button

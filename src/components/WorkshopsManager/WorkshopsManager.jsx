@@ -9,7 +9,7 @@ export default function WorkshopManager({ data, conference_id, refetch }) {
   const { submit } = useSubmit();
 
   const formatDate = (date, country = "en-US", props) => {
-    const options = props ?? { day: "numeric", month: "long" }; // fallback si props est null ou undefined
+    const options = props ?? { day: "numeric", month: "long" };
     const converted = new Date(date);
     return converted.toLocaleDateString(country, options);
   };

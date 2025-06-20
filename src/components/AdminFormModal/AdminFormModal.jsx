@@ -248,7 +248,6 @@ export default function AdminFormModal() {
               );
             }
 
-            // Détection du type de champ
             let inputType = null;
             if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
               inputType = "date";

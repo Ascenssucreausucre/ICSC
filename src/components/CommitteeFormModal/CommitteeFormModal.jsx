@@ -58,14 +58,13 @@ export default function CommitteeFormModal() {
 
     let committeeResponse = null;
 
-    // 🏗️ Création ou mise à jour du comité
     committeeResponse = await submit({
       url: formData.id ? `/Committee/update/${formData.id}` : "/Committee",
       method: formData.id ? "PUT" : "POST",
       data: formData,
     });
 
-    if (!committeeResponse) return; // ⛔ stop si erreur
+    if (!committeeResponse) return;
 
     const committeeId =
       (committeeResponse?.newItem && committeeResponse.newItem.id) ||
@@ -76,7 +75,6 @@ export default function CommitteeFormModal() {
       return;
     }
 
-    // 🔍 Comparaison membres
     const initialMemberMap = new Map(initialMembers.map((m) => [m.id, m]));
     const currentMemberMap = new Map(members.map((m) => [m.id, m]));
 
@@ -102,7 +100,6 @@ export default function CommitteeFormModal() {
           initialMemberMap.get(m.id)?.CommitteeRole?.title
     );
 
-    // 🛑 Suppression des membres
     if (removedMembers.length > 0) {
       const removedMembersData =
         removedMembers.length === 1
@@ -127,7 +124,6 @@ export default function CommitteeFormModal() {
       if (!removeResponse) return;
     }
 
-    // ➕ Ajout des nouveaux membres
     if (newMembers.length > 0) {
       const newMembersData =
         newMembers.length === 1
@@ -156,7 +152,6 @@ export default function CommitteeFormModal() {
       if (!addResponse) return;
     }
 
-    // 📝 Mise à jour des membres
     if (updatedMembers.length > 0) {
       const updateResponse = await submit({
         url:
@@ -173,7 +168,6 @@ export default function CommitteeFormModal() {
       if (!updateResponse) return;
     }
 
-    // 🎭 Mise à jour des rôles
     if (updatedRoles.length > 0) {
       const roleResponse = await submit({
         url:
@@ -200,7 +194,6 @@ export default function CommitteeFormModal() {
       if (!roleResponse) return;
     }
 
-    // ✅ Rafraîchir et fermer
     detailedModalData.refreshFunction?.(
       !detailedModalData.arg
         ? null

@@ -16,12 +16,11 @@ export default function TopicManager({ data, conference_id }) {
     if (data) setTopics(data);
   }, [data]);
 
-  // Fonction de suppression du topic
   const handleDeleteTopic = () => {
     if (selectedTopic) {
       submit({ url: `/Topics/delete/${selectedTopic.id}`, method: "DELETE" });
-      setTopics((prev) => prev.filter((item) => item.id !== selectedTopic.id)); // Supprimer le topic de la liste
-      setSelectedTopic(null); // Réinitialiser le topic sélectionné après suppression
+      setTopics((prev) => prev.filter((item) => item.id !== selectedTopic.id));
+      setSelectedTopic(null);
     }
   };
 

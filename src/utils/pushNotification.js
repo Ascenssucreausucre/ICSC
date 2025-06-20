@@ -94,7 +94,7 @@ export const requestNotificationPermission = async () => {
     const permission = await Notification.requestPermission();
     return permission;
   } catch (err) {
-    console.error("Erreur lors de la demande de permission:", err);
+    console.error("Error while asking permission:", err);
     return "denied";
   }
 };
@@ -116,7 +116,7 @@ export const checkPushSubscription = async () => {
     const subscription = await registration.pushManager.getSubscription();
     return subscription;
   } catch (error) {
-    console.error("Erreur lors de la vérification de l'abonnement:", error);
+    console.error("Error while verifying subscription:", error);
     return null;
   }
 };

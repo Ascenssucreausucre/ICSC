@@ -7,12 +7,10 @@ class CustomErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    // Affiche une UI de repli au prochain rendu
     return { hasError: true, error };
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log l'erreur (console, monitoring, etc.)
     this.setState({ errorInfo });
 
     if (this.props.onError) {
@@ -22,7 +20,6 @@ class CustomErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      // Affiche un fallback custom si fourni
       if (this.props.fallback) {
         return typeof this.props.fallback === "function"
           ? this.props.fallback({
@@ -32,7 +29,6 @@ class CustomErrorBoundary extends React.Component {
           : this.props.fallback;
       }
 
-      // Fallback par défaut
       return <h2>Une erreur est survenue.</h2>;
     }
 

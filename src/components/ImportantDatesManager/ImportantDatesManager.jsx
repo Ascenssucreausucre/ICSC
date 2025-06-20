@@ -93,7 +93,7 @@ export default function ImportantDatesManager({ data, conference_id }) {
               className="button small"
               onClick={() =>
                 openConfirmationModal({
-                  text: "Are you sure to delete this conference's dates ? This action can'rt be undone.",
+                  text: "Are you sure to delete this conference's dates ? This action can't be undone.",
                   handleAction: handleDeleteDates,
                 })
               }

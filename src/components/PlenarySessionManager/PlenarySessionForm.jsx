@@ -65,7 +65,6 @@ export default function PlenarySessionForm({ data, close, refetch }) {
       const value = formData[key];
 
       if (key === "authors") {
-        // Si c’est un tableau ou un objet, on stringify
         dataToSend.append(key, JSON.stringify(value));
       } else {
         dataToSend.append(key, value);
@@ -126,7 +125,7 @@ export default function PlenarySessionForm({ data, close, refetch }) {
               onChange={(newAuthorId) => {
                 setFormData((prev) => ({
                   ...prev,
-                  authors: { id: newAuthorId }, // <- on sauvegarde juste l'ID de l'auteur
+                  authors: { id: newAuthorId },
                 }));
               }}
             />
