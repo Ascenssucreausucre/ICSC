@@ -51,6 +51,7 @@ export default function FeesModal({ data, close, refreshFunction }) {
     setLoading(true);
     const updatedFee = {
       ...registrationFee,
+      description: registrationFee.description.toLowerCase(),
       feecategories: feeCategories,
     };
 

@@ -38,7 +38,7 @@ export default function FeesManager({
   }, [additionalFeesData]);
 
   const registrationFeestemplate = {
-    description: "",
+    description: "Other Countries",
     conference_id: conference_id,
     feecategories: [],
   };
@@ -164,8 +164,7 @@ export default function FeesManager({
                   onClick={() =>
                     openConfirmationModal({
                       text: "Are you sure to delete this option ?",
-                      handleAction: () =>
-                        handleDeleteAditionalFees(additionalFees.id),
+                      handleAction: () => handleDeleteFees(fee.id),
                     })
                   }
                 >
