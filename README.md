@@ -81,6 +81,6 @@ Application web full stack développée **entièrement from scratch** :
 ---
 
 ## 🔗 Liens utiles
-- 🌍 [Lien vers la démo live](https://icsc.up.railway.app/)
+- 🌍 [Lien vers la démo live](https://icsc-conference.netlify.app/)
 - 💻 [Dépôt GitHub frontend](https://github.com/Ascenssucreausucre/ICSC)
 - 💻 [Dépôt GitHub backend](https://github.com/Ascenssucreausucre/ICSC-API)
